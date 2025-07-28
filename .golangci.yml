@@ -1,0 +1,29 @@
+version: "2"
+
+run:
+  timeout: 10m
+  tests: true
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - gofmt
+    - goimports
+    - misspell
+    - gosec
+    - goconst
+    - gocyclo
+    - dupl
+    - funlen
+    - lll
+  disable: []
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

@@ -1,0 +1,150 @@
+---
+alwaysApply: true
+---
+
+# Rule Validation and Auto-Update Patterns
+
+## 🎯 **Purpose**
+Define patterns for automatically detecting and updating rules that become inconsistent after refactoring.
+
+## 📋 **Validation Patterns**
+
+### **Code Pattern Mapping**
+- Each rule should map to specific code patterns
+- When patterns change, rules need updating
+
+### **Auto-Update Triggers**
+1. **Directory Structure Changes**
+   - Monitor changes to key directories (bronze/silver/gold)
+   - Update related architecture rules automatically
+
+2. **API Changes**
+   - Track deprecated API usage
+   - Update rules to reflect new patterns
+
+3. **Naming Convention Updates**
+   - Monitor function/class naming changes
+   - Update naming rules accordingly
+
+4. **Module Structure Changes**
+   - Track changes to module organization
+   - Update module structure rules
+
+## 🔄 **Update Process**
+
+### **1. Detection Phase**
+- Monitor git changes for pattern violations
+- Compare changes against rule definitions
+- Flag inconsistencies for review
+
+### **2. Update Phase**
+- Generate rule updates based on new patterns
+- Present changes for review
+- Apply approved updates
+
+### **3. Validation Phase**
+- Verify rule consistency
+- Check for conflicts
+- Ensure backward compatibility
+
+## 🛠️ **Implementation**
+
+### **Required Changes**
+1. Add pattern detection to pre-commit hooks
+2. Implement rule update suggestions
+3. Add validation checks
+
+### **Configuration**
+```yaml
+rule_validation:
+  enabled: true
+  auto_update: true
+  patterns:
+    - type: directory_structure
+      paths: ["data_platform/*"]
+    - type: naming_conventions
+      paths: ["**/*.py"]
+    - type: module_structure
+      paths: ["data_platform/common/**"]
+```
+
+## 🚨 **Critical Requirements**
+
+1. Rules must be version controlled
+2. Changes must be reviewed
+3. Updates must maintain consistency
+4. No automatic deletions allowed
+
+# Rule Validation and Auto-Update Patterns
+
+## 🎯 **Purpose**
+Define patterns for automatically detecting and updating rules that become inconsistent after refactoring.
+
+## 📋 **Validation Patterns**
+
+### **Code Pattern Mapping**
+- Each rule should map to specific code patterns
+- When patterns change, rules need updating
+
+### **Auto-Update Triggers**
+1. **Directory Structure Changes**
+   - Monitor changes to key directories (bronze/silver/gold)
+   - Update related architecture rules automatically
+
+2. **API Changes**
+   - Track deprecated API usage
+   - Update rules to reflect new patterns
+
+3. **Naming Convention Updates**
+   - Monitor function/class naming changes
+   - Update naming rules accordingly
+
+4. **Module Structure Changes**
+   - Track changes to module organization
+   - Update module structure rules
+
+## 🔄 **Update Process**
+
+### **1. Detection Phase**
+- Monitor git changes for pattern violations
+- Compare changes against rule definitions
+- Flag inconsistencies for review
+
+### **2. Update Phase**
+- Generate rule updates based on new patterns
+- Present changes for review
+- Apply approved updates
+
+### **3. Validation Phase**
+- Verify rule consistency
+- Check for conflicts
+- Ensure backward compatibility
+
+## 🛠️ **Implementation**
+
+### **Required Changes**
+1. Add pattern detection to pre-commit hooks
+2. Implement rule update suggestions
+3. Add validation checks
+
+### **Configuration**
+```yaml
+rule_validation:
+  enabled: true
+  auto_update: true
+  patterns:
+    - type: directory_structure
+      paths: ["data_platform/*"]
+    - type: naming_conventions
+      paths: ["**/*.py"]
+    - type: module_structure
+      paths: ["data_platform/common/**"]
+```
+
+## 🚨 **Critical Requirements**
+
+1. Rules must be version controlled
+2. Changes must be reviewed
+3. Updates must maintain consistency
+4. No automatic deletions allowed
+

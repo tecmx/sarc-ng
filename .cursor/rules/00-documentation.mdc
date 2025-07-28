@@ -1,0 +1,100 @@
+---
+description: Apply when creating, updating, or organizing documentation across the project
+alwaysApply: false
+---
+
+# 00-documentation.mdc
+# Documentation Standards and Organization
+
+> **PRIORITY**: HIGH - Consistent documentation is essential for project maintainability
+
+## 🎯 **CORE DOCUMENTATION PRINCIPLES**
+
+### **CLARITY OVER DECORATION**
+- Use clean, professional formatting without emojis
+- Focus on essential information that developers need
+- Eliminate fluff and redundant explanations
+- Keep documentation current and accurate
+
+### **STRUCTURED HIERARCHY**
+- Root README.md serves as comprehensive project overview and quick start
+- docs/ directory contains detailed, specialized documentation
+- Each document has a single, clear purpose
+- Consistent file naming and organization patterns
+
+### **ACTIONABLE CONTENT**
+- Provide concrete examples and commands
+- Include minimal steps to get started
+- Focus on "how to" rather than "what is"
+- Validate all commands and procedures work
+
+## 📁 **DOCUMENTATION STRUCTURE**
+
+### **Root Level**
+- **README.md**: Project overview, quick start, essential commands
+- **CONTRIBUTING.md**: Development guidelines and contribution process
+
+### **docs/ Directory Structure**
+- **ARCHITECTURE.md**: System design, components, data flow
+- **DEVELOPMENT.md**: Local development setup and workflows
+- **DEPLOYMENT.md**: Production deployment procedures
+- **INFRASTRUCTURE.md**: Infrastructure overview and management
+- **API.md**: API documentation and examples
+- **TESTING.md**: Testing strategies and procedures
+
+### **Component-Level Documentation**
+- Each major directory should have README.md explaining structure and purpose
+- Focus on operational commands and file organization
+- Avoid duplicating information from main documentation
+
+## ✍️ **WRITING STANDARDS**
+
+### **Format Guidelines**
+- No emojis in professional documentation
+- Use clear headings and consistent formatting
+- Include code blocks with proper syntax highlighting
+- Provide working examples and commands
+
+### **Content Standards**
+- Start with purpose and scope
+- Include prerequisites and assumptions
+- Provide step-by-step procedures
+- End with troubleshooting or common issues
+
+### **Maintenance Requirements**
+- Update documentation when code changes
+- Remove outdated or deprecated information
+- Consolidate redundant content
+- Test all documented procedures regularly
+
+## 🔄 **DOCUMENTATION WORKFLOW**
+
+### **Creation Process**
+1. Determine appropriate location (root vs docs/)
+2. Check for existing content that could be consolidated
+3. Follow established naming patterns
+4. Use consistent structure and formatting
+
+### **Update Process**
+1. Identify outdated or conflicting information
+2. Consolidate related content when possible
+3. Maintain cross-references and links
+4. Verify all commands and procedures work
+
+### **Review Criteria**
+- Does it solve a real user need?
+- Is the information accurate and current?
+- Can a new developer follow the instructions?
+- Is it in the right location within the hierarchy?
+
+## 📋 **IMPLEMENTATION CHECKLIST**
+
+Before creating or updating documentation:
+- [ ] Identified the appropriate location and filename
+- [ ] Checked for existing content that could be consolidated
+- [ ] Used clean, professional formatting without emojis
+- [ ] Included actionable commands and examples
+- [ ] Verified all procedures work as documented
+- [ ] Maintained consistency with project patterns
+
+**CRITICAL**: Documentation should be a reliable guide for developers, not decorative content!

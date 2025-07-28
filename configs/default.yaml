@@ -1,0 +1,77 @@
+# Default configuration for SARC-NG
+# This file contains default settings that can be overridden by environment-specific configurations
+
+# Server Configuration
+server:
+  port: 8080
+  mode: debug # debug, release, test
+  host: localhost
+
+# Database Configuration
+database:
+  host: localhost
+  port: 3306
+  user: root
+  password: example
+  name: sarcng
+  charset: utf8mb4
+  parseTime: true
+  loc: Local
+  # Connection pool configuration
+  max_open_conns: 25
+  max_idle_conns: 10
+  conn_max_lifetime: 5m
+  conn_max_idle_time: 2m
+
+# API Configuration
+api:
+  title: "SARC-NG API"
+  description: "SARC Next Generation - Resource Reservation and Management API"
+  contact:
+    name: "API Support"
+    email: "support@example.com"
+
+# Logging Configuration
+logging:
+  level: info # debug, info, warn, error
+  format: json # json, text
+  file: "" # empty means log to stdout
+
+# Authentication Configuration (for future use)
+auth:
+  jwt:
+    secret: "your-secret-key-here"
+    expiration: 24h
+
+# CORS Configuration
+cors:
+  allowOrigins: ["*"]
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  allowHeaders: ["Origin", "Content-Type", "Accept", "Authorization"]
+  exposeHeaders: ["Content-Length"]
+  allowCredentials: true
+  maxAge: 12h
+
+# Swagger Configuration
+swagger:
+  enabled: true
+  path: "/swagger/*any"
+
+# Health Check Configuration
+health:
+  path: "/health"
+
+# Rate Limiting Configuration (for future use)
+rateLimit:
+  enabled: false
+  requestsPerMinute: 60
+
+# Cache Configuration (for future use)
+cache:
+  enabled: false
+  type: redis
+  redis:
+    host: localhost
+    port: 6379
+    password: ""
+    db: 0

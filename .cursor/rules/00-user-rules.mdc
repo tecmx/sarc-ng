@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+
+# User Rules
+
+- Always eliminate legacy or backward-compatibility code paths.
+– Strip out deprecated APIs, shims, polyfills, and version-specific branches.
+– Replace them with current, officially supported APIs and patterns.
+– Do not keep fallbacks, wrappers, feature flags, or “old-version” conditionals unless explicitly requested in the same prompt.
+– Modernize project dependencies accordingly and delete unused packages.
+– Ensure all code is forward-compatible with the latest standards.
+– This rule applies to all codebases, regardless of language or framework.
+– If a specific legacy code path is requested, it must be explicitly stated in the prompt.

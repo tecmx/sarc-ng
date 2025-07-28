@@ -1,0 +1,90 @@
+---
+description: Apply to any coding task, writing new code, fixing bugs, refactoring, or making architectural decisions
+alwaysApply: true
+---
+
+# 00-development-principles.mdc
+# Core Development Principles for Cursor AI Agents
+
+> **PRIORITY**: HIGHEST - These principles apply to ALL development tasks
+
+## 🎯 **FUNDAMENTAL PRINCIPLES**
+
+### **THE FEWER LINES OF CODE, THE BETTER**
+- Prioritize concise, readable solutions
+- Eliminate redundancy and unnecessary complexity
+- Choose simple implementations over clever ones
+
+### **PROCEED LIKE A SENIOR DEVELOPER**
+- Think before coding - write 2-3 reasoning paragraphs first
+- Consider long-term maintainability
+- Make architectural decisions with experience in mind
+- Anticipate edge cases and future requirements
+
+### **DO NOT STOP UNTIL COMPLETE**
+- Ensure all requirements are met
+- Test the implementation thoroughly
+- Handle edge cases and error conditions
+- Provide complete, working solutions
+
+## 🧠 **REASONING & ANALYSIS**
+
+### **ALWAYS START WITH THREE REASONING PARAGRAPHS**
+Before implementing, analyze what the task might involve:
+
+1. **Initial observations**: "It's possible that..." - start with uncertainty
+2. **Deeper analysis**: Consider alternative explanations and approaches
+3. **Most likely solution**: Gradually build confidence with supporting evidence
+
+### **UNCERTAINTY TO CONFIDENCE PATTERN**
+- Begin with "One potential explanation could be..."
+- Gradually build confidence as evidence accumulates
+- Only make definitive statements when fully certain
+
+## 🛠️ **IMPLEMENTATION STANDARDS**
+
+### **MANDATORY FUNCTION REUSE CHECK**
+**CRITICAL:** Before implementing ANY functionality, check existing codebase for similar functions.
+
+**Required Questions:**
+- Does this functionality already exist in the codebase?
+- Can I extend an existing function instead of creating new one?
+- Where should this belong in the existing structure?
+
+### **CODE QUALITY REQUIREMENTS**
+- Write clean, simple, readable code
+- Implement features in the simplest possible way
+- Keep files small and focused (<200 lines)
+- Use clear, consistent naming
+- NEVER delete old comments unless obviously wrong
+
+### **DATA INTEGRITY REQUIREMENTS**
+- DO NOT use mock or sample data unless explicitly requested
+- ALWAYS prompt user for real input data if missing
+- If sample data is used, label it clearly as "for example purposes only"
+- Stop and ask for clarification if essential data is unavailable
+
+## 🚨 **ERROR HANDLING PRINCIPLES**
+
+### **DO NOT JUMP TO CONCLUSIONS**
+- Consider multiple possible causes before deciding
+- Explain the problem in plain English
+- Make minimal necessary changes
+- For strange errors, suggest user perform web search for latest info
+
+### **ERROR FIXING WORKFLOW**
+1. **Analyze**: Write reasoning paragraphs about potential causes
+2. **Minimal Changes**: Change as few lines as possible
+3. **Test**: Verify each change works
+
+## 📋 **ENFORCEMENT CHECKLIST**
+
+Before completing any task, verify:
+- [ ] Followed three-paragraph reasoning process
+- [ ] Checked for existing functions in codebase
+- [ ] Used simple, clean implementation
+- [ ] Tested functionality thoroughly
+- [ ] Handled edge cases appropriately
+- [ ] Used real data (not mock/sample)
+
+**CRITICAL**: These principles take precedence over all other implementation guidelines!

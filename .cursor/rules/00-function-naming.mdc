@@ -1,0 +1,57 @@
+---
+description: Apply when writing functions, refactoring code, or working on naming conventions across the codebase
+alwaysApply: false
+---
+# 00-function-naming.mdc
+# Universal Naming Conventions for Functions and Assets
+
+> **PRIORITY**: HIGHEST - Consistent naming is critical for maintainability
+
+## 🎯 **CORE NAMING PRINCIPLES**
+
+### **CONSISTENCY OVER CLEVERNESS**
+- Use predictable patterns that developers can easily remember
+- Prefer explicit names over abbreviated ones
+- Maintain consistency within functional areas
+
+### **SEMANTIC CLARITY**
+- Function names should clearly indicate their purpose and return type
+- Use domain-specific terminology when appropriate
+- Avoid ambiguous or generic terms
+
+### **HIERARCHICAL ORGANIZATION**
+- Group related functions using consistent prefixes
+- Follow the verb-noun pattern for actions
+- Use consistent suffixes for similar operations
+
+## 🔧 **FUNCTION NAMING PATTERNS**
+
+### **Common Patterns**
+- **Calculation**: `calculate_<what>_<type>` (e.g., `calculate_total_score`)
+- **Retrieval**: `get_<what>_<type>` (e.g., `get_user_profile`)
+- **Validation**: `validate_<what>_<aspect>` (e.g., `validate_email_format`)
+- **Generation**: `generate_<what>_<type>` (e.g., `generate_report_summary`)
+- **Normalization**: `normalize_<what>_<aspect>` (e.g., `normalize_phone_number`)
+- **Creation**: `create_<what>_<type>` (e.g., `create_user_session`)
+
+### **Feature Engineering**
+- **Extraction**: `extract_<what>_<type>`
+- **Encoding**: `encode_<what>_<method>`
+
+### **Model Operations**
+- **Training**: `train_<model_type>_<purpose>`
+- **Evaluation**: `evaluate_<model_type>_<metric>`
+
+### **I/O Operations**
+- **Pattern**: `<action>_<what>_<object>`
+
+## 📋 **NAMING CHECKLIST**
+
+Before implementing any function:
+- [ ] Follows established verb_noun pattern
+- [ ] Uses appropriate prefix (`calculate_`, `get_`, `validate_`, etc.)
+- [ ] Consistent with existing naming in the same module
+- [ ] Clear and unambiguous purpose
+- [ ] No mixing of naming patterns within functional areas
+
+**CRITICAL**: Naming consistency is essential for code maintainability and developer productivity!

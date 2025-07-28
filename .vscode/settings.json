@@ -1,0 +1,29 @@
+{
+    "go.useLanguageServer": true,
+    "go.lintTool": "golangci-lint",
+    "go.lintFlags": [
+        "--fast"
+    ],
+    "go.formatTool": "goimports",
+    "go.testTimeout": "30s",
+    "go.coverageDecorator": {
+        "type": "highlight",
+        "coveredHighlightColor": "rgba(64, 128, 128, 0.5)",
+        "uncoveredHighlightColor": "rgba(128, 64, 64, 0.25)"
+    },
+    "editor.formatOnSave": true,
+    "[go]": {
+        "editor.defaultFormatter": "golang.go",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/tmp": true
+    },
+    "files.watcherExclude": {
+        "**/tmp/**": true
+    }
+} 

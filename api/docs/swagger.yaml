@@ -1,0 +1,1059 @@
+basePath: /api/v1
+definitions:
+  internal_transport_rest_handler.ErrorResponse:
+    properties:
+      code:
+        example: 400
+        type: integer
+      error:
+        example: Invalid input
+        type: string
+      message:
+        example: The provided data is invalid
+        type: string
+    type: object
+  internal_transport_rest_handler.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        example: Operation completed successfully
+        type: string
+    type: object
+  sarc-ng_internal_domain_building.Building:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  sarc-ng_internal_domain_class.Class:
+    properties:
+      capacity:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  sarc-ng_internal_domain_lesson.Lesson:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      duration:
+        description: Duration in minutes
+        type: integer
+      endTime:
+        type: string
+      id:
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  sarc-ng_internal_domain_reservation.Reservation:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      endTime:
+        type: string
+      id:
+        type: integer
+      purpose:
+        type: string
+      resourceID:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  sarc-ng_internal_domain_resource.Resource:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      isAvailable:
+        type: boolean
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  sarc-ng_internal_service_building.CreateBuildingDTO:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  sarc-ng_internal_service_building.UpdateBuildingDTO:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - code
+    - id
+    - name
+    type: object
+  sarc-ng_internal_service_class.CreateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  sarc-ng_internal_service_class.UpdateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  sarc-ng_internal_service_lesson.CreateLessonDTO:
+    properties:
+      duration:
+        minimum: 1
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  sarc-ng_internal_service_lesson.UpdateLessonDTO:
+    properties:
+      duration:
+        minimum: 1
+        type: integer
+      id:
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+    required:
+    - id
+    - title
+    type: object
+  sarc-ng_internal_service_reservation.CreateReservationDTO:
+    properties:
+      endTime:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      userId:
+        type: integer
+    required:
+    - endTime
+    - resourceId
+    - startTime
+    - userId
+    type: object
+  sarc-ng_internal_service_reservation.UpdateReservationDTO:
+    properties:
+      endTime:
+        type: string
+      id:
+        type: integer
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      userId:
+        type: integer
+    required:
+    - endTime
+    - id
+    - resourceId
+    - startTime
+    - userId
+    type: object
+  sarc-ng_internal_service_resource.CreateResourceDTO:
+    properties:
+      isAvailable:
+        type: boolean
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - name
+    - type
+    type: object
+  sarc-ng_internal_service_resource.UpdateResourceDTO:
+    properties:
+      id:
+        type: integer
+      isAvailable:
+        type: boolean
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - id
+    - name
+    - type
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: SARC Next Generation - Resource Reservation and Management API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: SARC-NG API
+  version: "1.0"
+paths:
+  /buildings:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all buildings in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of buildings
+          schema:
+            items:
+              $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get all buildings
+      tags:
+      - buildings
+    post:
+      consumes:
+      - application/json
+      description: Create a new building with the provided name and code
+      parameters:
+      - description: Building creation data
+        in: body
+        name: building
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_building.CreateBuildingDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created building
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Create a new building
+      tags:
+      - buildings
+  /buildings/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a building by its ID
+      parameters:
+      - description: Building ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Building deleted successfully
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+        "400":
+          description: Invalid building ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Building not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Delete a building
+      tags:
+      - buildings
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific building by its unique identifier
+      parameters:
+      - description: Building ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Building details
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+        "400":
+          description: Invalid building ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Building not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get building by ID
+      tags:
+      - buildings
+    put:
+      consumes:
+      - application/json
+      description: Update an existing building's name and code by ID
+      parameters:
+      - description: Building ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Building update data
+        in: body
+        name: building
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_building.UpdateBuildingDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated building
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Building not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Update an existing building
+      tags:
+      - buildings
+  /classes:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all classes in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of classes
+          schema:
+            items:
+              $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get all classes
+      tags:
+      - classes
+    post:
+      consumes:
+      - application/json
+      description: Create a new class with the provided name and capacity
+      parameters:
+      - description: Class creation data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_class.CreateClassDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created class
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Create a new class
+      tags:
+      - classes
+  /classes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a class by its ID
+      parameters:
+      - description: Class ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class deleted successfully
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+        "400":
+          description: Invalid class ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Class not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Delete a class
+      tags:
+      - classes
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific class by its unique identifier
+      parameters:
+      - description: Class ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class details
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+        "400":
+          description: Invalid class ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Class not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get class by ID
+      tags:
+      - classes
+    put:
+      consumes:
+      - application/json
+      description: Update an existing class's name and capacity by ID
+      parameters:
+      - description: Class ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Class update data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_class.UpdateClassDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated class
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Class not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Update an existing class
+      tags:
+      - classes
+  /lessons:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all lessons in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of lessons
+          schema:
+            items:
+              $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get all lessons
+      tags:
+      - lessons
+    post:
+      consumes:
+      - application/json
+      description: Create a new lesson with the provided title, duration, and start
+        time
+      parameters:
+      - description: Lesson creation data
+        in: body
+        name: lesson
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_lesson.CreateLessonDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created lesson
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Create a new lesson
+      tags:
+      - lessons
+  /lessons/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a lesson by its ID
+      parameters:
+      - description: Lesson ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lesson deleted successfully
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+        "400":
+          description: Invalid lesson ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Lesson not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Delete a lesson
+      tags:
+      - lessons
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific lesson by its unique identifier
+      parameters:
+      - description: Lesson ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lesson details
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+        "400":
+          description: Invalid lesson ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Lesson not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get lesson by ID
+      tags:
+      - lessons
+    put:
+      consumes:
+      - application/json
+      description: Update an existing lesson's title, duration, and start time by
+        ID
+      parameters:
+      - description: Lesson ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Lesson update data
+        in: body
+        name: lesson
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_lesson.UpdateLessonDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated lesson
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Lesson not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Update an existing lesson
+      tags:
+      - lessons
+  /reservations:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all reservations in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of reservations
+          schema:
+            items:
+              $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get all reservations
+      tags:
+      - reservations
+    post:
+      consumes:
+      - application/json
+      description: Create a new reservation with resource, user, and time information
+      parameters:
+      - description: Reservation creation data
+        in: body
+        name: reservation
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_reservation.CreateReservationDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created reservation
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Create a new reservation
+      tags:
+      - reservations
+  /reservations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a reservation by its ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reservation deleted successfully
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+        "400":
+          description: Invalid reservation ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Reservation not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Delete a reservation
+      tags:
+      - reservations
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific reservation by its unique identifier
+      parameters:
+      - description: Reservation ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reservation details
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+        "400":
+          description: Invalid reservation ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Reservation not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get reservation by ID
+      tags:
+      - reservations
+    put:
+      consumes:
+      - application/json
+      description: Update an existing reservation's resource, user, time, and status
+        information by ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Reservation update data
+        in: body
+        name: reservation
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_reservation.UpdateReservationDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated reservation
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Reservation not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Update an existing reservation
+      tags:
+      - reservations
+  /resources:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all resources in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of resources
+          schema:
+            items:
+              $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get all resources
+      tags:
+      - resources
+    post:
+      consumes:
+      - application/json
+      description: Create a new resource with name, type, and availability information
+      parameters:
+      - description: Resource creation data
+        in: body
+        name: resource
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_resource.CreateResourceDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created resource
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Create a new resource
+      tags:
+      - resources
+  /resources/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a resource by its ID
+      parameters:
+      - description: Resource ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Resource deleted successfully
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+        "400":
+          description: Invalid resource ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Delete a resource
+      tags:
+      - resources
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific resource by its unique identifier
+      parameters:
+      - description: Resource ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Resource details
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+        "400":
+          description: Invalid resource ID
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Get resource by ID
+      tags:
+      - resources
+    put:
+      consumes:
+      - application/json
+      description: Update an existing resource's name, type, and availability by ID
+      parameters:
+      - description: Resource ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Resource update data
+        in: body
+        name: resource
+        required: true
+        schema:
+          $ref: '#/definitions/sarc-ng_internal_service_resource.UpdateResourceDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated resource
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+      summary: Update an existing resource
+      tags:
+      - resources
+schemes:
+- http
+- https
+swagger: "2.0"

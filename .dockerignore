@@ -1,0 +1,55 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+
+# Development and build artifacts
+bin/
+dist/
+coverage.out
+coverage.html
+.env
+.env.*
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker files (avoid recursion)
+Dockerfile*
+docker-compose*.yml
+
+# CI/CD
+.github/
+.circleci/
+.travis.yml
+.gitlab-ci.yml
+
+# Testing and coverage
+*_test.go
+test/
+tests/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/ 

@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "golang.go",                 // Official Go extension
+        "premparihar.gotestexplorer", // Go Test Explorer
+        "766b.go-outliner",          // Go Outliner
+        "zerotaskx.vscode-go-doc",   // Go Doc
+        "eamodio.gitlens",           // Git integration
+        "streetsidesoftware.code-spell-checker", // Spell checker
+        "ms-azuretools.vscode-docker" // Docker support
+    ]
+} 
