@@ -1,0 +1,63 @@
+---
+id: get-all-buildings
+title: "Get all buildings"
+description: "Get all buildings"
+sidebar_label: "Get all buildings"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVU1vGzcQ/SvEnBpgbUlpAwR7qmwkhoumKCwbPdhCQC1HWiZccjMzq0YV9N+LoVbyRnFjNNfoosXwzdebx+EWUotkxad47aCEFco0hIvOB+fjiqEAsSuG8h4WR9u8AEJuU2RkKLfwcjzWP4dckW81FJQw66oKmZddMMcMUECVomAUxdu2Db7KB6MPrE5b4KrGxuqXbFqEEiyR3UABXrDhgT0tPmAlUEBLGl78vhTvBhgfBVdIUAB+tk0bEMrJroBoGxygWMjH1RAE76yP5tI2bcfmQAXstHj3nOflxdlUodY5QuZvoycvfzZ30a+R2MvGTNeorsuQEvG3+3il1RBaQTeVp5IsEzVWoARnBc/ENzl017r/57LTUX/qPKFTDXgHPX89GfMCxEtu5pEo/RXwy3jytSruou2kTuT/QfcdaviPqT8/F0JOHVX4PiZ5v0xddEpHg8x29YzrbY1GOUAWdOYQyPxt2cQkpg92QlSu6DHBgKY3RIlgT9Grpy7OdRSkaINhpDWSwezwg3O1K05YukIxNgSzGGyqBqVO/RLTvq3UUMJoCNlzqvtsCx0FKKEWacvRKKTKhjqxlK/Hr8ej9QROM/6uCONwjSG1DUbpBwS7ucatOvKyyYEv0BLStNP09/Ph8UyHtJ/DEHSkVIvRKjMMSlhkEBT9x9vDDf3tr9tMo4/LlN17wmbTm8uzP67M9M9rc4NLJIwVftWJni4TmQP6p5vDoN7ZaFeYm7PRGS3XdcHHlZltWLB58RAf4m3tOWdoKa29QzYYXZt8FM5hGw2iPkfiC1MFy0wpNVwcZcHFQ9Qs/JhFakrdqlYI0joLnHMlAZlT5PMHfUPyvsydTM7H5+P+btgq3439dj8yMevaNpHKARvrdeC8t/zaq/a8Sk3msk0sjY2DGE9p7Asmj3MT/CyjNlgf85ZVYW17/Z08nCoxNW63C8t4R2G3U/OnDknFMy9gbcnbhY7zfr4roEbrkLKuPuJGp1dV2GpDaxu6/ESebgNV3PEuXL1RqfwLGlG44Q==
+sidebar_class_name: "get api-method"
+info_path: content/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get all buildings"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/buildings"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get all buildings
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Successful operation","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Main Campus Building"},"code":{"type":"string","example":"MCB-A"},"address":{"type":"string","example":"123 University Ave"},"floors":{"type":"integer","example":5},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","code"],"title":"Building"}}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

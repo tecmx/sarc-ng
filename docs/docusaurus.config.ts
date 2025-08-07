@@ -26,6 +26,8 @@ const config: Config = {
       {
         docs: {
           sidebarPath: require.resolve("./sidebars.ts"),
+          path: "content", // Specify the path to the docs
+          routeBasePath: "content", // Prefix URL path for docs
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
@@ -63,7 +65,7 @@ const config: Config = {
           {
             label: "API Reference",
             position: "left",
-            to: "/docs/category/api-reference",
+            to: "/content/category/api-reference",
           },
           {
             href: "https://github.com/tecmx/sarc-ng",
@@ -80,11 +82,11 @@ const config: Config = {
             items: [
               {
                 label: "Documentation",
-                to: "/docs/introduction",
+                to: "/content/introduction",
               },
               {
                 label: "API Reference",
-                to: "/docs/category/api-reference",
+                to: "/content/category/api-reference",
               },
             ],
           },
@@ -231,7 +233,7 @@ const config: Config = {
         config: {
           "sarc-ng": {
             specPath: "../api/openapi.yaml",
-            outputDir: "docs/api-reference",
+            outputDir: "content/api-reference",
             downloadUrl:
               "https://raw.githubusercontent.com/sarc-ng/sarc-ng/main/api/openapi.yaml",
             sidebarOptions: {

@@ -1,0 +1,71 @@
+---
+id: update-resource
+title: "Update resource"
+description: "Update resource"
+sidebar_label: "Update resource"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV0tvGzcQ/iuLOSUAbclBDAR7quwmrYu0MPxAD7IQUMuRlimXpEmuHEXY/14Ml7taWYKdAD6kSH2xRHJe33zz0AaMRceDNPpCQA61FTzgFXpTuwKBQeBLD/kUXDryMGPg8L5GH86MWEO+iV+lQwF5cDUyKIwOqANdcWuVLKL+0WdvNJ35osSK06ewtgg5mPlnLAIwsI68CRI93Wpe4eCVD07qJTDAL7yyio4+YhFqh9nvXKlsAg1Lbw/I6LqiMArFvXfGVHR2X0tbkaMMFJ9TYFvV24cNg4JbXsiwHmiWOuAS3dCd03HDQJk22qcdP6ulElIvswnLPihjXPaG7MzTMaXiKUsnDQOBgUvlD8HIhZDkA1eXA0Db3PQ6NlByf+kMyRjXXZfcn5vK1gGdh3zBlcemadggxdM2LwnqGYMgQ4ypI82FtnWAJol5a7Rv8/lmPKZ/An3hpG1B6qWylnkCXow+8htA/J9iPwjFGBQOKf+TcCishXEVD5ADceQoyAoplkSZbxd5RGRJbHuGzYnIbw9x94yLLLXCl6NtYcQzlOxa8SdtwqeFqbUgMCr0ni+fEb0psfMYyfdUew/cZ9qELCl7BFP0aGtgANJ754zrETrZR+hW8zqUxsmvL1nZ/12I3j7RALfaf3qgTg9V24UO6DRXmUe3QpdhFPjJsYpdeqfiYk/sTVCY3PEK22477baqtvdJkrA8lMD2lrg93LohsWeyZ/DFr9DMyOFQGlomaQ9grf4cRv0GOdpI0QCDNo+tV7VTkEMZgs1HIxpwqjQ+5O/G78aj1Qk8NvmRXmQCV6hMnK+JFNG+x6J2cZRON3CG3KGb1OTDdDa8vqYA29wPH/XxkjOQcKDv8/gIWPrwoZsvf/x9E1NHhLvaLsbvt1MwQf5oleg2iZ2FYbsGnI6Hk/7gON+d5ic7A/s7Jq/UCxPjTuy6nlydH/31Wza5vMiucIEOdSTSbgrodmFc1r1+1dPgT675EmNWuBYZ4SxqRb5fr33A6vWdvtM3pfTRgnVmJQX6DLWwRurgo9qKlJBMF6JnWQ+UZz3BPbvTZMVvrYTSmXpZ0hN0qwigj54o9N5of3yngQFRr43k5Hh8PE6NhBdhkLEutuvaWuOIzFhxSUz17ckvqcSPC9riGgbW+FBxPdCxX5A7OPZ0C/gljKziUsfVhuphk2pn+OuLQS4F9QKqD7rabObc461TTUPH9zU6Yv6MwYo7yeeU0ukGhPT0WaS873nRd1F4dZU6wetsWNnssKPpkOs1YcpVTd+AwT+4brtMM2sYlMgFuuhIe3Hemju6IfGt4F4Db1gnMSkKtOHJt8Pec3l7Q/WRfqFWsbmD4w/U6fhD66OJ0cdyiWcbUFwv69jNoVVJf/8CVDc57Q==
+sidebar_class_name: "put api-method"
+info_path: content/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Update resource"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"put"}
+  path={"/resources/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Update resource
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer"},"description":"Resource ID"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","example":"Lecture Hall A"},"type":{"type":"string","enum":["classroom","equipment","lab"],"example":"classroom"},"capacity":{"type":"integer","example":50},"location":{"type":"string","example":"Building A, Floor 2"},"buildingId":{"type":"integer","example":1},"details":{"type":"object","additionalProperties":true,"example":{"hasProjector":true,"hasComputers":false}}},"required":["name","type"],"title":"ResourceInput"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Resource updated","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Lecture Hall A"},"type":{"type":"string","enum":["classroom","equipment","lab"],"example":"classroom"},"capacity":{"type":"integer","example":50},"location":{"type":"string","example":"Building A, Floor 2"},"buildingId":{"type":"integer","example":1},"details":{"type":"object","additionalProperties":true,"example":{"hasProjector":true,"hasComputers":false}},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","type"],"title":"Resource"}}}},"400":{"description":"Bad request","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"404":{"description":"Resource not found","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

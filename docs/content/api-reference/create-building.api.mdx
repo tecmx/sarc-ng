@@ -1,0 +1,71 @@
+---
+id: create-building
+title: "Create a new building"
+description: "Create a new building"
+sidebar_label: "Create a new building"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVt9v2zYQ/leIe1oBJra7Fij0VCfohhRrV8QO9pAYBS2eLbYSyR4pp66h/304SrJV100wIC/b/GDLx/vF77670w6cR1LROHulIYOcUEW8qE2pjV2DhKjWAbJbWHaiAAsJhF9qDPHC6S1ku/TXEGrIItUoIXc2oo18pLwvTZ78jz4FZ1kW8gIrxU9x6xEycMtPmEeQ4ImziQYDn1pV4UArRGpTwq+q8iWL3iljxaWqfB3EPueGE9CPWV5enE1ZVWlNGMLD2pPnv4obazZIwcStmG6QTVelczS0NDbiGmlo+rJp5ACf2/ZSXYYLCdHEFKHP/sr6OkLTtGbBOxtaMJ6PJ/yjMeRkPOM5sBJt2TQ8GfZGP3yvSSP/I/WRHef1NJ4KsnJUqQgZaBXxLJoqua69/mcmRywwXKpHqNCx4MV4fKLwSouuCZ+u5o9XhTC4mnL8aF38uHK11QxGhSGo9SOm8wL7jJFzbx2JexWEdVF0zo5gShkdAgxAekPkaI/Qida4saqOhSPz7Snb4t8K0ctTJLqyEcmqUgSkDZLAZPA/x6qRRyhdpukglLB4L5aHxVhhLByvTO9SE3oVC8hgdFiUElpgeX/uoKYSMihi9NloVLpclYULMXs1fjUebSZwHPYP1hAaN1g6X6GNXZWgWbDfvCYTt8nxBSpCmtYc/nYxPJ5xpdpiDJX2uHIynGVSgwyWSQlk9/BbP8fe/jVPWDIDrg+r/01fjX5Vn573/bjvZvpgpJ+a24exzaPZ2JVLCXd1mk2vL8/e/y6mH67ENa6Q0Ob4A3Z8unIkeu1frnt+vFNWrTHBqawWDJCuS96gs22IWD27s3d2XpiQInhyG6MxCLTaO2NjSG4rdsI2+1JLkZcqBHKuCnLPxiDvLEcJhyixIFevC1ZB2qS+CimTEkNwNpzfWZCQ8Eg3mZyPz8ddS6o8DqDu7zarvXfEBMRKGaZYaCWvu2Y5z12Vqsc8rZQd+PgZtb9Dc8+WiF/jyJfK2LQBmc67jvVHr4dMbBbudksV8IbKpmHxlxqJKbuQsFFk1JJLertoJBSoNFJi82fccmbtCDqbc2hWL2tO4Ydx1MjeYprn6OODuotB0374czZnondvsFXLUFL3INN3BiDBJQhS/yTZDkpl13UaTtD65M/fNwjegw==
+sidebar_class_name: "post api-method"
+info_path: content/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create a new building"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/buildings"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Create a new building
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","example":"Main Campus Building"},"code":{"type":"string","example":"MCB-A"},"address":{"type":"string","example":"123 University Ave"},"floors":{"type":"integer","example":5}},"required":["name","code"],"title":"BuildingInput"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Building created","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Main Campus Building"},"code":{"type":"string","example":"MCB-A"},"address":{"type":"string","example":"123 University Ave"},"floors":{"type":"integer","example":5},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","code"],"title":"Building"}}}},"400":{"description":"Bad request","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

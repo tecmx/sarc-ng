@@ -31,7 +31,7 @@ const sidebars: SidebarsConfig = {
           "Complete API reference for the SARC-NG (Resource Management and Scheduling System). This API provides endpoints for managing buildings, classrooms, resources, and scheduling through reservations and lessons.",
         slug: "/category/api-reference"
       },
-      items: require("./docs/api-reference/sidebar.js")
+      items: require("./content/api-reference/sidebar.js")
     }
   ]
 };

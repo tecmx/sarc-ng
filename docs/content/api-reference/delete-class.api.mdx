@@ -1,0 +1,71 @@
+---
+id: delete-class
+title: "Delete class"
+description: "Delete class"
+sidebar_label: "Delete class"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVV1v00oQ/SvWPIG0NCniSshPFFpQERddtUU8tBHaeCfxgr27nRnnEiz/dzRrNwkNEj+Ap3h35+PMmTmTHmJCsuJjuHRQgsMGBd80lhkMiF0zlLdQ6RkZFgYIOcWgh7KH5/MX+uOQK/JJg0AJ2bkYAzkYDLyYnx5bfQq2kzqS/4EODFQxCAZRO5tS46sMafaV1bgHrmpsrX7JNiGUEJdfsRIwkEgLED8CqqLDAysW8mENBvC7bVOjV4QcO6rwS4jyZRW7kCG2yGzXf3C9qbEgvO+QBV3xEKj433IRohRTsEE5uu88ocvUKaJ9goUB8ZLDXRBFgmEYMkW/IfLqIcM++l9P1D/z+TFRl0GQgm0KRtogFZgd/nKuBvOIpfOsyKKatJ0s2RYFSRXeQ7Ct+nudMa/myUoNh2mFOjTHpPkguEaCo3zjHrg8h2GhUKWO+wWT80sNJcym3TLrvRvAwNjCEVNHDZRQi6RyNmtiZZs6spQv5y/ns80pPE74QS0KhxtsYmoxyDQPGQBj1ZGXbQ78Gi0hnXWK4HZx+Hyt5Y1tPzTaVatgYGJBz8tsBGb6eBuptQIlvP98k7vmwypm96k/12dXb559fFec/XdZXOEKCUOFR5Xo6ypS8WD9ZLcK/rXBrjEXZ4MrFK7rGh/WxfWWBdund+Eu3NSec4ZEceMdcoHBpeiDcA7bahD1WXa+cT6s2YxjQTG2bHZTyOYuaBbeZ5GaYreu1QRpk/XEGUmDzDHwyV0AA9rBsZLTk/nJfJKirbIUp0l7qO26SymSqg5b67XhPN68mkRyUsU2c5kiS2vDQYxHI/0LibuWCX6XWWqsDzqjeab6afr2/2wGSu9USDph+tD3S8v4iZph0Ov7DklnZ2FgY8nbpXbztgfnWb8dlCvbMB5h2K0geHI1KelpsVOG+T3G6dKGrXJpm05PYOAbbkeJDovBQI3WIWUU48NZVWGSA5ejpfeLEs8vPlzcXMAw/ATvZsO4
+sidebar_class_name: "delete api-method"
+info_path: content/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Delete class"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/classes/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Delete class
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer"},"description":"Class ID"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"204":{"description":"Class deleted"},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"404":{"description":"Resource not found","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

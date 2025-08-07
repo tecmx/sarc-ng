@@ -1,0 +1,71 @@
+---
+id: delete-lesson
+title: "Delete lesson"
+description: "Delete lesson"
+sidebar_label: "Delete lesson"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVduOEzkQ/RWrnkAykwxiJdRPzO7MokEsWs1FPMxEyGlX0ga37SlXZwmt/ndU7s4FgrQfwFPcdl1OnapT6SEmJMMuhmsLFVj0yPgec44BNLBZZ6gewJeLDAsNhDnFkDFD1cPL+Sv5sZhrckmiQAWjtxpDWRg0vJqfn5rdB9NxE8l9Qwsa6hgYA4udScm7uoCafRYgVQ+5brA1cuJtQqggLj9jzaAhkZTAbkRUR4tHVpnJhTVowK+mTV6uCHPsqMZPIfKnVexCgdhizmb9P653DSrCpw4zo1W7QOo/k1WIrKZgg5D01DlCK9wVRIcECw3suIS7IooEwzAUin7B5M0uwyH6b0/UH/P5KVHXgZGC8SojbZAUFoffnKtB/8TSZVGk8jt1J0OmRUYSjfcQTCsBnAyZE/tkuIHjvEwd6lPWXGBcI8FJwmkTXF/CsBCw3MTDkikAuIEKZtN6mfXODqBhbOIIqiMPFTTMqZrNfKyNb2Lm6vX89Xy2OYeTjGKhLG7Qx9Ri4GkiCoCMdUeOtyXwn2gI6aITBA+L4+dbqW9s/LHRvlwBAxMN8r0sRqCnw9+RWsNQwbuPd6VvLqxicZ86dHtx89eLD2/Vxb/X6gZXSBhqPKlEXleR1M762X4Z/GOCWWMpzgSrBK7tvAtrdbvNjO3zx/AY7hqXS4ZEceMsZoXBpugC5xK2lSDis+ycty6ss1a1NzlTjG3W+znM+jFIlnzIwg3Fbt2ICdKmKCoXJFMbzx5luKSDYyXnZ/Oz+SRGUxcxTqO2q+22SymS6A5b46Thebx5M8nkrI5t4TLFzK0JRzF+HuofWNz3jPErz5I3LsiUlqHqp/E7/LtpqJwVLcmIyUPfL03Ge/LDINdPHZIMz0LDxpAzS2nnQw/WZTlbqFbGZzzBsN9C8Oxm0tJzddCG/jXI6dKErbBpfCdfoOELbkeVDotBQ4PGIhUY48NFXWPiI5eTxfeDFi+v3l/dXcEwfAeJdMb3
+sidebar_class_name: "delete api-method"
+info_path: content/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Delete lesson"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"delete"}
+  path={"/lessons/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Delete lesson
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer"},"description":"Lesson ID"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"204":{"description":"Lesson deleted"},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"404":{"description":"Resource not found","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
