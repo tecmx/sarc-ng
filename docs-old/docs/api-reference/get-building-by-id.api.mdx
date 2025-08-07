@@ -1,0 +1,71 @@
+---
+id: get-building-by-id
+title: "Get building by ID"
+description: "Get building by ID"
+sidebar_label: "Get building by ID"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVlFv20YM/isHPrWAEttdCxR6mpN1gYd1KOIEe0iM4qyjreuku+uR8uoJ+u8Dz5KjxkGDAn3rk6UTyY/8PpLnFnzAqNl6tzCQwxb5orGVsW57sV8YyID1liC/g3V/TLDKICIF7wgJ8hZeTafyY5CKaIOEghyWTVEg0aap1BEBMii8Y3Qs9jqEyhbpw+QTiVMLVJRYa3nifUDIwa8/YcGQQYgShu0B0pqRjXWMW4yQAX7RdagQ8lmXgdM1jqyIo3XbsRG819apS12HhtRQNXSSpHnO8/LibC6m2piIRN+2nr36Rd06u8NIlvdqvkNx3VTeR/p2HW8km4ia0cz5KZCNj7VmyMFoxjO2dQrdBPN9Lp1I+rmxEY1obUX4xF9PxioDtpyKeSCqE7fX09mp+LdON1z6aP9D8+NEf16WiOSbWOBH5/njxjfOCBs1EuntM643JSqhAInRqCGQ+leTcp5VH+wRTymjB4ARS+9i9PFI0etTiq4HhIfoPz1Rb55aJAvHGJ2uFGHcYVSYHH5yrrrsEUtXyGrY0Gq9V4vfpFIddY2MsmXu2n4hHobbilPQXMIYnGOD2Sl1w2I6QR12gcB1K8mZS99fIwmfS8hhcrw6Jq01HWRwkPKQVRMryKFkDvlkUvlCV6Unzt9O304nuxk8hvxTLJTBHVY+1Oi474uET1g00fI+Bb5AHTHOG8nhbjX+vJQCD/KPjY71SjLQ8yDv62QEWf/w+7BA//j7Jqln3cYn916n5fz68uyvKzX/sDjJf/5hoTY+qsHmxXERvNdObzGVpJ1RkqRpKmF3uSfG+uW9u3c3pSWJq0L0O2uQFDoTvHVMKWwtQVIPDJxnqqg0UfS+puzYg5Speycw9ADDZfTNthQbjLs0TpRSqZDIOzq/lxs83WKplNn59HzaT6Iu0iT2LTYUt2xC8FFaAWttRWc6nPzaz8h54etEYfDEtXajGE929FdcHvVi/MKTUGnr0uUnDdX2zTf+35JBbo3MkzSYfGrbtSa8jVXXyfHnBqO0ziqDnY5Wr0XMuxaMJXk2kG90RXiSxXETwYvrfpReqvFoZE8n2h9qtxdaddXIG2TwD+4PY9qtugxK1AZjSuTwYV4UGHjkcrL+vhrFq3fSpP8DbAxmvQ==
+sidebar_class_name: "get api-method"
+info_path: api-reference/sarc-ng-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get building by ID"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/buildings/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get building by ID
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer"},"description":"Building ID"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Successful operation","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Main Campus Building"},"code":{"type":"string","example":"MCB-A"},"address":{"type":"string","example":"123 University Ave"},"floors":{"type":"integer","example":5},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","code"],"title":"Building"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"404":{"description":"Resource not found","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

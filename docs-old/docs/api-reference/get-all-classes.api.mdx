@@ -1,0 +1,63 @@
+---
+id: get-all-classes
+title: "Get all classes"
+description: "Get all classes"
+sidebar_label: "Get all classes"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVVGP0zgQ/ivWPB1SaNPlTkJ5urLAatEdQnTRPXQr5NrTxODYZjzp0avy30+TpqXscqyOV/rSxPnmm/E339h7iAlJs4vh2kIFNfLc+0uvc8YMBbCuM1RLMOPKqgDCnGKQl2oPF2UpfxazIZeEBipYdMZgzpvOqxM7FGBiYAwseJ2Sd2b4MP2QJWgP2TTYanniXUKoQBPpHRTgGNt8th7XH9AwFJBI6NkdSnH2DOMCY40EBeBn3SaPUM36AoJu8QyVmVyoz0FwGdvUMZJaGIfBoJqVM+ilePtQ5GKEupCZOsORXj+Y7jlN1CsdUC1ax41EZ2wxM9L3415q79VFefFkqE0nbRzvvr//J6VACTWjnfO36DeRWs1QgdWMj9m1KOxdsv8vpBePfOocoRXrOAuj8KOK9xRaFcCODyKKz6CXXwG/lrP75noXdMdNJPcP2h8w1X+Y5+H2EubYkcH3IfL7TeyCFXFazFnXD4TeNKhEEemrVUci9bfOKkRWI9kd2UapjgnONHpBFAkOEv32rfm7DowUtFcZaYukcAj4ybXqizsqXSErmSJzOuxa5CaOp6DsWnMDFUy/AA56yoG4h448VNAwp2o69dFo38TM1dPyaTndzuButj8EoSxu0cfUYuCxOdCvhNd0NAzwcg/PUBPSvJPky9X554U06NCDc9BJTilGqhxgUMF6AEExPrw8zuqrv24GCV3YxCF8FGsxf3v5+PWVmr+5vlf//M212kRSR8wvb4+t+VMHXeOwJR2skiJt512o1WKXGdtHt+E23DQuC69KFLfOYlYYbIoucB5oWyGRmHXnvHWhzsWhMRRjm4uTEXKhboOkyV/ScEOxqxvBIG0HT+ehFI85x5Ant3L7SOMOW5lNykk5joM2wzgc7oWTAIsupUjiAWy1kz7nw8rvo1EnJraDhClmbnU447hvq6+EPDWL8TNPk9cuDIesuGk/Wu6r61ZcJUv7/VpnfEe+72X5U4ckflkVsNXk9Fo6uFz1BTSorVwfyz18xJ20zhhMspmt9t1wsd4dfjHZyfxXL8Qd/wI6ZceU
+sidebar_class_name: "get api-method"
+info_path: api-reference/sarc-ng-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get all classes"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/classes"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get all classes
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Successful operation","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Computer Science 101"},"code":{"type":"string","example":"CS101"},"instructorName":{"type":"string","example":"Dr. Jane Smith"},"semester":{"type":"string","example":"Fall 2023"},"capacity":{"type":"integer","example":30},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","code","instructorName"],"title":"Class"}}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

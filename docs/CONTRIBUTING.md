@@ -1,314 +1,60 @@
-# Contributing to SARC-NG
-
-This guide covers development setup, workflows, and contribution guidelines for SARC-NG.
-
-## Development Setup
-
-### Prerequisites
-- Go 1.24+
-- Docker & Docker Compose
-- Make
-
-### Initial Setup
+# How to contribute
 
-1. **Clone and setup**:
-   ```bash
-   git clone <repository-url>
-   cd sarc-ng
-   make setup
-   ```
-
-2. **Choose development approach**:
-
-   **Native Go (fastest for development):**
-   ```bash
-   make run        # Run application
-   make debug      # Run with hot reloading
-   ```
+:+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
-   **Docker environment (with database):**
-   ```bash
-   cd docker
-   docker compose up -d    # Start environment
-   ```
-
-## Development Workflow
+It's people like you that make security open source such a force in preventing
+successful cyber-attacks. Following these guidelines helps keep the project
+maintainable, easy to contribute to, and more secure. Thank you for taking the
+time to follow this guide.
 
-### Running the Application
+## Where to start
 
-```bash
-# Native Go
-make run                    # Direct execution
-make debug                  # With hot reloading
+There are many ways to contribute. You can fix a bug, improve the documentation,
+submit bug reports and feature requests, or take a first shot at a feature you
+need for yourself.
 
-# Docker
-cd docker && docker compose up -d    # Start with database
-```
+Pull requests are necessary for all contributions of code or documentation.
 
-### Testing
+## New to open source?
 
-```bash
-# Unit tests
-make test
+If you're **new to open source** and not sure what a pull request is, welcome!!
+We're glad to have you! All of us once had a contribution to make and didn't
+know where to start.
 
-# Integration tests (requires Docker)
-cd docker && docker compose up -d && docker compose run --rm app go test -tags=integration ./test/integration/... && docker compose down -v --remove-orphans
+Even if you don't write code for your job, don't worry, the skills you learn
+during your first contribution to open source can be applied in so many ways,
+you'll wonder what you ever did before you had this knowledge. It's worth
+learning.
 
-# Coverage
-make coverage
-```
+[Learn how to make a pull request](https://github.com/PaloAltoNetworks/.github/blob/master/Learn-GitHub.md#learn-how-to-make-a-pull-request)
 
-### Code Quality
+## Fixing a typo, or a one or two line fix
 
-```bash
-make format     # Format code
-make lint       # Run linters
-make test       # Run tests
-```
+Many fixes require little effort or review, such as:
 
-### Building
+> - Spelling / grammar, typos, white space and formatting changes
+> - Comment clean up
+> - Change logging messages or debugging output
 
-```bash
-make build      # Development build
-make release    # Production build
-```
+These small changes can be made directly in GitHub if you like.
 
-### API Documentation
+Click the pencil icon in GitHub above the file to edit the file directly in
+GitHub. This will automatically create a fork and pull request with the change.
+See:
+[Make a small change with a Pull Request](https://www.freecodecamp.org/news/how-to-make-your-first-pull-request-on-github/)
 
-```bash
-make swagger    # Generate documentation
-# View at: http://localhost:8080/swagger/index.html
-```
+## Bug fixes and features
 
-## Project Architecture
+For something that is bigger than a one or two line fix, go through the process
+of making a fork and pull request yourself:
 
-### Directory Structure
+> 1. Create your own fork of the code
+> 2. Clone the fork locally
+> 3. Make the changes in your local clone
+> 4. Push the changes from local to your fork
+> 5. Create a pull request to pull the changes from your fork back into the
+>    upstream repository
 
-```
-sarc-ng/
-├── cmd/                    # Application entry points
-│   ├── cli/               # CLI application
-│   ├── lambda/            # AWS Lambda handler
-│   └── server/            # HTTP server
-├── internal/              # Private application code
-│   ├── adapter/          # External service adapters
-│   ├── config/           # Configuration management
-│   ├── domain/           # Business entities and logic
-│   ├── service/          # Application services
-│   └── transport/        # HTTP handlers and routing
-├── pkg/                   # Public libraries
-├── configs/               # Configuration files
-├── docker/                # Docker environment
-├── infrastructure/        # Terraform infrastructure
-└── test/                  # Test files
-```
-
-### Clean Architecture Layers
-
-1. **Domain Layer** (`internal/domain/`): Core business entities and logic
-2. **Service Layer** (`internal/service/`): Application services and use cases
-3. **Transport Layer** (`internal/transport/`): HTTP handlers and routing
-4. **Adapter Layer** (`internal/adapter/`): External service integration
-
-### Key Technologies
-
-- **Language**: Go 1.24+
-- **Web Framework**: Gin
-- **Database**: MySQL with GORM
-- **Dependency Injection**: Google Wire
-- **Configuration**: Viper with YAML
-- **Documentation**: Swagger/OpenAPI
-- **Testing**: Testify
-- **Hot Reloading**: Air
-
-## Development Tools
-
-The following tools are automatically installed via `make setup`:
-
-- **Air**: Hot reloading during development
-- **Wire**: Dependency injection code generation
-- **Swag**: API documentation generation
-- **golangci-lint**: Code linting and static analysis
-- **Delve**: Go debugger
-
-### Wire Dependency Injection
-
-After modifying dependency injection in `cmd/*/wire.go`:
-
-```bash
-make wire       # Regenerate injection code
-make build      # Build includes wire generation
-```
-
-## Configuration
-
-### Environment Variables
-
-```bash
-# Database
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=password
-DB_NAME=sarcng
-
-# Application
-PORT=8080
-ENVIRONMENT=development
-```
-
-### Configuration Files
-
-- `configs/default.yaml`: Base configuration
-- `configs/development.yaml`: Development overrides
-
-The application automatically loads the appropriate configuration based on the `ENVIRONMENT` variable.
-
-## Docker Development
-
-### Development Environment
-
-```bash
-cd docker
-docker compose up -d                     # Start environment
-docker compose down -v --remove-orphans  # Stop and cleanup
-```
-
-### Database Access
-
-Database admin interface: http://localhost:8081 (admin/example)
-
-### Container Operations
-
-```bash
-cd docker
-docker compose down -v --remove-orphans  # Stop and cleanup all
-```
-
-## Testing Guidelines
-
-### Unit Tests
-
-- Place tests next to the code they test
-- Use table-driven tests where appropriate
-- Mock external dependencies
-- Test business logic thoroughly
-
-### Integration Tests
-
-- Use build tags: `//go:build integration`
-- Test against real database in Docker
-- Test complete request/response flows
-- Place in `test/integration/`
-
-### Test Execution
-
-```bash
-# Unit tests only
-make test
-
-# Integration tests (requires Docker environment)
-cd docker && docker compose up -d && docker compose run --rm app go test -tags=integration ./test/integration/... && docker compose down -v --remove-orphans
-```
-
-## API Development
-
-### Adding New Endpoints
-
-1. **Define entity** in `internal/domain/{entity}/`
-2. **Create service** in `internal/service/{entity}/`
-3. **Add handlers** in `internal/transport/rest/{entity}/`
-4. **Register routes** in router
-5. **Update documentation** with Swagger comments
-
-### Swagger Documentation
-
-Add Swagger comments to handlers:
-
-```go
-// @Summary Get building by ID
-// @Description Retrieve a building by its ID
-// @Tags buildings
-// @Accept json
-// @Produce json
-// @Param id path int true "Building ID"
-// @Success 200 {object} BuildingDTO
-// @Router /api/v1/buildings/{id} [get]
-func (h *Handler) GetBuilding(c *gin.Context) {
-    // implementation
-}
-```
-
-Generate documentation:
-
-```bash
-make swagger
-```
-
-## Database Development
-
-### Migrations
-
-Database schema is managed through GORM AutoMigrate. Add new fields to domain entities and restart the application.
-
-### Database Operations
-
-Database admin interface: http://localhost:8081 (root/example)
-
-Reset database:
-```bash
-cd docker
-docker compose down -v --remove-orphans && docker compose up -d
-```
-
-## Infrastructure
-
-Infrastructure is managed with Terraform and Terragrunt:
-
-```bash
-cd infrastructure/aws
-# See docs/AWS.md for detailed commands
-```
-
-## Code Standards
-
-### Formatting and Linting
-
-```bash
-make format     # Format all Go code
-make lint       # Run golangci-lint
-```
-
-### Commit Messages
-
-Use conventional commit format:
-
-```
-feat: add building reservation endpoint
-fix: resolve database connection timeout
-docs: update API documentation
-test: add integration tests for classes
-```
-
-### Code Review
-
-- All changes require pull request review
-- Ensure tests pass and coverage is maintained
-- Update documentation for API changes
-- Follow existing code patterns
-
-## Contribution Process
-
-1. **Fork** the repository
-2. **Create** feature branch from `develop`
-3. **Implement** changes with tests
-4. **Run** quality checks: `make format lint test`
-5. **Update** documentation if needed
-6. **Submit** pull request to `develop` branch
-
-## Getting Help
-
-- Check existing documentation in `docs/`
-- Review Docker setup in `docs/DOCKER.md`
-- Check infrastructure setup in `docs/AWS.md`
-- Open issue for bugs or feature requests
+Please use clear commit messages so we can understand what each commit does.
+We'll review every PR and might offer feedback or request changes before
+merging.

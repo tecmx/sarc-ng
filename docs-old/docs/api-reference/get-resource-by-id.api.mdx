@@ -1,0 +1,71 @@
+---
+id: get-resource-by-id
+title: "Get resource by ID"
+description: "Get resource by ID"
+sidebar_label: "Get resource by ID"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVkuP2zYQ/ivEnBKAWXuDBAh0qjePrYu0WKw36MFrBLQ4tphSJJdDunEE/fdiJNmrxEbSAr3lJImc5zffzKgBHzCqZLybayhgi+kWyedY4tV+rkFCUluCYglxOCZYSf4I3hESFA08n075oZHKaAKbggIWuSyRaJOtOHoACaV3CV1ieRWCNWV3MflErNQAlRXWit/SPiAU4NefsEwgIUQ2k0zv0uiRjHEJtxhBAn5WdbAIxWUrwakaR1KUonHbsRC8xzLliOJXZa2YQSsH2TM6LtcMQmkVUfS+5rOHbELNyUiwas2wPJp+FGwllCqo0qT992N+OW0lWN8j8v3Ar7Kx2ritmEnxznofxXP2sx6O5/8CHY1JGUvnoFZaG45B2ZsR6ClmHNlooFJ0Ez3r+Hi4rhS99nXICSNBsVGWsGUAIqqEepbOpbXxsVYJCtAq4bNkauRcctD/TaVlVj5kE1FzpQxzt6PAUNWVhGRSB9+B4dC2rPZiennK3w9O5VT5aL6g/v94W3r9A04e2uyj8+njxmenGY0aidT2B6p3FQqGACmhFgdD4m9FwvkkBmPf4NRF9OhghNLbGH08QvTiFKIDjCPrPz1QL8/NwrlLGJ2ygjDuMArsFH5yrLoZNEbpGtOj/fVezN9wpiqqGvtxsmyGmd43t2GloFIFY+f9HDqB7jAFT7weSTx/A+2KY06VHzZh5z9VUMDkuP0mjdEtSOhL2UeVo4UCqpRCMZnwBLeVp1S8mr6aTnaX8K3L9ywhNO7Q+m6BDLzo/BOWOXa7YtnAFaqIcZY5huVqfL3gBPvyj4WO+XIwMODA3+tOCOTw8u4wQH/7866rnnEb36kPdVrMbl8/++NazG7mJ/HPbuZi46M4yDw5Yvi7cmqLXUrKacFB6mx5US32lLB+eu/u3V1liO2KEP3OaCSBTgdvXKLObM1GWOewzkiK4zoleeQISXHv2A09uklV9HlbsQzGXddO1IVikcg7urjnnxAuXJ/K5cX0Yjp0oiq7ThwodkhukUPwkamAtTJcZ+pPfhl65KLkJd9KCJ5SrdzIxllGf4XlsV4JP6dJsMq4bvkxoZqBfONfLwmF0dxPTDC+apq1IvwQbdvy8UPGyNRZSdipaNSai7lsQBvidz3s5JMojpMIntwOrfRUjFtDng90OFRuz7Aqm/kLJPyF+75N21UroUKlMXaB9BezssSQRion4++rVrx+yyT9B2vyrOo=
+sidebar_class_name: "get api-method"
+info_path: api-reference/sarc-ng-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get resource by ID"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/resources/{id}"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get resource by ID
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"id","in":"path","required":true,"schema":{"type":"integer"},"description":"Resource ID"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Successful operation","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Lecture Hall A"},"type":{"type":"string","enum":["classroom","equipment","lab"],"example":"classroom"},"capacity":{"type":"integer","example":50},"location":{"type":"string","example":"Building A, Floor 2"},"buildingId":{"type":"integer","example":1},"details":{"type":"object","additionalProperties":true,"example":{"hasProjector":true,"hasComputers":false}},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","type"],"title":"Resource"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"404":{"description":"Resource not found","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

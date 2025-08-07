@@ -1,0 +1,71 @@
+---
+id: create-building
+title: "Create a new building"
+description: "Create a new building"
+sidebar_label: "Create a new building"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVt9v2zYQ/leIe1oBJra7FSj0NCfoBg/rFsQO9pAYBS2eLXYSyZInp66h/304SrI1100wIC/b/GDL1P349N13d9qD8xgUGWdnGjLIAyrCq9qU2tgNSCC1iZDdw6o7irCUEPBTjZGunN5Btk9/TUANGYUaJeTOElriW8r70uQp/uhjdJbPYl5gpfiKdh4hA7f6iDmBBB8YDRmMfNeqCgdWkUILCT+rypd89F4ZK65V5esoDpgbBqCf87y+upiyqdI6YIxPW09efy/urNliiIZ2YrpFdl2XzoWhp7GEGwxD1zdNIwf83LcP1SFcSiBDKUOPfmZ9TdA0rVv0zsaWjNfjCf9ojHkwnvkceIm2bBpejHujn36uSSP/I/WRneb1lM4lWbtQKYIMtCK8IFOl0LXX/8zlRAWGS/WMFDoV/DAenym80qJrwper+fNVCRhdHXL8YB19WLvaaiajwhjV5hnXRYE9YmTsbSDxqKKwjkQX7ISmhOiYYEDSuxBcODB0pjXurKqpcMF8ecm2+LdS9OaciGaWMFhViohhi0Fgcvifc9XIE5au03QQSlh8FKvjYqyQCscr07vUhF5RARmMjotSQkss78891KGEDAoin41GpctVWbhI2dvx2/FoO4HTtL+yhdC4xdL5Ci11VYJmyXHzOhjapcBXqAKGac3p75fD23OuVFuModGBVwbDKJMZZLBKRiC7i5/6OfbLH4vEJSvg9rj63/XV6Ff1+Xnfj/tupg9G+rm5fRzbPJqNXbsEuKvTfHp7ffHbz2J6M/uKsenNTKxdEL3Nd7e9Kt4rqzaYSFRWC6ZF1yXvzfkuElavHuyDXRQmclzhg9sajVGg1d4ZSzGFrTgI+xwKLEVeqhiDc1WUBw1GKR4sp4nHNFQEV28KtsGwTe0UE5QSY3Q2Xj5YkJBoSI8yuRxfjrtOVDkNGO4fbl577wLrDitlWFmxPfmx65HL3FWpaCzPStlBjG8p+m90HkRC+JlGvlTGpsXHKt53Yj95K2Q98+F+v1IR70LZNHz8qcbASl1K2Kpg1Ioreb9sJBSoNIYk4j9xx8jayXOx4NRsXtYM4asp1MjeY5rn6OlJ2+WgV29+ny9Y392La9UKM6hHkOk7A5DgEgWpbdLZHkplN3WaSdDG5M9fcsva9A==
+sidebar_class_name: "post api-method"
+info_path: api-reference/sarc-ng-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create a new building"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/buildings"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Create a new building
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","example":"Main Campus Building"},"code":{"type":"string","example":"MCB-A"},"address":{"type":"string","example":"123 University Ave"},"floors":{"type":"integer","example":5}},"required":["name","code"],"title":"BuildingInput"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Building created","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Main Campus Building"},"code":{"type":"string","example":"MCB-A"},"address":{"type":"string","example":"123 University Ave"},"floors":{"type":"integer","example":5},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","code"],"title":"Building"}}}},"400":{"description":"Bad request","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

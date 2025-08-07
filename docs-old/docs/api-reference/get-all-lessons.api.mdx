@@ -1,0 +1,71 @@
+---
+id: get-all-lessons
+title: "Get all lessons"
+description: "Get all lessons"
+sidebar_label: "Get all lessons"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVt9v2zYQ/leIe9oAJpbTBOj0NG9NAw/dEDQJBiwxClo822wpUiVPbl3D//twlCwrsRe3xfY0v1ii7r7vfvPW4CsMiox3Yw05zJFG1r7BGL2LIIHUPEJ+D7Y9mUioVFAlEgb+sAanSoQcCqtiHGuQYBzk8LHGsAIJAT/WJqCGfKZsRAmxWGCpIF8DrSpWNI5wjgE2EjTGIpiKjYEcXhtLGMR0JRK2GL+Cjez4ZsGXrxThtxNGCsbNQcLMh1IR5KAZZ4//hlQgwd/EzAcxS+YYNxfbWPSsIf/f2nLp9LOWTJgsVt5FjAx/lmX898ShuigwxlltRZd0kFB4R+iI5VVVWVOkD4P3kZXW+zarEBR7ZwjL2Dv30/dYEEioAsOTaUwx+kCyJeBnVVYWIR9uZFc8RwUDRl+HAo/Jnm0kRM7freH8HIn3CbFUTx3OsrMXJ9lPJ9n57fA8z7I8y/7irKDT/wLiRf6iQwxYoaJrRYTBHcJFV5fcgd4VjKiVsRz9T4gf0sPUtI+TPl171hHcOTL2eOHtWTw8OxleMEwRUBHqEX2l7xsJdaW/TWXTb5l7rhzZmyu93PeTu0vKRAIZSrY3Aww2/JNwng33u+HOqZoWPpgvqL+jC/6h2guvD1bHLqxbN945T+9mvnaaY1VijGp+RPV2gYIDhJFQiy2Q+KSicJ5EC/YkismiHUEvSJch+ABNiC4ODYyx46JUVkQMSwwCk8L/PFZ7s/kKSShru2HM+rTw7W3KXitaQA6DnUATz+b+rIOFHBZEVT4YWF8ou/CR8pfZy2ywHMJTtjcsITQu0fqqREdtctIdELGog6FVAv4FVcAwqpn8ftL/fMMJanLQF+rCycZAe1vx+zQJ8axJD6+3rfvbn7cphMbNfFJvg3UzevvryR9XYnQ93rN/dD1Ol9hW5oe329T8rpyaY3JJOS3YSF1bvuZuVpGw/PHBPbjbhYmMK6rgl0ZjFOh05Y2jmGBLBmGdaW2sNm4eZbM+BO/LKLtCiFI8OKaJOxpaBF/PFyyDYZlqOiZT2sSdPvB1yYlrXBmeZqdZ2w6qSO3QrgNb527qqvKBawBLxfMXYnPyc1uop4UvUwgrH6lUroexX1aPAtkli/AzDSqrjEszN6Qp35Tco7WNq4qP1uupingX7GbDx82uwvWiTVRT29tWnvB1XX9oM5OHzfmAq0e74VLZmqXS7vT1hEdXsWfpe6vid/IfWb+eZe9Wwx33hF+CYfLUmhIWqDSGlIZGa1QUWFFPa2/QMko3aK4uuRP/BrfNBmM=
+sidebar_class_name: "get api-method"
+info_path: api-reference/sarc-ng-api
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get all lessons"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/lessons"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get all lessons
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"classId","in":"query","required":false,"schema":{"type":"integer"},"description":"Filter by class ID"},{"name":"fromDate","in":"query","required":false,"schema":{"type":"string","format":"date"},"description":"Start date for filtering lessons"},{"name":"toDate","in":"query","required":false,"schema":{"type":"string","format":"date"},"description":"End date for filtering lessons"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Successful operation","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"integer","example":1},"classId":{"type":"integer","example":1},"resourceId":{"type":"integer","example":2},"startTime":{"type":"string","format":"date-time","example":"2023-09-04T14:00:00Z"},"endTime":{"type":"string","format":"date-time","example":"2023-09-04T15:30:00Z"},"repeatPattern":{"type":"string","enum":["once","daily","weekly","biweekly"],"example":"weekly"},"repeatUntil":{"type":"string","format":"date","example":"2023-12-15"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","classId","resourceId","startTime","endTime"],"title":"Lesson"}}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

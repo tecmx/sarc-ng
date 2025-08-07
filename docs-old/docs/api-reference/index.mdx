@@ -1,0 +1,59 @@
+---
+sidebar_position: 0
+slug: /api-reference
+---
+
+# SARC-NG API Reference
+
+Welcome to the SARC-NG API Reference documentation. This section provides detailed information about all available API endpoints, request/response formats, and authentication methods.
+
+## API Resources
+
+The SARC-NG API is organized around the following main resources:
+
+- **Buildings** - Physical structures where classrooms and resources are located
+- **Classes** - Rooms or spaces within buildings
+- **Resources** - Equipment and other physical resources
+- **Reservations** - Bookings of resources and spaces
+- **Lessons** - Scheduled teaching sessions
+
+## Authentication
+
+Most API endpoints require authentication. See the [Authentication](/api/authentication) section for details on how to authenticate your requests.
+
+## Making Requests
+
+The API accepts requests with JSON payloads and returns JSON responses. All endpoints use standard HTTP methods:
+
+- `GET` - Retrieve resources
+- `POST` - Create resources
+- `PUT` - Update resources
+- `DELETE` - Remove resources
+
+## Response Format
+
+All API responses follow a consistent format:
+
+```json
+{
+  "data": {
+    /* Response data */
+  },
+  "meta": {
+    "pagination": {
+      /* Pagination info if applicable */
+    }
+  }
+}
+```
+
+For errors:
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message"
+  }
+}
+```

@@ -1,0 +1,88 @@
+---
+sidebar_position: 1
+slug: /
+---
+
+# SARC-NG Documentation
+
+Welcome to the SARC-NG documentation. SARC-NG is a comprehensive system for managing academic resources, classrooms, and reservations.
+
+import ApiEndpointDemo from "@site/src/components/ApiEndpointDemo";
+
+## About SARC-NG
+
+SARC-NG (Space and Resource Coordination - Next Generation) is designed to help educational institutions efficiently manage their physical resources, including:
+
+- Buildings and classrooms
+- Teaching equipment
+- Academic scheduling
+- Space reservations
+- Lesson planning
+
+Built with modern technologies and clean architecture principles, SARC-NG provides both a REST API and web interface for seamless integration into your institution's systems.
+
+## Key Features
+
+### Resource Management
+
+- Track all available resources (rooms, equipment, etc.)
+- Categorize resources by type and availability
+- Associate resources with buildings and locations
+
+### Reservation System
+
+- Book resources for specific time periods
+- Prevent scheduling conflicts with automatic validation
+- Manage reservation status workflow
+
+### Academic Scheduling
+
+- Schedule classes and lessons
+- Track classroom usage and capacity
+- Optimize space utilization
+
+### API-First Design
+
+- Comprehensive REST API for all operations
+- Consistent response formats and error handling
+- Easily integrate with existing systems
+
+### Modern Architecture
+
+- Clean architecture with separation of concerns
+- Dependency injection for better testability
+- Container-based deployment options
+
+## Getting Started
+
+<ApiEndpointDemo
+  endpoints={[
+    { method: "GET", path: "/api/v1/buildings", description: "List all buildings" },
+    { method: "GET", path: "/api/v1/resources", description: "List all resources" },
+    { method: "POST", path: "/api/v1/reservations", description: "Create reservation" }
+  ]}
+/>
+
+To start using SARC-NG, check out:
+
+- [Installation guide](getting-started/installation)
+- [Quick start tutorial](getting-started/quick-start)
+- [API documentation](api/overview)
+- [Architecture overview](architecture/overview)
+
+## Explore the Documentation
+
+This documentation is organized into sections:
+
+- **Getting Started**: Installation and initial setup
+- **Architecture**: System design and components
+- **API Documentation**: Conceptual API documentation
+- **API Reference**: Detailed endpoint specifications
+- **Deployment**: Deployment options and configurations
+- **Contributing**: Guidelines for contributors
+
+## Next Steps
+
+- [Learn how to install SARC-NG](getting-started/installation)
+- [Explore the API](api/overview)
+- [See deployment options](deployment/overview)
