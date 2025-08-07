@@ -7,8 +7,6 @@
 package main
 
 import (
-	"github.com/google/wire"
-	"gorm.io/gorm"
 	"sarc-ng/internal/adapter/db"
 	"sarc-ng/internal/adapter/gorm/building"
 	"sarc-ng/internal/adapter/gorm/class"
@@ -27,10 +25,11 @@ import (
 	reservation2 "sarc-ng/internal/service/reservation"
 	resource2 "sarc-ng/internal/service/resource"
 	"sarc-ng/internal/transport/rest"
-)
 
-import (
-	_ "sarc-ng/api/docs"
+	"github.com/google/wire"
+	"gorm.io/gorm"
+
+	_ "sarc-ng/api/swagger"
 )
 
 // Injectors from wire.go:

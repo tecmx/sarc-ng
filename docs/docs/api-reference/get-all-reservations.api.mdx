@@ -1,0 +1,71 @@
+---
+id: get-all-reservations
+title: "Get all reservations"
+description: "Get all reservations"
+sidebar_label: "Get all reservations"
+hide_title: true
+hide_table_of_contents: true
+api: eJzlVktvGzcQ/ivEnFqAtlZuAyR7qlq7gYM2KGwHAWobAb070jLhkgxn1okr6L8Xw11LK8vxo0VP1UXScB7fvGcJIWIybIM/rqGEBfLMuRMkTNeZSqCBzYKgPIc0Jl9qiCaZFhmTvC7BmxahhHkK7aFhBA3WQwmfO0w3oCHh584mrKGcG0eogaoGWwPlEvgmiiRxsn4BGuYhtYahhFr0rDTUSFWyUSxDCadsEit5U/OQ1Nw6RpFUWwBXeg2Jw38L6MjXz4GTkEKXKjyunw/JesYFpl0MJ4NSdXz4IIxLsUIxeEISvQdFIV93ItxVFRLNO6fW9QEaquAZPQu/idHZKj9MPpIILXfBmpSMuGUZWxrRw9VHrBg0xCTq2fZQbH2Poxrwq2mjQyinKz2O3aO8HWF6jO/FwPc2p2Y382tGeBMarw5DTj9JBZ7Z+0W2imWPhWus56A4+GGveLVXTM+KV2VRlEXxp+hEX/97jdPpSGPsUgz0iFvvQ/pETYiKkEjS3LvHHd0r57tWRkFEX/eUKvi5TS1KLVfGV+gc1jIdNiY2LCsNVULDWM/4iY5KfmL9PJHVuJPOpa70dtMNlTFO5CYBa/8vNbDl7MJoIsJKPhp+LKa7jfPOm46bkOxffUCe2TDfaIwq1I9k8da7Dz7wh3nofI51i0Rm8YjoWYNKooXEWKtbReqLIeUDq0HZnZBmRBsDo0gdpRQS9CF6cd9sOfaMyRunJKKYFGaB/3msdsb5a2RlnNse3qKEmzAsanHdcAMlTO5w9ZHtt3KXHJTQMMdyMnGhMq4JxOXL4mUxuZ7CXbu/CYeq8RpdiC16HtKUFwdh1SXLN1nxz2gSplknCM4vx8+nkqo+G2OmdWAFDAy7Tf5fZSbQw49fbzv6zfuzHEzr5yGLD2E7nZ38svf2tZr9caxOcI4JfYU7nsirLMJb7u/WG/J3480Cs3PG10rg1p2TVXl6Q4zt9xf+wp81lrKFmMK1rZEU+joG65my2laUiMxVZ53MQtKqcoYohdCSXhcH6QsvVmhjhZsUukWzlduMxCFR8LR/IctWMth7Mt0v9ouhQ0yVO2S4JG59O+1iDEkqAltjJeHUU34aane/Cm2OZQzErfEjHd+otK1grlPH+JUn0Rmb90SureVQhbv3oRSa0JfLK0P4LrnVSsj9sSMlVFsyV2507twxuh4JTzz59P0wP+HN9l16bVwnbPkoezqIp5x5D0JY36H/EMATb7wHMWztwQ2OS/mTrADJ7ayhQVNjynnqJWdVhZFHUjtjWrSsJ9TrI+nevwGvKkPw
+sidebar_class_name: "get api-method"
+info_path: docs/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Get all reservations"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"get"}
+  path={"/reservations"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Get all reservations
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"fromDate","in":"query","required":false,"schema":{"type":"string","format":"date"},"description":"Start date for filtering reservations"},{"name":"toDate","in":"query","required":false,"schema":{"type":"string","format":"date"},"description":"End date for filtering reservations"},{"name":"resourceId","in":"query","required":false,"schema":{"type":"integer"},"description":"Resource ID for filtering reservations"}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={undefined}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"200":{"description":"Successful operation","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"integer","example":1},"resourceId":{"type":"integer","example":1},"userId":{"type":"integer","example":5},"userName":{"type":"string","example":"John Doe"},"startTime":{"type":"string","format":"date-time","example":"2023-09-01T09:00:00Z"},"endTime":{"type":"string","format":"date-time","example":"2023-09-01T11:00:00Z"},"purpose":{"type":"string","example":"Workshop session"},"status":{"type":"string","enum":["pending","confirmed","cancelled"],"example":"confirmed"},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","resourceId","userId","startTime","endTime","status"],"title":"Reservation"}}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

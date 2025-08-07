@@ -1,6 +1,6 @@
 # Base Docker Compose configuration for SARC-NG
 # This file contains development settings and common configurations
-# For production, run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+# For production, run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up
 
 # YAML anchors for reusable configurations
 x-common-variables: &common-variables
@@ -109,10 +109,10 @@ services:
       - adminer
     entrypoint: ["/bin/sh", "-c"]
     command: >
-      "apk add --no-cache bash curl && 
+      "apk add --no-cache bash curl &&
        echo 'Waiting for services to start...' &&
        sleep 10 &&
-       echo 'All services are up! Displaying service information...' && 
+       echo 'All services are up! Displaying service information...' &&
        bash /show-info.sh"
     restart: "no"
     network_mode: "host"

@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: SARC-NG API
+  title: SARC-NG API Reference
   description: |
     API for SARC-NG (Resource Management and Scheduling System)
-    
-    This API provides endpoints for managing buildings, classrooms, resources, 
+
+    This API provides endpoints for managing buildings, classrooms, resources,
     and scheduling through reservations and lessons.
   version: 1.0.0
   contact:
@@ -38,18 +38,18 @@ paths:
       tags:
         - buildings
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Building'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                  $ref: "#/components/schemas/Building"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     post:
       summary: Create a new building
       operationId: createBuilding
@@ -60,20 +60,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BuildingInput'
+              $ref: "#/components/schemas/BuildingInput"
       responses:
-        '201':
+        "201":
           description: Building created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Building'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Building"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /buildings/{id}:
     parameters:
@@ -89,18 +89,18 @@ paths:
       tags:
         - buildings
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Building'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Building"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     put:
       summary: Update building
       operationId: updateBuilding
@@ -111,36 +111,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BuildingInput'
+              $ref: "#/components/schemas/BuildingInput"
       responses:
-        '200':
+        "200":
           description: Building updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Building'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Building"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     delete:
       summary: Delete building
       operationId: deleteBuilding
       tags:
         - buildings
       responses:
-        '204':
+        "204":
           description: Building deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # Classes endpoints
   /classes:
@@ -150,18 +150,18 @@ paths:
       tags:
         - classes
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Class'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                  $ref: "#/components/schemas/Class"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     post:
       summary: Create a new class
       operationId: createClass
@@ -172,20 +172,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClassInput'
+              $ref: "#/components/schemas/ClassInput"
       responses:
-        '201':
+        "201":
           description: Class created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Class'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Class"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /classes/{id}:
     parameters:
@@ -201,18 +201,18 @@ paths:
       tags:
         - classes
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Class'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Class"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     put:
       summary: Update class
       operationId: updateClass
@@ -223,36 +223,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClassInput'
+              $ref: "#/components/schemas/ClassInput"
       responses:
-        '200':
+        "200":
           description: Class updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Class'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Class"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     delete:
       summary: Delete class
       operationId: deleteClass
       tags:
         - classes
       responses:
-        '204':
+        "204":
           description: Class deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # Resources endpoints
   /resources:
@@ -269,18 +269,18 @@ paths:
             type: string
           description: Filter by resource type
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Resource'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                  $ref: "#/components/schemas/Resource"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     post:
       summary: Create a new resource
       operationId: createResource
@@ -291,20 +291,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceInput'
+              $ref: "#/components/schemas/ResourceInput"
       responses:
-        '201':
+        "201":
           description: Resource created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Resource'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Resource"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /resources/{id}:
     parameters:
@@ -320,18 +320,18 @@ paths:
       tags:
         - resources
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Resource'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Resource"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     put:
       summary: Update resource
       operationId: updateResource
@@ -342,36 +342,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResourceInput'
+              $ref: "#/components/schemas/ResourceInput"
       responses:
-        '200':
+        "200":
           description: Resource updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Resource'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Resource"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     delete:
       summary: Delete resource
       operationId: deleteResource
       tags:
         - resources
       responses:
-        '204':
+        "204":
           description: Resource deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # Reservation endpoints
   /reservations:
@@ -402,18 +402,18 @@ paths:
             type: integer
           description: Resource ID for filtering reservations
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Reservation'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                  $ref: "#/components/schemas/Reservation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     post:
       summary: Create a new reservation
       operationId: createReservation
@@ -424,22 +424,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReservationInput'
+              $ref: "#/components/schemas/ReservationInput"
       responses:
-        '201':
+        "201":
           description: Reservation created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Reservation'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Reservation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /reservations/{id}:
     parameters:
@@ -455,18 +455,18 @@ paths:
       tags:
         - reservations
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Reservation'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Reservation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     put:
       summary: Update reservation
       operationId: updateReservation
@@ -477,38 +477,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReservationInput'
+              $ref: "#/components/schemas/ReservationInput"
       responses:
-        '200':
+        "200":
           description: Reservation updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Reservation'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Reservation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     delete:
       summary: Delete reservation
       operationId: deleteReservation
       tags:
         - reservations
       responses:
-        '204':
+        "204":
           description: Reservation deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # Lesson endpoints
   /lessons:
@@ -539,18 +539,18 @@ paths:
             format: date
           description: End date for filtering lessons
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Lesson'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                  $ref: "#/components/schemas/Lesson"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     post:
       summary: Create a new lesson
       operationId: createLesson
@@ -561,22 +561,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LessonInput'
+              $ref: "#/components/schemas/LessonInput"
       responses:
-        '201':
+        "201":
           description: Lesson created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Lesson'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Lesson"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /lessons/{id}:
     parameters:
@@ -592,18 +592,18 @@ paths:
       tags:
         - lessons
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Lesson'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Lesson"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     put:
       summary: Update lesson
       operationId: updateLesson
@@ -614,38 +614,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LessonInput'
+              $ref: "#/components/schemas/LessonInput"
       responses:
-        '200':
+        "200":
           description: Lesson updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Lesson'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Lesson"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     delete:
       summary: Delete lesson
       operationId: deleteLesson
       tags:
         - lessons
       responses:
-        '204':
+        "204":
           description: Lesson deleted
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # Authentication endpoints
   /auth/login:
@@ -659,22 +659,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
       responses:
-        '200':
+        "200":
           description: Successful login
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '401':
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
 components:
   schemas:
@@ -793,7 +793,7 @@ components:
           example: "Lecture Hall A"
         type:
           type: string
-          enum: [ classroom, equipment, lab ]
+          enum: [classroom, equipment, lab]
           example: "classroom"
         capacity:
           type: integer
@@ -827,7 +827,7 @@ components:
           example: "Lecture Hall A"
         type:
           type: string
-          enum: [ classroom, equipment, lab ]
+          enum: [classroom, equipment, lab]
           example: "classroom"
         capacity:
           type: integer
@@ -874,7 +874,7 @@ components:
           example: "Workshop session"
         status:
           type: string
-          enum: [ pending, confirmed, cancelled ]
+          enum: [pending, confirmed, cancelled]
           example: "confirmed"
         createdAt:
           type: string
@@ -909,7 +909,7 @@ components:
           example: "Workshop session"
         status:
           type: string
-          enum: [ pending, confirmed, cancelled ]
+          enum: [pending, confirmed, cancelled]
           example: "pending"
       required:
         - resourceId
@@ -938,7 +938,7 @@ components:
           example: "2023-09-04T15:30:00Z"
         repeatPattern:
           type: string
-          enum: [ once, daily, weekly, biweekly ]
+          enum: [once, daily, weekly, biweekly]
           example: "weekly"
         repeatUntil:
           type: string
@@ -976,7 +976,7 @@ components:
           example: "2023-09-04T15:30:00Z"
         repeatPattern:
           type: string
-          enum: [ once, daily, weekly, biweekly ]
+          enum: [once, daily, weekly, biweekly]
           example: "weekly"
         repeatUntil:
           type: string
@@ -1045,37 +1045,37 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     Forbidden:
       description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     NotFound:
       description: Resource not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     Conflict:
       description: Conflict with existing resource
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
 
   securitySchemes:
     BearerAuth:
@@ -1084,4 +1084,4 @@ components:
       bearerFormat: JWT
 
 security:
-  - BearerAuth: [ ]
+  - BearerAuth: []

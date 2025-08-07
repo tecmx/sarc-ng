@@ -116,14 +116,33 @@ release: ## Build production release binaries
 # DOCUMENTATION
 #
 
-.PHONY: swagger
+.PHONY: swagger docs-build docs-serve docs-clean
 swagger: ## Generate API documentation
 	@echo "Generating Swagger docs..."
 	$(call check_tool,swag)
-	@rm -rf api/docs/swagger.json api/docs/swagger.yaml api/docs/docs.go
-	swag init -g cmd/server/main.go --parseDependency --parseInternal --output api/docs
-	@[ -f api/docs/swagger.json ] || (echo "Generation failed" && exit 1)
-	@grep -q '"paths": {}' api/docs/swagger.json && echo "Empty paths - check annotations" || echo "Documentation generated"
+	@rm -rf api/swagger/swagger.json api/swagger/swagger.yaml api/swagger/docs.go
+	swag init -g cmd/server/main.go --parseDependency --parseInternal --output api/swagger
+	@[ -f api/swagger/swagger.json ] || (echo "Generation failed" && exit 1)
+	@grep -q '"paths": {}' api/swagger/swagger.json && echo "Empty paths - check annotations" || echo "Documentation generated"
+
+docs-build: ## Build documentation site
+	@echo "Building documentation..."
+	$(call check_tool,yarn)
+	@cd docs && yarn clean-api-docs sarc-ng || true
+	@cd docs && yarn gen-api-docs sarc-ng
+	@cd docs && yarn build
+	@echo "Documentation built successfully in docs/build/"
+
+docs-serve: ## Start documentation development server
+	@echo "Starting documentation server..."
+	$(call check_tool,yarn)
+	@cd docs && yarn start
+
+docs-clean: ## Clean documentation build artifacts
+	@echo "Cleaning documentation..."
+	@cd docs && yarn clean-api-docs sarc-ng || true
+	@rm -rf docs/build docs/node_modules/.cache
+	@echo "Documentation cleaned"
 
 #
 # QUALITY ASSURANCE

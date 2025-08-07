@@ -27,7 +27,7 @@ import (
 	"sarc-ng/internal/domain/resource"
 	"sarc-ng/pkg/metrics"
 
-	_ "sarc-ng/api/docs" // Import generated API documentation
+	_ "sarc-ng/api/swagger" // Import generated API documentation
 
 	"github.com/gin-gonic/gin"
 )

@@ -7,9 +7,9 @@ import type * as Plugin from "@docusaurus/types/src/plugin";
 import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 
 const config: Config = {
-  title: "My Site",
-  tagline: "Dinosaurs are cool",
-  url: "https://your-docusaurus-test-site.com",
+  title: "SARC-NG Documentation",
+  tagline: "Resource Management and Scheduling System",
+  url: "https://your-sarc-ng-docs.com",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -17,8 +17,8 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "facebook", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  organizationName: "sarc-ng", // Usually your GitHub org/user name.
+  projectName: "sarc-ng", // Usually your repo name.
 
   presets: [
     [
@@ -29,18 +29,10 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/tecmx/sarc-ng/tree/main/docs/",
           docItemComponent: "@theme/ApiItem", // Derived from docusaurus-theme-openapi
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          onInlineAuthors: "ignore",
-          onUntruncatedBlogPosts: "ignore",
-        },
+        blog: false, // Disable blog functionality
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -56,26 +48,25 @@ const config: Config = {
         },
       },
       navbar: {
-        title: "My Site",
+        title: "SARC-NG",
         logo: {
-          alt: "My Site Logo",
+          alt: "SARC-NG Logo",
           src: "img/logo.svg",
         },
         items: [
           {
             type: "doc",
-            docId: "intro",
+            docId: "introduction",
             position: "left",
-            label: "Tutorial",
-          },
-          { to: "/blog", label: "Blog", position: "left" },
-          {
-            label: "Petstore API",
-            position: "left",
-            to: "/docs/category/petstore-api",
+            label: "Documentation",
           },
           {
-            href: "https://github.com/facebook/docusaurus",
+            label: "API Reference",
+            position: "left",
+            to: "/docs/category/api-reference",
+          },
+          {
+            href: "https://github.com/tecmx/sarc-ng",
             label: "GitHub",
             position: "right",
           },
@@ -88,8 +79,12 @@ const config: Config = {
             title: "Docs",
             items: [
               {
-                label: "Tutorial",
-                to: "/docs/intro",
+                label: "Documentation",
+                to: "/docs/introduction",
+              },
+              {
+                label: "API Reference",
+                to: "/docs/category/api-reference",
               },
             ],
           },
@@ -97,16 +92,12 @@ const config: Config = {
             title: "Community",
             items: [
               {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+                label: "GitHub Issues",
+                href: "https://github.com/tecmx/sarc-ng/issues",
               },
               {
-                label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
-              },
-              {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
+                label: "Discussions",
+                href: "https://github.com/tecmx/sarc-ng/discussions",
               },
             ],
           },
@@ -114,17 +105,13 @@ const config: Config = {
             title: "More",
             items: [
               {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
                 label: "GitHub",
-                href: "https://github.com/facebook/docusaurus",
+                href: "https://github.com/tecmx/sarc-ng",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} SARC-NG Project. Built with Docusaurus.`,
       },
       prism: {
         additionalLanguages: [
@@ -242,11 +229,11 @@ const config: Config = {
         id: "openapi",
         docsPluginId: "classic",
         config: {
-          petstore: {
-            specPath: "examples/petstore.yaml",
-            outputDir: "docs/petstore",
+          "sarc-ng": {
+            specPath: "../api/openapi.yaml",
+            outputDir: "docs/api-reference",
             downloadUrl:
-              "https://raw.githubusercontent.com/PaloAltoNetworks/docusaurus-template-openapi-docs/main/examples/petstore.yaml",
+              "https://raw.githubusercontent.com/sarc-ng/sarc-ng/main/api/openapi.yaml",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
@@ -257,7 +244,11 @@ const config: Config = {
     ],
   ],
 
-  themes: ["docusaurus-theme-openapi-docs"],
+  themes: ["docusaurus-theme-openapi-docs", "@docusaurus/theme-mermaid"],
+
+  markdown: {
+    mermaid: true,
+  },
 };
 
 export default async function createConfig() {

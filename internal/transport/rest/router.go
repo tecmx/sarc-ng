@@ -18,7 +18,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "sarc-ng/api/docs" // Import generated docs
+	_ "sarc-ng/api/swagger" // Import generated docs
 )
 
 // Router contains all the dependencies for setting up routes

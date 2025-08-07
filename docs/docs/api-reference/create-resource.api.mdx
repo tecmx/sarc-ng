@@ -1,0 +1,71 @@
+---
+id: create-resource
+title: "Create a new resource"
+description: "Create a new resource"
+sidebar_label: "Create a new resource"
+hide_title: true
+hide_table_of_contents: true
+api: eJztV0tvGzcQ/iuLOTUAbUlBDQR7qmwkrYu0NWwHPdhCMFqOtEy5JM2HHFfY/14MdyWtHMVuAB9atD7YMjnPb76ZodZgHXmMyppzCSVUnjDSJQWbfEUgIOIyQHkDvj8KMBPg6S5RiKdWPkC5zv8qTxLK6BMJqKyJZCJfoXNaVdn+6FOwhs9CVVOD/Ck+OIIS7PwTVREEOM/RREWBbw02NJAK0SuzBAH0GRun+eg9VTF5Kn5CrYsptKKXPaBjUsNpVBpD8NY2fHaXlGs4UAEa55zYzvROsBVQocNKxYeBZWUiLckPwzkZtwK07bJ9OvDTpLRUZllMRfFOW+uL1+xn3h9zKZ7yNGkFSIqodDgEI0qpOAbUFwNAu9psbayhxnDhLetYv7muMZzZxqVIPkC5QB2obVsxKPFNV5ce6pmAqGLOaUOac+NShLZXC86a0NXz9XjCfySFyivXgbTVKjrmSXgx+qi/AeL/FPuHUEz0k0dO46G0FtY3GKEEiZGOomqIc0lOfpvKIyIrZtszbO6J/P14/CV3T1EW/Sh8OdpWVj5Dyc0o/mhs/LiwyUgGo6EQcPmM6nVNm4iJY+977x5DYWwsemOPYMoR7RwMQHrrvfVbhA509weDKdbWqz9fsrP/rRCdHCLRuYnkDeoikF+RLygr/MexysNniNJZng4FFobut46ylVhbfrg4m5vQYayhhNHuuSKgA5ZfMWtIXkMJdYyuHI14kOrahli+Gb8Zj1YTeOz2PUsUklakbZ7jfZWgnbHdKvk8sm/WcEroyU8Tu7+ZDa+vuFJdMYZCW1w5GI4yi0EJ8ywEov/wbjPHfv79OmPJDLjcPcDe7qZtt80er6zNxtpbTLt1czIebpSDa2N/a0z2FsM3THhlFjbn3Zf7anp5dvTrj8X04ry4pAV5Mrmm+yXg24X1xUb6u+2L4Rc0uKRcFTSyYJxl0hz71UOI1Ly6NbfmulYhe3DerpSkUJCRzioTQzbbsBHW2aQYRLEFKogt14K4Newl7LzE2tu0rFmE/CoDGHIkmkKwJhzfGhDA1OsymRyPj8d9Z2MVBxXb5HaVnLOeeUwNKmZq6E5+6HvuuOLXQisy3Rs0Axtf65A9NLeki/Q5jpxGZfIi5a5Y983z6K3P/cGH6/UcA33wum35+C6RZ+bPBKzQK5xzSW9mrYCaUJLPTfEHPXBk3SQ7umbXLK4Th/DFVGvFRmNaVeTik7KzQe9f/HZ1zSTtv440eeSBx3sQ+XcJIMBmCDJn89kaNJplyjMOOpv88xd1vIPQ
+sidebar_class_name: "post api-method"
+info_path: docs/api-reference/sarc-ng-api-reference
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"Create a new resource"}
+>
+</Heading>
+
+<MethodEndpoint
+  method={"post"}
+  path={"/resources"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Create a new resource
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+  children={"Request"}
+>
+</Heading>
+
+<ParamsDetails
+  parameters={undefined}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","example":"Lecture Hall A"},"type":{"type":"string","enum":["classroom","equipment","lab"],"example":"classroom"},"capacity":{"type":"integer","example":50},"location":{"type":"string","example":"Building A, Floor 2"},"buildingId":{"type":"integer","example":1},"details":{"type":"object","additionalProperties":true,"example":{"hasProjector":true,"hasComputers":false}}},"required":["name","type"],"title":"ResourceInput"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  id={undefined}
+  label={undefined}
+  responses={{"201":{"description":"Resource created","content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"integer","example":1},"name":{"type":"string","example":"Lecture Hall A"},"type":{"type":"string","enum":["classroom","equipment","lab"],"example":"classroom"},"capacity":{"type":"integer","example":50},"location":{"type":"string","example":"Building A, Floor 2"},"buildingId":{"type":"integer","example":1},"details":{"type":"object","additionalProperties":true,"example":{"hasProjector":true,"hasComputers":false}},"createdAt":{"type":"string","format":"date-time"},"updatedAt":{"type":"string","format":"date-time"}},"required":["id","name","type"],"title":"Resource"}}}},"400":{"description":"Bad request","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"401":{"description":"Unauthorized","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}},"500":{"description":"Internal server error","content":{"application/json":{"schema":{"type":"object","properties":{"code":{"type":"string","example":"resource_not_found"},"message":{"type":"string","example":"The requested resource was not found"}},"required":["code","message"],"title":"Error"}}}}}}
+>
+  
+</StatusCodes>
+
+
+      
