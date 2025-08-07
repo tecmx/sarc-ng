@@ -1,12 +1,11 @@
-# Infrastructure
+# AWS Infrastructure
 
 Terraform and Terragrunt configuration for SARC-NG AWS infrastructure.
 
 ## Directory Structure
 
 ```
-infrastructure/terraform/
-├── README.md                  # This file
+infrastructure/aws/
 ├── live/                      # Environment configurations
 │   ├── terragrunt.hcl         # Root configuration
 │   └── accounts/              # Account-based organization
@@ -57,7 +56,7 @@ Navigate to a module and run standard Terragrunt commands:
 
 ```bash
 # Example: Network module in dev environment
-cd live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 
 # Initialize
 terragrunt init
@@ -87,7 +86,7 @@ localstack start -d
 curl -s http://localhost:4566/_localstack/health
 
 # Apply to LocalStack
-cd live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 LOCALSTACK=true terragrunt apply --auto-approve
 
 # Destroy from LocalStack
@@ -98,15 +97,15 @@ LOCALSTACK=true terragrunt destroy --auto-approve
 
 ```bash
 # Development environment
-cd live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 terragrunt apply
 
 # Staging environment
-cd live/accounts/staging/us-east-1/network
+cd infrastructure/aws/live/accounts/staging/us-east-1/network
 terragrunt apply
 
 # Production environment
-cd live/accounts/prod/us-east-1/network
+cd infrastructure/aws/live/accounts/prod/us-east-1/network
 terragrunt apply
 ```
 
@@ -116,7 +115,7 @@ Apply multiple modules at once:
 
 ```bash
 # Apply all modules in an environment
-cd live/accounts/dev/us-east-1
+cd infrastructure/aws/live/accounts/dev/us-east-1
 terragrunt run-all apply
 
 # Plan all modules
@@ -131,7 +130,7 @@ terragrunt run-all destroy
 ### Network Module
 
 ```bash
-cd live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 terragrunt plan
 terragrunt apply
 ```
@@ -139,7 +138,7 @@ terragrunt apply
 ### Database Module
 
 ```bash
-cd live/accounts/dev/us-east-1/database
+cd infrastructure/aws/live/accounts/dev/us-east-1/database
 terragrunt plan
 terragrunt apply
 ```
@@ -147,7 +146,7 @@ terragrunt apply
 ### Compute Module
 
 ```bash
-cd live/accounts/dev/us-east-1/compute
+cd infrastructure/aws/live/accounts/dev/us-east-1/compute
 terragrunt plan
 terragrunt apply
 ```
@@ -163,7 +162,7 @@ terragrunt apply
 
 2. Test network module:
    ```bash
-   cd live/accounts/dev/us-east-1/network
+   cd infrastructure/aws/live/accounts/dev/us-east-1/network
    LOCALSTACK=true terragrunt apply --auto-approve
    ```
 
@@ -173,20 +172,20 @@ terragrunt apply
 
 1. **Development:**
    ```bash
-   cd live/accounts/dev/us-east-1
+   cd infrastructure/aws/live/accounts/dev/us-east-1
    terragrunt run-all apply
    ```
 
 2. **Staging:**
    ```bash
-   cd live/accounts/staging/us-east-1
+   cd infrastructure/aws/live/accounts/staging/us-east-1
    terragrunt run-all plan
    terragrunt run-all apply
    ```
 
 3. **Production:**
    ```bash
-   cd live/accounts/prod/us-east-1
+   cd infrastructure/aws/live/accounts/prod/us-east-1
    terragrunt run-all plan
    terragrunt run-all apply
    ```
@@ -234,7 +233,7 @@ aws configure
 
 ```bash
 # Verbose logging
-cd live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 terragrunt plan --terragrunt-log-level debug
 ```
 
@@ -310,7 +309,7 @@ terraform fmt -recursive
 
 ```bash
 # Validate configuration
-cd live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 terragrunt validate
 ```
 
@@ -318,5 +317,5 @@ terragrunt validate
 
 ```bash
 # List available modules
-ls live/accounts/dev/us-east-1/
-``` 
+ls infrastructure/aws/live/accounts/dev/us-east-1/
+```

@@ -134,9 +134,9 @@ GIN_MODE=release
 
 **Directory Structure:**
 ```
-infrastructure/terraform/live/accounts/
+infrastructure/aws/live/accounts/
 ├── dev/                    # Development environment
-├── staging/                # Staging environment  
+├── staging/                # Staging environment
 └── prod/                   # Production environment
 ```
 
@@ -144,7 +144,7 @@ infrastructure/terraform/live/accounts/
 
 **Deploy Development Infrastructure:**
 ```bash
-cd infrastructure/terraform/live/accounts/dev/us-east-1
+cd infrastructure/aws/live/accounts/dev/us-east-1
 
 # Deploy network foundation
 cd network
@@ -171,7 +171,7 @@ terragrunt apply
 
 **Deploy Production Infrastructure:**
 ```bash
-cd infrastructure/terraform/live/accounts/prod/us-east-1
+cd infrastructure/aws/live/accounts/prod/us-east-1
 
 # Deploy all modules
 terragrunt run-all plan
@@ -186,7 +186,7 @@ terragrunt run-all apply
 localstack start -d
 
 # Test infrastructure locally
-cd infrastructure/terraform/live/accounts/dev/us-east-1/network
+cd infrastructure/aws/live/accounts/dev/us-east-1/network
 LOCALSTACK=true terragrunt apply --auto-approve
 ```
 
@@ -272,7 +272,7 @@ spec:
 **Helm Chart Deployment:**
 ```bash
 # Deploy via Terraform Helm provider
-cd infrastructure/terraform/live/accounts/prod/us-east-1/services/sarcng-api/eks-helm-release
+cd infrastructure/aws/live/accounts/prod/us-east-1/services/sarcng-api/eks-helm-release
 terragrunt apply
 ```
 
@@ -430,7 +430,7 @@ resource "aws_route53_record" "api" {
   zone_id = var.hosted_zone_id
   name    = "api.yourdomain.com"
   type    = "A"
-  
+
   alias {
     name                   = aws_lb.main.dns_name
     zone_id                = aws_lb.main.zone_id
@@ -572,4 +572,4 @@ aws cloudwatch get-metric-statistics \
 # RDS performance insights
 aws rds describe-db-instances \
   --db-instance-identifier sarc-ng-db
-``` 
+```

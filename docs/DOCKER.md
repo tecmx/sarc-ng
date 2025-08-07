@@ -7,8 +7,7 @@ Docker configuration for SARC-NG development and deployment.
 ```
 docker/
 ├── docker-compose.yml      # Development services
-├── Dockerfile              # Multi-stage application build
-└── README.md               # This file
+└── Dockerfile              # Multi-stage application build
 ```
 
 ## Services
@@ -110,7 +109,6 @@ Development configuration:
 - Host user mapping
 
 
-
 ## Development Workflow
 
 ### Hot Reloading
@@ -133,7 +131,7 @@ docker compose up -d && docker compose run --rm app go test -tags=integration ./
 
 Database admin interface available at: http://localhost:8081
 - System: MySQL
-- Server: db  
+- Server: db
 - Username: root
 - Password: example
 

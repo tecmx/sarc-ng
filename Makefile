@@ -61,7 +61,7 @@ help: ## Show available commands
 	@echo ""
 	@echo "Other environments:"
 	@echo "  Docker:         cd docker && docker compose up -d"
-	@echo "  Infrastructure: cd infrastructure/terraform (see README.md)"
+	@echo "  Infrastructure: cd infrastructure/aws (see docs/AWS.md)"
 
 setup: ## Setup development environment and install dependencies
 	@echo "Setting up development environment..."

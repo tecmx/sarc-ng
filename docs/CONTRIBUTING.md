@@ -266,8 +266,8 @@ docker compose down -v --remove-orphans && docker compose up -d
 Infrastructure is managed with Terraform and Terragrunt:
 
 ```bash
-cd infrastructure/terraform
-# See README.md for detailed commands
+cd infrastructure/aws
+# See docs/AWS.md for detailed commands
 ```
 
 ## Code Standards
@@ -309,6 +309,6 @@ test: add integration tests for classes
 ## Getting Help
 
 - Check existing documentation in `docs/`
-- Review Docker setup in `docker/README.md`
-- Check infrastructure setup in `infrastructure/terraform/README.md`
+- Review Docker setup in `docs/DOCKER.md`
+- Check infrastructure setup in `docs/AWS.md`
 - Open issue for bugs or feature requests

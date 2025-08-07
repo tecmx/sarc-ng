@@ -33,8 +33,8 @@ Reusable Terraform modules for consistent deployments:
 ## Directory Structure
 
 ```
-infrastructure/terraform/
-├── README.md                  # Quick reference guide
+infrastructure/aws/
+
 ├── Makefile                   # Removed for simplification
 ├── live/                      # Environment configurations
 │   ├── terragrunt.hcl         # Root configuration
@@ -229,7 +229,7 @@ terragrunt destroy --auto-approve
 
 **Network Foundation:**
 ```bash
-cd infrastructure/terraform/live/accounts/dev/us-east-1
+cd infrastructure/aws/live/accounts/dev/us-east-1
 
 # Deploy VPC and networking
 cd network
@@ -266,7 +266,7 @@ terragrunt apply
 
 **Bulk Deployment:**
 ```bash
-cd infrastructure/terraform/live/accounts/prod/us-east-1
+cd infrastructure/aws/live/accounts/prod/us-east-1
 
 # Plan entire environment
 terragrunt run-all plan

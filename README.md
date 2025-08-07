@@ -57,8 +57,8 @@ docker compose down -v --remove-orphans     # Stop and cleanup all
 
 ### Infrastructure
 ```bash
-cd infrastructure/terraform
-# See README.md for Terragrunt commands
+cd infrastructure/aws
+# See docs/AWS.md for Terragrunt commands
 ```
 
 ## Project Structure
@@ -74,7 +74,7 @@ sarc-ng/
 ├── docker/                # Docker development & deployment
 ├── docs/                  # Project documentation
 ├── infrastructure/        # Infrastructure as Code
-│   └── terraform/        # Terraform configurations
+│   └── aws/              # AWS infrastructure configurations
 ├── internal/              # Private application code
 │   ├── adapter/          # External service adapters
 │   ├── config/           # Configuration management
@@ -153,5 +153,6 @@ make release
 ## Documentation
 
 - [CONTRIBUTING.md](docs/CONTRIBUTING.md) - Development guidelines and setup
-- [docker/README.md](docker/README.md) - Docker environment documentation
-- [infrastructure/terraform/README.md](infrastructure/terraform/README.md) - Infrastructure setup
+- [DOCKER.md](docs/DOCKER.md) - Docker environment documentation
+- [AWS.md](docs/AWS.md) - AWS infrastructure setup
+- [AWS_MODULES.md](docs/AWS_MODULES.md) - AWS infrastructure modules
