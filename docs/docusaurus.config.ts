@@ -226,6 +226,28 @@ const config: Config = {
 
   plugins: [
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/docs/introduction',
+            to: '/content/introduction',
+          },
+          {
+            from: '/docs/category/api-reference',
+            to: '/content/category/api-reference',
+          },
+        ],
+        createRedirects(existingPath) {
+          if (existingPath.includes('/content/')) {
+            // Redirect from /docs/xyz to /content/xyz
+            return [existingPath.replace('/content/', '/docs/')];
+          }
+          return undefined;
+        },
+      },
+    ],
+    [
       "docusaurus-plugin-openapi-docs",
       {
         id: "openapi",

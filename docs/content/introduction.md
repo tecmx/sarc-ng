@@ -85,7 +85,7 @@ SARC-NG follows REST API principles with:
 
 ### Explore the API
 
-Check out our [**API Reference**](/docs/category/api-reference) for complete endpoint documentation with:
+Check out our [**API Reference**](/content/category/api-reference) for complete endpoint documentation with:
 
 - Interactive API explorer
 - Request/response examples
@@ -94,9 +94,9 @@ Check out our [**API Reference**](/docs/category/api-reference) for complete end
 
 ## Next Steps
 
-- 📚 Browse the [API Reference](/docs/category/api-reference) to explore all available endpoints
+- 📚 Browse the [API Reference](/content/category/api-reference) to explore all available endpoints
 - 🚀 Try the interactive API examples to test functionality
 - 💡 Check out our tutorials for common use cases
 - 🐛 Report issues on our [GitHub repository](https://github.com/tecmx/sarc-ng)
 
-Ready to get started? Jump into our [API Reference](/docs/category/api-reference) and start building!
+Ready to get started? Jump into our [API Reference](/content/category/api-reference) and start building!

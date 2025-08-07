@@ -6,7 +6,7 @@ export default function Home() {
 
   useEffect(() => {
     // Redirect to introduction page
-    history.replace('/docs/introduction');
+    history.replace('/content/introduction');
   }, [history]);
 
   return null;
