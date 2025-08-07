@@ -1,0 +1,573 @@
+---
+sidebar_position: 1
+---
+
+# JavaScript Examples
+
+Integration examples for using the SARC-NG API with JavaScript.
+
+## API Client Setup
+
+First, let's create a simple API client for interacting with the SARC-NG API:
+
+```javascript
+// api-client.js
+export default class SarcApiClient {
+  constructor(baseUrl = "http://localhost:8080/api/v1") {
+    this.baseUrl = baseUrl;
+    this.headers = {
+      "Content-Type": "application/json",
+    };
+  }
+
+  // Set auth token if using authentication
+  setAuthToken(token) {
+    if (token) {
+      this.headers["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete this.headers["Authorization"];
+    }
+  }
+
+  // Generic request method
+  async request(endpoint, method = "GET", data = null) {
+    const url = `${this.baseUrl}${endpoint}`;
+
+    const options = {
+      method,
+      headers: this.headers,
+    };
+
+    if (data) {
+      options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(url, options);
+
+    // Handle 204 No Content responses
+    if (response.status === 204) {
+      return { success: true };
+    }
+
+    const responseData = await response.json();
+
+    // Handle error responses
+    if (!response.ok) {
+      throw {
+        status: response.status,
+        ...responseData,
+      };
+    }
+
+    return responseData;
+  }
+
+  // Buildings
+  async getBuildings() {
+    return this.request("/buildings");
+  }
+
+  async getBuilding(id) {
+    return this.request(`/buildings/${id}`);
+  }
+
+  async createBuilding(building) {
+    return this.request("/buildings", "POST", building);
+  }
+
+  async updateBuilding(id, building) {
+    return this.request(`/buildings/${id}`, "PUT", building);
+  }
+
+  async deleteBuilding(id) {
+    return this.request(`/buildings/${id}`, "DELETE");
+  }
+
+  // Resources
+  async getResources(type = null) {
+    const query = type ? `?type=${encodeURIComponent(type)}` : "";
+    return this.request(`/resources${query}`);
+  }
+
+  // Reservations
+  async createReservation(reservation) {
+    return this.request("/reservations", "POST", reservation);
+  }
+
+  async getReservations(params = {}) {
+    const queryParams = new URLSearchParams();
+
+    if (params.fromDate) queryParams.append("fromDate", params.fromDate);
+    if (params.toDate) queryParams.append("toDate", params.toDate);
+    if (params.resourceId) queryParams.append("resourceId", params.resourceId);
+    if (params.page) queryParams.append("page", params.page);
+    if (params.limit) queryParams.append("limit", params.limit);
+
+    const query = queryParams.toString() ? `?${queryParams.toString()}` : "";
+    return this.request(`/reservations${query}`);
+  }
+}
+```
+
+## Interactive Client Example
+
+```jsx live
+function ApiClientDemo() {
+  const [buildings, setBuildings] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [newBuilding, setNewBuilding] = useState({ name: "", code: "" });
+
+  // Mock API client for demo purposes
+  const mockGetBuildings = () => {
+    setLoading(true);
+    setError(null);
+
+    // Simulate API call
+    setTimeout(() => {
+      setBuildings([
+        {
+          id: 1,
+          name: "Main Campus",
+          code: "MC-01",
+          createdAt: "2023-01-01T00:00:00Z",
+        },
+        {
+          id: 2,
+          name: "Science Building",
+          code: "SC-02",
+          createdAt: "2023-01-02T00:00:00Z",
+        },
+        {
+          id: 3,
+          name: "Library",
+          code: "LB-03",
+          createdAt: "2023-01-03T00:00:00Z",
+        },
+      ]);
+      setLoading(false);
+    }, 1000);
+  };
+
+  const mockCreateBuilding = () => {
+    if (!newBuilding.name || !newBuilding.code) {
+      setError("Name and code are required");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    // Simulate API call
+    setTimeout(() => {
+      const createdBuilding = {
+        id: buildings.length + 1,
+        ...newBuilding,
+        createdAt: new Date().toISOString(),
+      };
+
+      setBuildings([...buildings, createdBuilding]);
+      setNewBuilding({ name: "", code: "" });
+      setLoading(false);
+    }, 1000);
+  };
+
+  return (
+    <div
+      style={{ border: "1px solid #eee", borderRadius: "8px", padding: "16px" }}
+    >
+      <h3>Buildings API Demo</h3>
+
+      <div style={{ marginBottom: "16px" }}>
+        <button
+          onClick={mockGetBuildings}
+          disabled={loading}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#25c2a0",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: loading ? "not-allowed" : "pointer",
+          }}
+        >
+          {loading ? "Loading..." : "Get Buildings"}
+        </button>
+      </div>
+
+      {buildings.length > 0 && (
+        <div style={{ marginBottom: "24px" }}>
+          <h4>Buildings List</h4>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "8px",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  ID
+                </th>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "8px",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  Name
+                </th>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "8px",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  Code
+                </th>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "8px",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  Created
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {buildings.map((building) => (
+                <tr key={building.id}>
+                  <td
+                    style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
+                  >
+                    {building.id}
+                  </td>
+                  <td
+                    style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
+                  >
+                    {building.name}
+                  </td>
+                  <td
+                    style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
+                  >
+                    {building.code}
+                  </td>
+                  <td
+                    style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
+                  >
+                    {new Date(building.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <h4>Create Building</h4>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <input
+          type="text"
+          placeholder="Building Name"
+          value={newBuilding.name}
+          onChange={(e) =>
+            setNewBuilding({ ...newBuilding, name: e.target.value })
+          }
+          style={{
+            padding: "8px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
+        />
+        <input
+          type="text"
+          placeholder="Building Code"
+          value={newBuilding.code}
+          onChange={(e) =>
+            setNewBuilding({ ...newBuilding, code: e.target.value })
+          }
+          style={{
+            padding: "8px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+          }}
+        />
+        <button
+          onClick={mockCreateBuilding}
+          disabled={loading}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#3578e5",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: loading ? "not-allowed" : "pointer",
+          }}
+        >
+          {loading ? "Creating..." : "Create Building"}
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+## Usage Examples
+
+### Authentication
+
+```javascript
+import SarcApiClient from "./api-client";
+
+const api = new SarcApiClient("http://localhost:8080/api/v1");
+
+async function login(username, password) {
+  try {
+    const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+
+    // Store token and set up API client
+    localStorage.setItem("token", data.access_token);
+    api.setAuthToken(data.access_token);
+
+    return data;
+  } catch (error) {
+    console.error("Login error:", error);
+    throw error;
+  }
+}
+```
+
+### Managing Buildings
+
+```javascript
+async function loadAndDisplayBuildings() {
+  try {
+    const buildings = await api.getBuildings();
+
+    // Display buildings on the page
+    const container = document.getElementById("buildings-container");
+    container.innerHTML = "";
+
+    buildings.data.forEach((building) => {
+      const element = document.createElement("div");
+      element.className = "building-item";
+      element.innerHTML = `
+        <h3>${building.name} (${building.code})</h3>
+        <p>Created: ${new Date(building.createdAt).toLocaleDateString()}</p>
+        <div class="actions">
+          <button data-id="${building.id}" class="edit-button">Edit</button>
+          <button data-id="${building.id}" class="delete-button">Delete</button>
+        </div>
+      `;
+      container.appendChild(element);
+    });
+
+    // Add event listeners
+    document.querySelectorAll(".edit-button").forEach((button) => {
+      button.addEventListener("click", () => editBuilding(button.dataset.id));
+    });
+
+    document.querySelectorAll(".delete-button").forEach((button) => {
+      button.addEventListener("click", () => deleteBuilding(button.dataset.id));
+    });
+  } catch (error) {
+    console.error("Error loading buildings:", error);
+    alert(`Failed to load buildings: ${error.message}`);
+  }
+}
+
+async function createBuilding(buildingData) {
+  try {
+    const newBuilding = await api.createBuilding(buildingData);
+    alert("Building created successfully!");
+    loadAndDisplayBuildings(); // Refresh the list
+    return newBuilding;
+  } catch (error) {
+    console.error("Error creating building:", error);
+
+    // Handle validation errors
+    if (error.status === 400 && error.details) {
+      const errorMessages = error.details
+        .map((e) => `${e.field}: ${e.message}`)
+        .join("\n");
+      alert(`Validation errors:\n${errorMessages}`);
+    } else {
+      alert(`Failed to create building: ${error.message}`);
+    }
+
+    throw error;
+  }
+}
+```
+
+### Making Reservations
+
+```javascript
+async function makeReservation() {
+  const resourceId = document.getElementById("resource-select").value;
+  const startTime = document.getElementById("start-time").value;
+  const endTime = document.getElementById("end-time").value;
+  const purpose = document.getElementById("purpose").value;
+
+  const reservation = {
+    resourceId: parseInt(resourceId),
+    startTime,
+    endTime,
+    purpose,
+    userId: 123, // Should be obtained from authenticated user
+  };
+
+  try {
+    const response = await api.createReservation(reservation);
+    alert("Reservation created successfully!");
+    return response;
+  } catch (error) {
+    // Handle reservation conflicts
+    if (error.status === 409) {
+      alert(`Reservation conflict: ${error.message}`);
+      // Could show available times instead
+    } else {
+      alert(`Error creating reservation: ${error.message}`);
+    }
+    throw error;
+  }
+}
+```
+
+### Handling Pagination
+
+```javascript
+let currentPage = 1;
+const itemsPerPage = 10;
+
+async function loadResourcesPage(page) {
+  try {
+    // Get resources with pagination
+    const response = await api.request(
+      `/resources?page=${page}&limit=${itemsPerPage}`
+    );
+
+    displayResources(response.data);
+
+    // Update pagination UI
+    const pagination = response.pagination;
+    document.getElementById("current-page").textContent = pagination.page;
+    document.getElementById("total-pages").textContent = pagination.pages;
+
+    // Enable/disable pagination buttons
+    document.getElementById("prev-page").disabled = pagination.page <= 1;
+    document.getElementById("next-page").disabled =
+      pagination.page >= pagination.pages;
+
+    currentPage = pagination.page;
+  } catch (error) {
+    console.error("Error loading resources:", error);
+    alert(`Failed to load resources: ${error.message}`);
+  }
+}
+
+// Event listeners for pagination
+document.getElementById("prev-page").addEventListener("click", () => {
+  if (currentPage > 1) {
+    loadResourcesPage(currentPage - 1);
+  }
+});
+
+document.getElementById("next-page").addEventListener("click", () => {
+  loadResourcesPage(currentPage + 1);
+});
+
+// Initial load
+loadResourcesPage(1);
+```
+
+### Error Handling
+
+```javascript
+// Enhanced request method with better error handling
+async request(endpoint, method = 'GET', data = null) {
+  try {
+    const url = `${this.baseUrl}${endpoint}`;
+
+    const options = {
+      method,
+      headers: this.headers,
+    };
+
+    if (data) {
+      options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(url, options);
+
+    // Handle 204 No Content responses
+    if (response.status === 204) {
+      return { success: true };
+    }
+
+    const responseData = await response.json();
+
+    // Handle error responses
+    if (!response.ok) {
+      // Session expired
+      if (response.status === 401 && this.headers.Authorization) {
+        // Trigger authentication refresh
+        document.dispatchEvent(new CustomEvent('auth:expired'));
+
+        // Rethrow with extra info
+        throw {
+          status: response.status,
+          authExpired: true,
+          ...responseData,
+        };
+      }
+
+      throw {
+        status: response.status,
+        ...responseData,
+      };
+    }
+
+    return responseData;
+  } catch (error) {
+    // Network errors won't have a status
+    if (!error.status) {
+      throw {
+        status: 0,
+        error: 'NetworkError',
+        message: 'Network error, please check your connection',
+      };
+    }
+
+    throw error;
+  }
+}
+```
+
+### Full Application Example
+
+For a complete frontend application example using this API client, check the [SPA Example repository](https://github.com/example/sarc-ng-spa) which demonstrates:
+
+- User authentication and session management
+- Resource browsing and filtering
+- Reservation calendar with availability checks
+- Admin dashboard for building and resource management
+- Error handling and notifications

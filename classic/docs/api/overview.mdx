@@ -1,0 +1,253 @@
+---
+sidebar_position: 1
+---
+
+# API Overview
+
+SARC-NG provides a RESTful API for managing resource reservations and scheduling. The API follows standard HTTP conventions and returns JSON-formatted responses.
+
+import ApiEndpointDemo from "@site/src/components/ApiEndpointDemo";
+
+## Base URL
+
+```
+http://localhost:8080/api/v1
+```
+
+## Version
+
+Current version: 1.0.0
+
+## Core Features
+
+- **Resource Management**: Manage bookable resources (rooms, equipment)
+- **Building Management**: Organize physical structures and locations
+- **Class Management**: Handle classroom and space definitions
+- **Lesson Scheduling**: Schedule and manage educational sessions
+- **Reservation System**: Book resources with conflict detection
+
+## API Endpoints Overview
+
+<ApiEndpointDemo
+  endpoints={[
+    { method: "GET", path: "/buildings", description: "List all buildings" },
+    {
+      method: "POST",
+      path: "/buildings",
+      description: "Create a new building",
+    },
+    {
+      method: "GET",
+      path: "/buildings/:id",
+      description: "Get building by ID",
+    },
+    { method: "PUT", path: "/buildings/:id", description: "Update building" },
+    {
+      method: "DELETE",
+      path: "/buildings/:id",
+      description: "Delete building",
+    },
+    { method: "GET", path: "/resources", description: "List all resources" },
+    {
+      method: "POST",
+      path: "/resources",
+      description: "Create a new resource",
+    },
+    {
+      method: "GET",
+      path: "/resources/:id",
+      description: "Get resource by ID",
+    },
+    { method: "PUT", path: "/resources/:id", description: "Update resource" },
+    {
+      method: "DELETE",
+      path: "/resources/:id",
+      description: "Delete resource",
+    },
+    {
+      method: "GET",
+      path: "/reservations",
+      description: "List all reservations",
+    },
+    {
+      method: "POST",
+      path: "/reservations",
+      description: "Create a new reservation",
+    },
+    {
+      method: "GET",
+      path: "/reservations/:id",
+      description: "Get reservation by ID",
+    },
+    {
+      method: "PUT",
+      path: "/reservations/:id",
+      description: "Update reservation",
+    },
+    {
+      method: "DELETE",
+      path: "/reservations/:id",
+      description: "Delete reservation",
+    },
+  ]}
+/>
+
+## Core Entities
+
+### Buildings
+
+Buildings represent physical structures and locations.
+
+```json
+{
+  "id": 1,
+  "name": "Main Campus Building",
+  "code": "MCB-A",
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+
+### Classes
+
+Classes represent classrooms or physical spaces.
+
+```json
+{
+  "id": 1,
+  "name": "Room 101",
+  "capacity": 30,
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+
+### Resources
+
+Resources are bookable items like rooms, equipment, etc.
+
+```json
+{
+  "id": 1,
+  "name": "Projector Room A",
+  "type": "equipment",
+  "isAvailable": true,
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+
+### Lessons
+
+Lessons represent teaching or training sessions.
+
+```json
+{
+  "id": 1,
+  "title": "Introduction to Programming",
+  "description": "Basic programming concepts",
+  "duration": 90,
+  "startTime": "2024-01-01T14:00:00Z",
+  "endTime": "2024-01-01T15:30:00Z",
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+
+### Reservations
+
+Reservations track resource bookings.
+
+```json
+{
+  "id": 1,
+  "resourceId": 1,
+  "userId": 123,
+  "startTime": "2024-01-01T14:00:00Z",
+  "endTime": "2024-01-01T16:00:00Z",
+  "purpose": "Team Meeting",
+  "status": "confirmed",
+  "description": "Weekly team standup",
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+
+## Response Format
+
+### Success Response
+
+Standard successful response format:
+
+```json
+{
+  "data": {},
+  "message": "Operation completed successfully"
+}
+```
+
+### Error Response
+
+Standard error response format:
+
+```json
+{
+  "code": 400,
+  "error": "Invalid input",
+  "message": "The provided data is invalid"
+}
+```
+
+## HTTP Status Codes
+
+- **200 OK**: Successful GET, PUT requests
+- **201 Created**: Successful POST requests
+- **204 No Content**: Successful DELETE requests
+- **400 Bad Request**: Invalid request data
+- **401 Unauthorized**: Authentication required
+- **403 Forbidden**: Access denied
+- **404 Not Found**: Resource not found
+- **409 Conflict**: Resource conflict (reservation overlap)
+- **500 Internal Server Error**: Server error
+
+## Swagger Documentation
+
+The API is documented using Swagger/OpenAPI. When running the application locally, you can access the Swagger UI at:
+
+```
+http://localhost:8080/swagger/index.html
+```
+
+The Swagger UI provides an interactive way to explore and test the API endpoints.
+
+## System Endpoints
+
+### Health Check
+
+```http
+GET /health
+```
+
+**Response:**
+
+```json
+{
+  "status": "healthy",
+  "service": "sarc-ng"
+}
+```
+
+### Metrics
+
+```http
+GET /metrics
+```
+
+**Response:** Prometheus-formatted metrics
+
+## Next Steps
+
+- [Learn about authentication](authentication)
+- [Understand pagination](pagination)
+- [View error handling guidelines](error-handling)
+- [Check out integration examples](examples/javascript)

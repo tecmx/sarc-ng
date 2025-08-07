@@ -1,0 +1,122 @@
+.container {
+  margin: 20px 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.methodFilters {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  background-color: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  gap: 8px;
+}
+
+.methodButton {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color: white;
+}
+
+.methodButton.active {
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.3);
+}
+
+.methodButton:hover {
+  opacity: 0.9;
+}
+
+.get {
+  background-color: #61affe;
+}
+
+.post {
+  background-color: #49cc90;
+}
+
+.put {
+  background-color: #fca130;
+}
+
+.delete {
+  background-color: #f93e3e;
+}
+
+.resourceSection {
+  margin: 0;
+}
+
+.resourceTitle {
+  padding: 12px 16px;
+  margin: 0;
+  background-color: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.endpointList {
+  display: flex;
+  flex-direction: column;
+}
+
+.endpoint {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  transition: background-color 0.2s;
+}
+
+.endpoint:last-child {
+  border-bottom: none;
+}
+
+.endpoint:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.method {
+  display: inline-block;
+  width: 60px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 12px;
+  font-family: var(--ifm-font-family-monospace);
+  color: white;
+}
+
+.path {
+  margin-left: 12px;
+  flex: 1;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.description {
+  color: var(--ifm-color-emphasis-700);
+  margin-left: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .endpoint {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .method {
+    width: auto;
+  }
+
+  .path, .description {
+    margin-left: 0;
+  }
+}
