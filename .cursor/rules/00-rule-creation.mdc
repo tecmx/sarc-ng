@@ -37,31 +37,26 @@ alwaysApply: false
 
 ```markdown
 ---
-description: [Clear context-based trigger description]
-alwaysApply: [true for universal rules, false for context-specific]
+description: [Clear context-based trigger]
+alwaysApply: [true/false]
 ---
-
 # Rule Title
-
-> **PRIORITY**: [HIGHEST/HIGH/MEDIUM] - [Context trigger phrase]
+> **PRIORITY**: [HIGHEST/HIGH/MEDIUM] - [Context]
 
 ## **QUICK REFERENCE**
-- Key principle 1 (most critical)
-- Key principle 2 (essential pattern)
-- Key principle 3 (critical rule)
+- Key principle (most critical first)
 
 ## **CORE PRINCIPLES**
 ### **PRIMARY PRINCIPLE**
 - Clear, actionable guideline
-- Supporting detail
 
 ## **ESSENTIAL PATTERNS**
 ### **Pattern Type**
 ```[language]
-# CORRECT approach
-example_code_or_pattern
+# CORRECT
+example
 
-# AVOID this
+# AVOID
 counter_example
 ```
 
@@ -69,60 +64,25 @@ counter_example
 
 ### **Category**
 
-- [ ] Specific, testable requirement
-- [ ] Clear verification criteria
+- [ ] Testable requirement
 
-**CRITICAL**: Final emphasis line!
+**CRITICAL**: Final emphasis!
 
 ```
 
 ### **Safe Modification Process**
 
-```bash
-# Step 1: Always read first
-read_file .cursor/rules/rule-name.mdc
-
-# Step 2: Use search_replace ONLY (never edit_file)
-search_replace --file rule-name.mdc --old "content below header" --new "updated content"
-
-# Step 3: Verify headers remain intact
-```
-
-**Rules:**
-
-- Always use `read_file` before making changes
-- Only modify content below YAML headers
-- Never use `edit_file` tool on rule files
+1. Read file first with `read_file`
+2. Use `search_replace` ONLY (never `edit_file`)
+3. Modify content below YAML headers only
+4. Verify headers remain intact
 
 ## **WRITING GUIDELINES**
 
-### **Quick References (5-8 bullets)**
-
-- Start with the most critical principle
-- Use action-oriented language ("Use X", "Always Y", "Never Z")
-- Include specific technical details (not just concepts)
-- Limit to essential information only
-
-### **Core Principles (20-40 lines)**
-
-- Group related concepts under clear headings
-- Use consistent bullet formatting (not paragraphs)
-- Focus on "why" and "what", save "how" for patterns section
-- Maintain logical flow from general to specific
-
-### **Essential Patterns (30-50 lines)**
-
-- Show contrast with CORRECT/AVOID patterns
-- Include real, applicable code/configurations
-- Demonstrate principles in action
-- Avoid repetitive or overly similar examples
-
-### **Enforcement Checklists (10-15 lines)**
-
-- Use specific, testable criteria
-- Group related items under logical categories
-- Focus on verification steps, not just reminders
-- Include both technical and process requirements
+- **Quick Reference**: 5-8 bullets, action-oriented, most critical first
+- **Core Principles**: 20-40 lines, bullet format, focus on "why" and "what"
+- **Essential Patterns**: 30-50 lines, CORRECT/AVOID contrasts, real examples
+- **Enforcement Checklist**: 10-15 lines, testable criteria, grouped logically
 
 ## **QUALITY TARGETS**
 

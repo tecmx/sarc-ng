@@ -22,24 +22,28 @@ SARC-NG is a modern resource management and scheduling system designed for educa
 ## Key Features
 
 ### 🏢 Building & Resource Management
+
 - Track buildings with detailed information (floors, addresses, codes)
 - Manage different types of resources (classrooms, equipment, labs)
 - Flexible resource details with custom attributes
 - Capacity tracking and location management
 
 ### 📅 Smart Scheduling
+
 - Create lessons with flexible repeat patterns (once, daily, weekly, biweekly)
 - Resource reservations with conflict detection
 - Time-based filtering and availability checking
 - Automated scheduling validation
 
 ### 👥 Class Management
+
 - Organize classes with instructor information
 - Track semester information and capacity
 - Link classes to scheduled lessons
 - Student enrollment capabilities
 
 ### 🔐 Authentication & Security
+
 - JWT-based authentication system
 - Secure API endpoints with bearer token authentication
 - Role-based access control
@@ -59,28 +63,35 @@ SARC-NG follows REST API principles with:
 
 ### Prerequisites
 
-- Go 1.19 or higher
+- Go 1.24 or higher
 - Docker and Docker Compose
-- PostgreSQL database
-- Redis (for caching and sessions)
+- MySQL 8.0 database
 
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/tecmx/sarc-ng.git
    cd sarc-ng
    ```
 
 2. **Start with Docker Compose**
+
    ```bash
-   cd infrastructure/docker
-   docker compose up -d
+   make docker-up
    ```
 
 3. **API will be available at**
+
    ```
-   http://localhost:8080/v1
+   http://localhost:8080/api/v1
+   ```
+
+   **Swagger documentation:**
+
+   ```
+   http://localhost:8080/swagger/index.html
    ```
 
 ### Explore the API

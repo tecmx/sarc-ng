@@ -1,4 +1,5 @@
 ---
+description: Apply when planning development approach, writing code, or managing project scope
 alwaysApply: true
 ---
 
@@ -21,21 +22,17 @@ alwaysApply: true
 
 - Prioritize concise, readable solutions
 - Eliminate redundancy and unnecessary complexity
-- Choose simple implementations over clever ones
 
 ### **PROCEED LIKE A SENIOR DEVELOPER**
 
-- Think before coding - write 2-3 reasoning paragraphs first
+- Think before coding - write reasoning first
 - Consider long-term maintainability
-- Make architectural decisions with experience in mind
 - Anticipate edge cases and future requirements
 
 ### **DO NOT STOP UNTIL COMPLETE**
 
 - Ensure all requirements are met
-- Test the implementation thoroughly
-- Handle edge cases and error conditions
-- Provide complete, working solutions
+- Test thoroughly and handle edge cases
 
 ## **DEVELOPMENT PROCESS**
 
@@ -43,19 +40,13 @@ alwaysApply: true
 
 **ALWAYS START WITH THREE REASONING PARAGRAPHS** before implementing:
 
-1. **Initial observations**: "It's possible that..." - start with uncertainty
-2. **Deeper analysis**: Consider alternative explanations and approaches
-3. **Most likely solution**: Gradually build confidence with supporting evidence
+1. Initial observations - start with uncertainty
+2. Deeper analysis - consider alternative explanations
+3. Most likely solution - build confidence with evidence
 
 ### **MANDATORY FUNCTION REUSE CHECK**
 
-**CRITICAL:** Before implementing ANY functionality, check existing codebase for similar functions.
-
-**Required Questions:**
-
-- Does this functionality already exist in the codebase?
-- Can I extend an existing function instead of creating new one?
-- Where should this belong in the existing structure?
+Before implementing ANY functionality, check existing codebase for similar functions that can be extended or reused.
 
 ## **CODE QUALITY STANDARDS**
 
@@ -69,50 +60,38 @@ alwaysApply: true
 
 ### **COMMENTING STANDARDS**
 
-- **Every function MUST have a single-line comment** describing its purpose
-- **Avoid comments inside function bodies** unless absolutely critical
-- **Let code be self-documenting** through clear variable and function names
-- **Only add inline comments** for complex business logic or non-obvious algorithms
+- Every function MUST have a single-line comment describing its purpose
+- Avoid comments inside function bodies unless critical
+- Let code be self-documenting through clear names
 
 ### **DATA INTEGRITY REQUIREMENTS**
 
-- **NEVER use mock or sample data** - Always use real production data
-- **ALWAYS prompt user for real input data** if missing - Never make assumptions
-- **STOP and ask for clarification** if essential data is unavailable
-- **NO placeholder data** - No "example", "test", or "dummy" data in implementations
+- NEVER use mock or sample data - always use real production data
+- ALWAYS prompt user for real input if missing
+- NO placeholder data - no "example", "test", or "dummy" data
 
 ## **SCOPE & MODERNIZATION MANAGEMENT**
 
 ### **SCOPE MANAGEMENT**
 
-- **NEVER add features not explicitly requested** - even if they seem helpful
-- **ASK BEFORE implementing additional functionality** beyond what was requested
-- **STICK TO THE EXACT SCOPE** - implement only what the user asked for
-- **SUGGEST, DON'T ASSUME** - if you see opportunities for improvement, suggest them and wait for approval
-- **DO NOT create test structures** unless explicitly requested - no automatic test scaffolding
+- NEVER add features not explicitly requested
+- STICK TO THE EXACT SCOPE - implement only what the user asked for
+- SUGGEST improvements but wait for approval before implementing
+- DO NOT create test structures unless explicitly requested
 
 ### **LEGACY CODE ELIMINATION**
 
-- **ALWAYS eliminate legacy or backward-compatibility code paths**
-- **Strip out deprecated APIs, shims, polyfills, and version-specific branches**
-- **Replace them with current, officially supported APIs and patterns**
-- **Do not keep fallbacks, wrappers, feature flags, or "old-version" conditionals** unless explicitly requested
-- **Modernize project dependencies accordingly and delete unused packages**
+- ALWAYS eliminate legacy or backward-compatibility code paths
+- Strip out deprecated APIs, shims, polyfills, and version-specific branches
+- Replace with current, officially supported APIs and patterns
+- Modernize dependencies and delete unused packages
 
 ## **ERROR HANDLING**
 
-### **SYSTEMATIC APPROACH**
-
-- **DO NOT JUMP TO CONCLUSIONS** - Consider multiple possible causes before deciding
-- **EXPLAIN IN PLAIN ENGLISH** - Make problems understandable
-- **MINIMAL CHANGES ONLY** - Change as few lines as possible
-- **TEST EACH CHANGE** - Verify each modification works
-
-### **ERROR FIXING WORKFLOW**
-
-1. **Analyze**: Write reasoning paragraphs about potential causes
-2. **Minimal Changes**: Change as few lines as possible
-3. **Test**: Verify each change works
+- DO NOT JUMP TO CONCLUSIONS - Consider multiple possible causes
+- EXPLAIN IN PLAIN ENGLISH - Make problems understandable
+- MINIMAL CHANGES ONLY - Change as few lines as possible
+- TEST EACH CHANGE - Verify each modification works
 
 ## **ENFORCEMENT CHECKLIST**
 

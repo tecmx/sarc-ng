@@ -16,13 +16,11 @@ This guide covers building and deploying SARC-NG in various environments.
 ### Local Build
 
 ```bash
-# Build all binaries
+# Build all binaries (includes Wire code generation)
 make build
 
-# Build specific components
-make build-server
-make build-cli
-make build-lambda
+# Build production release binaries
+make release
 
 # Cross-compile for different platforms
 GOOS=linux GOARCH=amd64 go build -o bin/server-linux cmd/server/main.go
@@ -82,17 +80,12 @@ server:
 
 database:
   host: ${DB_HOST}
-  port: ${DB_PORT}
+  port: 3306
   name: ${DB_NAME}
   user: ${DB_USER}
   password: ${DB_PASSWORD}
   max_connections: 100
   max_idle_connections: 10
-
-redis:
-  addr: ${REDIS_ADDR}
-  password: ${REDIS_PASSWORD}
-  db: 0
 
 auth:
   jwt_secret: ${JWT_SECRET}
@@ -114,6 +107,7 @@ metrics:
 ### AWS Deployment
 
 #### Prerequisites
+
 ```bash
 # Install AWS CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -123,27 +117,109 @@ sudo ./aws/install
 # Configure AWS credentials
 aws configure
 
-# Install Terraform
+# Install AWS SAM CLI (for serverless deployment)
+pip install aws-sam-cli
+# or on macOS
+brew install aws-sam-cli
+
+# Install Terraform (for infrastructure as code)
 wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
 unzip terraform_1.6.0_linux_amd64.zip
 sudo mv terraform /usr/local/bin/
 ```
 
-#### Infrastructure Setup
+#### AWS SAM (Serverless) Deployment
+
+AWS SAM deployment includes Lambda function, RDS MySQL, API Gateway, and VPC configuration.
+
+**Architecture:**
+
+- Lambda Function (Go provided.al2 runtime)
+- RDS MySQL 8.0 Database
+- API Gateway (HTTP API)
+- VPC with public, private, and database subnets
+- CloudWatch Logs
+
+**Build Lambda:**
 
 ```bash
-# Navigate to infrastructure directory
-cd infrastructure/terraform
-
-# Initialize Terraform
-terraform init
-
-# Plan deployment
-terraform plan -var-file="environments/production.tfvars"
-
-# Apply infrastructure
-terraform apply -var-file="environments/production.tfvars"
+cd infrastructure/sam
+sam build
 ```
+
+**First-time Deploy (Interactive):**
+
+```bash
+cd infrastructure/sam
+sam deploy --guided
+```
+
+This will prompt for:
+
+- Stack name (e.g., `sarc-ng-prod`)
+- AWS Region (e.g., `us-east-1`)
+- Environment parameter (dev/staging/prod)
+- Database password
+- Confirmation for capabilities
+
+**Subsequent Deploys:**
+
+```bash
+cd infrastructure/sam
+sam deploy
+```
+
+**Environment-Specific Deployment:**
+
+```bash
+# Development
+cd infrastructure/sam && sam deploy --config-env development
+
+# Production
+cd infrastructure/sam && sam deploy --config-env production
+```
+
+**Custom Parameters:**
+
+```bash
+cd infrastructure/sam && sam deploy \
+    --parameter-overrides \
+    Environment=prod \
+    DBPassword=secure-password
+```
+
+**Local Testing:**
+
+```bash
+# Start database first
+make docker-up
+
+# Start SAM local API
+cd infrastructure/sam
+sam local start-api \
+  --port 3001 \
+  --docker-network sarc-ng-network \
+  --env-vars env.json
+```
+
+**Delete Stack:**
+
+```bash
+cd infrastructure/sam
+sam delete
+```
+
+**View Logs:**
+
+```bash
+# View Lambda logs
+sam logs -n SarcNgFunction --stack-name sarc-ng-prod --tail
+
+# View logs from specific time
+sam logs -n SarcNgFunction --stack-name sarc-ng-prod --start-time '10min ago'
+```
+
+For detailed SAM documentation, see [`infrastructure/README.md`](../infrastructure/README.md).
 
 #### ECS Deployment
 
@@ -161,19 +237,19 @@ aws ecs update-service --cluster sarc-ng-cluster --service sarc-ng-service --for
 
 #### Lambda Deployment
 
+**Recommended:** Use AWS SAM for Lambda deployment (see section above).
+
+**Manual deployment (if not using SAM):**
+
 ```bash
 # Build Lambda function
-GOOS=linux GOARCH=amd64 go build -o bootstrap cmd/lambda/main.go
+GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -buildvcs=false -o bootstrap cmd/lambda/main.go
 zip lambda-deployment.zip bootstrap
 
 # Deploy via AWS CLI
 aws lambda update-function-code \
   --function-name sarc-ng-lambda \
   --zip-file fileb://lambda-deployment.zip
-
-# Or using Terraform
-cd infrastructure/terraform
-terraform apply -target=aws_lambda_function.sarc_ng
 ```
 
 ### Container Platforms
@@ -290,16 +366,12 @@ docker service update --image sarc-ng:v2.0.0 sarc-ng_sarc-ng
 ### Required Environment Variables
 
 ```bash
-# Database
+# Database (MySQL)
 export DB_HOST=localhost
-export DB_PORT=5432
-export DB_NAME=sarc_ng
-export DB_USER=sarc
+export DB_PORT=3306
+export DB_NAME=sarcng
+export DB_USER=root
 export DB_PASSWORD=secure_password
-
-# Redis
-export REDIS_ADDR=localhost:6379
-export REDIS_PASSWORD=redis_password
 
 # Authentication
 export JWT_SECRET=very_secure_jwt_secret
@@ -307,6 +379,7 @@ export JWT_SECRET=very_secure_jwt_secret
 # Server
 export SERVER_PORT=8080
 export SARC_ENV=production
+export GIN_MODE=release
 ```
 
 ### Optional Environment Variables
@@ -331,9 +404,13 @@ export S3_BUCKET=sarc-ng-assets
 
 ## Database Deployment
 
-### PostgreSQL Setup
+### MySQL 8.0 Setup
 
 #### Managed Database (AWS RDS)
+
+**Recommended:** Use AWS SAM deployment which includes RDS MySQL automatically (see SAM section above).
+
+**Manual RDS creation:**
 
 ```bash
 # Create RDS instance via Terraform
@@ -344,36 +421,41 @@ terraform apply -target=aws_db_instance.sarc_ng
 aws rds create-db-instance \
   --db-instance-identifier sarc-ng-prod \
   --db-instance-class db.t3.micro \
-  --engine postgres \
-  --engine-version 15.4 \
-  --master-username sarc \
+  --engine mysql \
+  --engine-version 8.0 \
+  --master-username root \
   --master-user-password ${DB_PASSWORD} \
+  --db-name sarcng \
   --allocated-storage 20 \
   --storage-type gp2 \
   --vpc-security-group-ids sg-12345678 \
   --db-subnet-group-name sarc-ng-subnet-group
 ```
 
-#### Self-managed PostgreSQL
+#### Self-managed MySQL
 
 ```bash
-# Run PostgreSQL with Docker
+# Run MySQL with Docker
 docker run -d \
-  --name sarc-postgres \
-  -e POSTGRES_DB=sarc_ng \
-  -e POSTGRES_USER=sarc \
-  -e POSTGRES_PASSWORD=${DB_PASSWORD} \
-  -v postgres-data:/var/lib/postgresql/data \
-  -p 5432:5432 \
-  postgres:15
+  --name sarc-mysql \
+  -e MYSQL_ROOT_PASSWORD=${DB_PASSWORD} \
+  -e MYSQL_DATABASE=sarcng \
+  -v mysql-data:/var/lib/mysql \
+  -p 3306:3306 \
+  mysql:8.0
 ```
 
 ### Database Migrations
+
+**Note:** GORM handles migrations automatically on application startup. For manual control:
 
 ```bash
 # Run migrations in production
 docker run --rm \
   -e DB_HOST=${DB_HOST} \
+  -e DB_PORT=3306 \
+  -e DB_NAME=sarcng \
+  -e DB_USER=root \
   -e DB_PASSWORD=${DB_PASSWORD} \
   sarc-ng:latest \
   /app/cli migrate up
@@ -555,6 +637,7 @@ kubectl patch deployment sarc-ng-canary -p '{"spec":{"replicas":0}}'
 ### Common Issues
 
 **Container Won't Start**
+
 ```bash
 # Check container logs
 docker logs sarc-ng-container
@@ -567,6 +650,7 @@ docker exec -it sarc-ng-container /bin/sh
 ```
 
 **Database Connection Issues**
+
 ```bash
 # Test database connectivity
 docker run --rm -it postgres:15 psql -h $DB_HOST -U $DB_USER -d $DB_NAME
@@ -576,6 +660,7 @@ nc -zv $DB_HOST $DB_PORT
 ```
 
 **High Memory Usage**
+
 ```bash
 # Profile memory usage
 curl http://your-domain.com/debug/pprof/heap > heap.prof
@@ -586,6 +671,7 @@ docker update --memory=1g sarc-ng-container
 ```
 
 **SSL Certificate Issues**
+
 ```bash
 # Check certificate validity
 openssl s_client -connect your-domain.com:443 -servername your-domain.com

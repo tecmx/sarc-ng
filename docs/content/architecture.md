@@ -19,48 +19,46 @@ graph TB
         CLI[CLI Tool]
         API[External APIs]
     end
-    
+
     subgraph "Transport Layer"
         HTTP[HTTP/REST]
         GraphQL[GraphQL]
         gRPC[gRPC]
     end
-    
+
     subgraph "Application Layer"
         Server[HTTP Server]
         Handlers[HTTP Handlers]
         Middleware[Middleware]
     end
-    
+
     subgraph "Business Layer"
         Services[Application Services]
         Domain[Domain Logic]
         Entities[Domain Entities]
     end
-    
+
     subgraph "Data Layer"
         Repositories[Repositories]
-        Database[(PostgreSQL)]
-        Cache[(Redis)]
+        Database[(MySQL 8.0)]
         Files[(File Storage)]
     end
-    
+
     Web --> HTTP
     CLI --> Server
     API --> HTTP
-    
+
     HTTP --> Handlers
     GraphQL --> Handlers
     gRPC --> Handlers
-    
+
     Handlers --> Services
     Middleware --> Handlers
-    
+
     Services --> Domain
     Services --> Repositories
-    
+
     Repositories --> Database
-    Repositories --> Cache
     Repositories --> Files
 ```
 
@@ -101,9 +99,13 @@ sarc-ng/
 │   ├── metrics/          # Metrics collection
 │   └── rest/             # REST client utilities
 │
+├── api/                   # API specifications
+│   └── swagger/          # Generated Swagger documentation
 ├── configs/               # Configuration files
-├── docker/               # Docker configurations
-├── infrastructure/       # Infrastructure as Code
+├── infrastructure/        # Infrastructure as Code
+│   ├── docker/           # Docker Compose configurations
+│   ├── sam/              # AWS SAM (Serverless) deployment
+│   └── terraform/        # Terraform/Terragrunt IaC
 └── test/                 # Integration tests
 ```
 
@@ -155,7 +157,7 @@ func (s *BuildingService) CreateBuilding(ctx context.Context, req CreateBuilding
     if err := s.validateBuilding(req); err != nil {
         return nil, err
     }
-    
+
     // Business logic
     building := &Building{
         Name:    req.Name,
@@ -163,12 +165,12 @@ func (s *BuildingService) CreateBuilding(ctx context.Context, req CreateBuilding
         Address: req.Address,
         Floors:  req.Floors,
     }
-    
+
     // Persist
     if err := s.buildingRepo.Create(ctx, building); err != nil {
         return nil, err
     }
-    
+
     return building, nil
 }
 ```
@@ -188,13 +190,13 @@ func (h *BuildingHandler) CreateBuilding(w http.ResponseWriter, r *http.Request)
         http.Error(w, "Invalid request", http.StatusBadRequest)
         return
     }
-    
+
     building, err := h.buildingService.CreateBuilding(r.Context(), req)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
-    
+
     w.Header().Set("Content-Type", "application/json")
     w.WriteStatus(http.StatusCreated)
     json.NewEncoder(w).Encode(building)
@@ -227,21 +229,25 @@ func (r *GormBuildingRepository) GetByID(ctx context.Context, id int) (*Building
 ## Design Patterns
 
 ### 1. Repository Pattern
+
 - Abstracts data access logic
 - Enables easy testing with mocks
 - Supports multiple data sources
 
 ### 2. Dependency Injection
+
 - Uses constructor injection
 - Managed by dependency injection container
 - Enables loose coupling
 
 ### 3. Clean Architecture
+
 - Business logic independent of frameworks
 - Testable architecture
 - Database and UI agnostic core
 
 ### 4. Domain-Driven Design (DDD)
+
 - Organized around business domains
 - Rich domain models
 - Ubiquitous language
@@ -249,14 +255,15 @@ func (r *GormBuildingRepository) GetByID(ctx context.Context, id int) (*Building
 ## Data Flow
 
 ### Request Flow
+
 ```mermaid
 sequenceDiagram
     participant Client
     participant Handler
-    participant Service  
+    participant Service
     participant Repository
     participant Database
-    
+
     Client->>Handler: HTTP Request
     Handler->>Handler: Parse & Validate
     Handler->>Service: Business Operation
@@ -271,6 +278,7 @@ sequenceDiagram
 ```
 
 ### Error Handling Flow
+
 ```mermaid
 graph TD
     A[Request] --> B{Validation}
@@ -280,7 +288,7 @@ graph TD
     E -->|Violation| F[422 Unprocessable Entity]
     E -->|Valid| G[Data Layer]
     G --> H{Database Operation}
-    H -->|Not Found| I[404 Not Found] 
+    H -->|Not Found| I[404 Not Found]
     H -->|Conflict| J[409 Conflict]
     H -->|Error| K[500 Internal Error]
     H -->|Success| L[200/201 Success]
@@ -288,72 +296,74 @@ graph TD
 
 ## Database Design
 
-### Core Entities
+### Core Entities (MySQL 8.0)
+
+The application uses GORM for ORM with automatic migrations. Tables are created automatically on startup.
 
 ```sql
 -- Buildings
 CREATE TABLE buildings (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    code VARCHAR(50) UNIQUE NOT NULL,
-    address TEXT,
-    floors INTEGER,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name LONGTEXT,
+    code LONGTEXT,
+    created_at DATETIME(3) NULL,
+    updated_at DATETIME(3) NULL,
+    deleted_at DATETIME(3) NULL
 );
 
--- Resources (Classrooms, Equipment, Labs)
-CREATE TABLE resources (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL, -- 'classroom', 'equipment', 'lab'
-    capacity INTEGER,
-    location VARCHAR(255),
-    building_id INTEGER REFERENCES buildings(id),
-    details JSONB, -- Flexible attributes
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- Classes  
+-- Classes
 CREATE TABLE classes (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    code VARCHAR(50) NOT NULL,
-    instructor_name VARCHAR(255) NOT NULL,
-    semester VARCHAR(100),
-    capacity INTEGER,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name LONGTEXT,
+    capacity BIGINT,
+    created_at DATETIME(3) NULL,
+    updated_at DATETIME(3) NULL,
+    deleted_at DATETIME(3) NULL
 );
 
--- Reservations
-CREATE TABLE reservations (
-    id SERIAL PRIMARY KEY,
-    resource_id INTEGER REFERENCES resources(id),
-    user_id INTEGER NOT NULL,
-    user_name VARCHAR(255) NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    purpose TEXT,
-    status VARCHAR(50) DEFAULT 'pending', -- 'pending', 'confirmed', 'cancelled'
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+-- Resources
+CREATE TABLE resources (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name LONGTEXT,
+    type LONGTEXT,
+    description LONGTEXT,
+    is_available BOOLEAN,
+    location LONGTEXT,
+    created_at DATETIME(3) NULL,
+    updated_at DATETIME(3) NULL,
+    deleted_at DATETIME(3) NULL
 );
 
 -- Lessons
 CREATE TABLE lessons (
-    id SERIAL PRIMARY KEY,
-    class_id INTEGER REFERENCES classes(id),
-    resource_id INTEGER REFERENCES resources(id),
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    repeat_pattern VARCHAR(50), -- 'once', 'daily', 'weekly', 'biweekly'
-    repeat_until DATE,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title LONGTEXT,
+    duration BIGINT,
+    description LONGTEXT,
+    start_time DATETIME(3) NULL,
+    end_time DATETIME(3) NULL,
+    created_at DATETIME(3) NULL,
+    updated_at DATETIME(3) NULL,
+    deleted_at DATETIME(3) NULL
+);
+
+-- Reservations
+CREATE TABLE reservations (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    resource_id BIGINT UNSIGNED,
+    user_id BIGINT UNSIGNED,
+    start_time DATETIME(3) NULL,
+    end_time DATETIME(3) NULL,
+    purpose LONGTEXT,
+    status LONGTEXT,
+    description LONGTEXT,
+    created_at DATETIME(3) NULL,
+    updated_at DATETIME(3) NULL,
+    deleted_at DATETIME(3) NULL
 );
 ```
+
+**Note:** GORM handles migrations automatically. Soft deletes are implemented using `deleted_at` field.
 
 ## Configuration
 
@@ -364,42 +374,52 @@ CREATE TABLE lessons (
 server:
   port: 8080
   timeout: 30s
-  
+
 database:
   host: localhost
-  port: 5432
-  name: sarc_ng
-  user: sarc
-  password: password
-  
-redis:
-  addr: localhost:6379
-  db: 0
-  
+  port: 3306
+  name: sarcng
+  user: root
+  password: example
+
 auth:
   jwt_secret: dev-secret-key
   token_ttl: 24h
-  
+
 logging:
   level: debug
   format: json
 ```
 
+### Dependency Injection
+
+The application uses [Wire](https://github.com/google/wire) for compile-time dependency injection:
+
+```bash
+# Generate dependency injection code
+make wire
+
+# Generates cmd/server/wire_gen.go and cmd/lambda/wire_gen.go
+```
+
 ## Security
 
 ### Authentication & Authorization
+
 - JWT-based authentication
 - Role-based access control (RBAC)
 - API key authentication for integrations
 - Request rate limiting
 
 ### Data Protection
+
 - Input validation and sanitization
 - SQL injection prevention (parameterized queries)
 - XSS protection
 - CORS configuration
 
 ### Infrastructure Security
+
 - HTTPS/TLS encryption
 - Database connection encryption
 - Secrets management
@@ -408,20 +428,23 @@ logging:
 ## Monitoring & Observability
 
 ### Metrics
+
 - Application metrics (Prometheus format)
 - Database performance metrics
 - HTTP request metrics
 - Custom business metrics
 
 ### Logging
+
 - Structured logging (JSON)
 - Correlation IDs for request tracing
 - Different log levels per environment
 - Centralized log aggregation
 
 ### Health Checks
+
 - Liveness probes
-- Readiness probes  
+- Readiness probes
 - Dependency health checks
 - Graceful shutdown
 

@@ -41,29 +41,32 @@ go run cmd/cli/main.go migrate down
 
 ### 3. Running Services
 
-#### Option A: Full Docker Environment
-**Note:** All Docker commands should be run from the `infrastructure/docker/` directory.
+#### Option A: Full Docker Environment (Recommended)
 
 ```bash
-# Navigate to docker directory
-cd infrastructure/docker
-
-# Start all services (recommended)
-docker compose up -d
+# Start all services
+make docker-up
 
 # Follow logs
-docker compose logs -f sarc-ng-server-dev
+make docker-logs
 
-# Restart just the API server
-docker compose restart sarc-ng-server-dev
+# Follow specific service logs
+make docker-logs service=app
+
+# Restart services
+make docker-down && make docker-up
 ```
 
 #### Option B: Hybrid Development
-```bash
-# Start only infrastructure
-docker compose up -d postgres redis
 
-# Run API server locally
+```bash
+# Start only database
+cd infrastructure/docker
+docker compose up -d db
+
+# Run API server locally (from project root)
+make run
+# or
 go run cmd/server/main.go
 
 # In another terminal, run CLI commands
@@ -71,32 +74,35 @@ go run cmd/cli/main.go --help
 ```
 
 #### Option C: Full Local Setup
-```bash
-# Start PostgreSQL (adjust connection settings in config)
-postgres -D /usr/local/var/postgres
 
-# Start Redis
-redis-server
+```bash
+# Start MySQL (adjust connection settings in config)
+mysql.server start
 
 # Run the server
-make run-server
+make run
 ```
 
 ## Development Commands
 
 ### Server Management
+
 ```bash
 # Start HTTP server
-make run-server
+make run
 
 # Start server with hot reload (requires air)
-air
+make debug
 
-# Start server with custom config
-SARC_CONFIG_PATH=./configs/custom.yaml go run cmd/server/main.go
+# Generate Wire dependency injection code
+make wire
+
+# Build server binary
+make build
 ```
 
 ### CLI Operations
+
 ```bash
 # View all CLI commands
 go run cmd/cli/main.go --help
@@ -112,36 +118,38 @@ go run cmd/cli/main.go import --file data.csv --type buildings
 ```
 
 ### Testing
+
 ```bash
 # Run all tests
 make test
 
-# Run tests with coverage
-make test-coverage
-
-# Run integration tests
-make test-integration
+# Run tests with coverage report
+make coverage
 
 # Run specific test package
 go test ./internal/domain/building/...
 
 # Run tests with verbose output
-go test -v ./...
+go test -v -race ./...
 ```
 
 ### Code Quality
+
 ```bash
 # Run linter
 make lint
 
 # Format code
-make fmt
+make format
 
-# Run security checks
-make security
+# Generate Swagger documentation
+make swagger
 
-# Generate mocks (if using mockery)
-make generate-mocks
+# Run pre-commit checks (format, wire, lint, test)
+make pre-commit
+
+# Run CI pipeline (wire, lint, test, build)
+make ci
 ```
 
 ## API Development
@@ -150,20 +158,23 @@ make generate-mocks
 
 ```bash
 # Health check
-curl http://localhost:8080/v1/health
+curl http://localhost:8080/health
 
 # Get buildings
-curl -H "Authorization: Bearer <token>" http://localhost:8080/v1/buildings
+curl -H "Authorization: Bearer <token>" http://localhost:8080/api/v1/buildings
 
 # Create a building
 curl -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"name": "Library", "code": "LIB"}' \
-  http://localhost:8080/v1/buildings
+  http://localhost:8080/api/v1/buildings
 
-# Get API documentation
-curl http://localhost:8080/v1/docs
+# View Swagger documentation
+open http://localhost:8080/swagger/index.html
+
+# Access API documentation JSON
+curl http://localhost:8080/swagger/doc.json
 ```
 
 ### Authentication
@@ -178,7 +189,7 @@ go run cmd/cli/main.go auth generate-token --user-id 1 --role admin
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "admin"}' \
-  http://localhost:8080/v1/auth/login
+  http://localhost:8080/api/v1/auth/login
 ```
 
 ## Database Operations
@@ -187,26 +198,32 @@ curl -X POST \
 
 ```bash
 # Connect to development database
-psql -h localhost -U sarc -d sarc_ng
+mysql -h localhost -u root -p sarcng
 
 # Or using Docker
-docker exec -it sarc-postgres psql -U sarc -d sarc_ng
+docker exec -it sarc-ng-db-dev mysql -u root -pexample sarcng
 ```
 
 ### Common Queries
 
 ```sql
 -- List all tables
-\dt
+SHOW TABLES;
 
 -- Check buildings
 SELECT * FROM buildings LIMIT 5;
 
--- Check migrations
-SELECT * FROM schema_migrations;
+-- Check database structure
+DESCRIBE buildings;
 
 -- Reset data (development only)
-TRUNCATE buildings, classes, resources, reservations, lessons RESTART IDENTITY CASCADE;
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE buildings;
+TRUNCATE TABLE classes;
+TRUNCATE TABLE resources;
+TRUNCATE TABLE reservations;
+TRUNCATE TABLE lessons;
+SET FOREIGN_KEY_CHECKS = 1;
 ```
 
 ### Seeding Development Data
@@ -223,6 +240,7 @@ go run cmd/cli/main.go seed --type users
 ## Debugging
 
 ### Server Debugging
+
 ```bash
 # Run with debug logging
 SARC_LOG_LEVEL=debug go run cmd/server/main.go
@@ -235,6 +253,7 @@ curl http://localhost:8080/debug/pprof/
 ```
 
 ### Using Delve Debugger
+
 ```bash
 # Install delve
 go install github.com/go-delve/delve/cmd/dlv@latest
@@ -279,6 +298,7 @@ Create `.vscode/launch.json`:
 ## Hot Reload Development
 
 ### Using Air
+
 ```bash
 # Install air
 go install github.com/cosmtrek/air@latest
@@ -291,6 +311,7 @@ air
 ```
 
 ### Using Watchman (Alternative)
+
 ```bash
 # Install watchman
 brew install watchman  # macOS
@@ -303,6 +324,7 @@ watchman-make -p '**/*.go' -r 'make run-server'
 ## Performance Monitoring
 
 ### Local Metrics
+
 ```bash
 # Access metrics endpoint (if enabled)
 curl http://localhost:8080/metrics
@@ -312,13 +334,22 @@ curl http://localhost:8080/v1/health/detailed
 ```
 
 ### Database Performance
+
 ```bash
-# Monitor slow queries (PostgreSQL)
-docker exec -it sarc-postgres psql -U sarc -d sarc_ng -c "
-SELECT query, calls, total_time, mean_time
-FROM pg_stat_statements
-ORDER BY mean_time DESC
-LIMIT 10;"
+# Monitor slow queries (MySQL)
+docker exec -it sarc-ng-db-dev mysql -u root -pexample -e "
+SELECT * FROM information_schema.processlist
+WHERE command != 'Sleep'
+ORDER BY time DESC;"
+
+# Check database size
+docker exec -it sarc-ng-db-dev mysql -u root -pexample -e "
+SELECT
+    table_schema AS 'Database',
+    ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)'
+FROM information_schema.tables
+WHERE table_schema = 'sarcng'
+GROUP BY table_schema;"
 ```
 
 ## Troubleshooting
@@ -326,6 +357,7 @@ LIMIT 10;"
 ### Common Development Issues
 
 **"Port already in use" Error**
+
 ```bash
 # Find and kill process using port 8080
 lsof -ti:8080 | xargs kill -9
@@ -335,18 +367,20 @@ SARC_SERVER_PORT=8081 go run cmd/server/main.go
 ```
 
 **Database Connection Issues**
+
 ```bash
 # Verify database is running
-docker ps | grep postgres
+docker ps | grep mysql
 
 # Test connection
-pg_isready -h localhost -p 5432
+mysql -h localhost -u root -p -e "SELECT 1;"
 
 # Check database logs
-docker logs sarc-postgres
+docker logs sarc-ng-db-dev
 ```
 
 **Module Issues**
+
 ```bash
 # Clean and reinstall modules
 go clean -modcache
@@ -355,6 +389,7 @@ go mod tidy
 ```
 
 **Build Issues**
+
 ```bash
 # Clean build cache
 go clean -cache
@@ -364,11 +399,12 @@ make build
 
 ### Useful Development Tools
 
-- **Postman/Insomnia** - API testing
-- **pgAdmin** - PostgreSQL GUI
-- **Redis Insight** - Redis GUI
-- **Grafana** - Metrics visualization
-- **Jaeger** - Distributed tracing (if implemented)
+- **Postman/Insomnia/Thunder Client** - API testing
+- **Adminer** - MySQL web GUI (included in Docker stack at <http://localhost:8081>)
+- **MySQL Workbench** - Desktop MySQL GUI
+- **Swagger UI** - Built-in API documentation (<http://localhost:8080/swagger/index.html>)
+- **Air** - Hot reloading for Go applications
+- **Delve** - Go debugger
 
 ## Contributing Workflow
 

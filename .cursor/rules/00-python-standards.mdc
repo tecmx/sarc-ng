@@ -46,18 +46,15 @@ alwaysApply: false
 # CORRECT Modern
 from __future__ import annotations
 from typing import Any
-from collections import defaultdict, Counter
+from collections import defaultdict
 
 def process_data(items: list[dict[str, Any]], key: str | None = None) -> dict[str, int]:
     """Process data with modern type hints."""
     if not items:
         raise ValueError("Items list cannot be empty")
-
-    result: dict[str, int] = {}
     groups = defaultdict(list)
     for item in items:
         groups[item.get(key, 'default')].append(item)
-
     return {k: len(v) for k, v in groups.items()}
 
 # AVOID Legacy
@@ -66,37 +63,15 @@ def process_data(items: List[Dict[str, Any]], key: Optional[str] = None) -> Dict
     pass
 ```
 
-### **Exception Handling & Validation**
+## **IMPORT ORGANIZATION**
 
-```python
-# CORRECT Comprehensive patterns
-def process_user_data(user_id: int, data: dict[str, Any]) -> dict[str, Any]:
-    """Process user data with validation."""
-    if user_id <= 0:
-        raise ValueError(f"Invalid user_id: {user_id}, must be positive")
-    if not isinstance(data, dict):
-        raise TypeError(f"Expected dict, got {type(data).__name__}")
-
-    try:
-        with open(f"user_{user_id}.json") as f:
-            existing_data = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        logger.warning(f"Could not load existing data: {e}")
-        existing_data = {}
-
-    return {**existing_data, **data}
-```
-
-## **IMPORT ORGANIZATION & PERFORMANCE**
-
-### **PEP 8 Import Order & Efficient Patterns**
+### **PEP 8 Import Order**
 
 ```python
 # 1. Standard library
 import os
 from pathlib import Path
-from collections import defaultdict, Counter
-from dataclasses import dataclass
+from collections import defaultdict
 
 # 2. Third-party packages
 import requests
@@ -105,24 +80,12 @@ from dagster import asset
 # 3. Local imports
 from .utils import helper_function
 from ..models import DataModel
-
-# CORRECT Efficient data processing
-@dataclass
-class DataProcessor:
-    """Process data with configurable settings."""
-    source_path: str
-    batch_size: int = 1000
-
-    def process(self) -> list[dict[str, Any]]:
-        """Process data from source with comprehensions and generators."""
-        lines = (line.strip() for line in open(self.source_path) if line.strip())
-        return [{'id': i, 'data': line.upper()} for i, line in enumerate(lines, 1) if len(line) > 5]
 ```
 
 **Rules:**
 
 - Use specific imports, never `from module import *`
-- Separate imports on individual lines
+- Follow order: stdlib → third-party → local
 
 ## **PYTHON STANDARDS CHECKLIST**
 

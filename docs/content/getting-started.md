@@ -14,128 +14,153 @@ This guide will help you get up and running with the SARC-NG backend development
 Before you begin, ensure you have the following installed:
 
 ### Required
-- **Go 1.19+** - [Download & Install Go](https://golang.org/dl/)
+
+- **Go 1.24+** - [Download & Install Go](https://golang.org/dl/)
 - **Docker & Docker Compose** - [Get Docker](https://docs.docker.com/get-docker/)
 - **Git** - Version control
 - **Make** - Build automation (usually pre-installed on Unix systems)
 
 ### Optional but Recommended
-- **PostgreSQL** - For local database development
-- **Redis** - For caching and sessions
-- **AWS CLI** - For cloud deployment
-- **Terraform** - For infrastructure management
+
+- **MySQL 8.0** - For local database development without Docker
+- **AWS CLI** - For cloud deployment (Lambda/RDS)
+- **AWS SAM CLI** - For serverless deployment
+- **Terraform/Terragrunt** - For infrastructure management
 
 ## Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/tecmx/sarc-ng.git
    cd sarc-ng
    ```
 
 2. **Install dependencies**
+
    ```bash
    go mod download
    ```
 
 3. **Start with Docker Compose** (Recommended for first-time setup)
+
    ```bash
-   cd infrastructure/docker && docker compose up -d
+   make docker-up
    ```
+
    This starts:
-   - PostgreSQL database
-   - Redis cache
+   - MySQL 8.0 database
    - SARC-NG API server
-   - All required services
+   - Adminer (database management UI)
 
 4. **Verify the setup**
+
    ```bash
    # Check if API is running
-   curl http://localhost:8080/v1/health
+   curl http://localhost:8080/health
 
-   # Should return: {"status": "ok"}
+   # Should return: {"service":"sarc-ng","status":"healthy"}
+
+   # Access Swagger documentation
+   open http://localhost:8080/swagger/index.html
    ```
 
 ## Development Environment
 
 ### Using Docker (Recommended)
 
-The easiest way to get started is using Docker Compose:
-
-**Note:** All Docker commands should be run from the `infrastructure/docker/` directory.
+The easiest way to get started is using Docker Compose via Make commands:
 
 ```bash
-# Navigate to docker directory
-cd infrastructure/docker
-
 # Start all services
-docker compose up -d
+make docker-up
 
 # View logs
-docker compose logs -f sarc-ng-server-dev
+make docker-logs
 
-# Stop services
-docker compose down
+# View specific service logs
+make docker-logs service=app
+
+# Stop services (keeps data)
+make docker-down
+
+# Remove all data (WARNING: deletes database)
+make docker-clean
 ```
+
+**Services Available:**
+
+- API: `http://localhost:8080/api/v1`
+- Swagger: `http://localhost:8080/swagger/index.html`
+- DB Admin (Adminer): `http://localhost:8081`
+- Metrics: `http://localhost:8080/metrics`
 
 ### Manual Setup
 
 If you prefer to run services individually:
 
-1. **Start PostgreSQL**
+1. **Start MySQL**
+
    ```bash
    # Using Docker
-   docker run --name sarc-postgres -e POSTGRES_DB=sarc_ng -e POSTGRES_USER=sarc -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:15
+   docker run --name sarc-mysql \
+     -e MYSQL_ROOT_PASSWORD=example \
+     -e MYSQL_DATABASE=sarcng \
+     -p 3306:3306 \
+     -d mysql:8.0
 
    # Or install locally and create database
-   createdb sarc_ng
+   mysql -u root -p -e "CREATE DATABASE sarcng;"
    ```
 
-2. **Start Redis**
-   ```bash
-   # Using Docker
-   docker run --name sarc-redis -p 6379:6379 -d redis:7
+2. **Run the API server**
 
-   # Or install locally
-   redis-server
-   ```
-
-3. **Configure environment**
    ```bash
-   cp configs/development.yaml.example configs/development.yaml
-   # Edit the configuration file with your database settings
-   ```
-
-4. **Run the API server**
-   ```bash
+   make run
+   # or
    go run cmd/server/main.go
    ```
+
+   **Configuration:**
+   - Configuration is managed via `configs/default.yaml` and `configs/development.yaml`
+   - Override settings using environment variables: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+   - Example: `DB_HOST=localhost DB_PASSWORD=mypass make run`
 
 ## Available Commands
 
 The project includes several useful commands:
 
 ```bash
-# Start API server
-make run-server
+# Development
+make run            # Run API server locally
+make debug          # Run with hot reloading (requires air)
+make wire           # Generate dependency injection code
 
-# Start CLI tool
-make run-cli
+# Build & Release
+make build          # Build server and CLI applications
+make release        # Build production binaries
 
-# Run tests
-make test
+# Testing & Quality
+make test           # Run tests
+make coverage       # Generate test coverage report
+make lint           # Run linters
+make format         # Format Go code
 
-# Build binaries
-make build
+# Documentation
+make swagger        # Generate Swagger API documentation
+make docs-build     # Build documentation site
+make docs-serve     # Start documentation dev server
 
-# Generate API documentation
-make docs
+# Docker
+make docker-up      # Start Docker services
+make docker-down    # Stop Docker services
+make docker-logs    # View logs
+make docker-clean   # Remove all data
 
-# Clean build artifacts
-make clean
-
-# Run linter
-make lint
+# Workflow
+make pre-commit     # Run all pre-commit checks
+make check          # Quick validation (lint, test)
+make ci             # CI pipeline (wire, lint, test, build)
 ```
 
 ## Project Structure
@@ -147,29 +172,60 @@ sarc-ng/
 │   ├── lambda/            # AWS Lambda function
 │   └── server/            # HTTP API server
 ├── internal/              # Internal application code
-│   ├── domain/            # Business logic
+│   ├── adapter/           # External service adapters (GORM, etc.)
+│   ├── config/            # Configuration loader
+│   ├── domain/            # Business logic (entities, repositories, use cases)
 │   ├── service/           # Application services
-│   └── transport/         # HTTP handlers
+│   └── transport/         # HTTP handlers (REST)
 ├── pkg/                   # Shared packages
+│   ├── metrics/           # Metrics collection
+│   └── rest/              # REST client utilities
+├── api/                   # API specifications
+│   └── swagger/           # Generated Swagger docs
 ├── configs/               # Configuration files
-├── docker/                # Docker configurations
-└── infrastructure/        # Terraform IaC
+├── infrastructure/        # Infrastructure as Code
+│   ├── docker/            # Docker Compose configurations
+│   ├── sam/               # AWS SAM (Serverless) deployment
+│   └── terraform/         # Terraform/Terragrunt IaC
+└── test/                  # Integration tests
 ```
 
 ## Configuration
 
-The application uses YAML configuration files in the `configs/` directory:
+The application uses a hierarchical configuration system with the following priority (highest to lowest):
 
-- `default.yaml` - Base configuration
-- `development.yaml` - Development overrides
-- `production.yaml` - Production settings (not in repo)
+1. **Environment Variables** - Override any config setting
+2. **Environment-Specific Config** - `configs/development.yaml` (based on `ENVIRONMENT` or `ENV` variable)
+3. **Base Config** - `configs/default.yaml`
+4. **Hardcoded Defaults** - In `internal/config/loader.go`
 
-Key configuration sections:
-- Database connection settings
-- Redis configuration
-- JWT authentication settings
-- Server port and timeouts
-- Logging configuration
+### Configuration Files
+
+- `configs/default.yaml` - Base configuration for all environments
+- `configs/development.yaml` - Development-specific overrides
+
+### Environment Variables
+
+Standard database environment variables are automatically mapped:
+
+```bash
+export DB_HOST=localhost        # Database host
+export DB_PORT=3306             # Database port
+export DB_USER=root             # Database user
+export DB_PASSWORD=password     # Database password
+export DB_NAME=sarcng           # Database name
+export PORT=8080                # Server port
+export ENVIRONMENT=development  # Environment (dev/staging/prod)
+```
+
+### Key Configuration Sections
+
+- **Server:** Port, host, timeouts
+- **Database:** MySQL connection settings and pool configuration
+- **JWT:** Authentication secret and token expiration
+- **Logging:** Level, format, output
+- **CORS:** Cross-origin resource sharing settings
+- **Swagger:** API documentation configuration
 
 ## Next Steps
 
@@ -182,6 +238,7 @@ Key configuration sections:
 ### Common Issues
 
 **Port already in use**
+
 ```bash
 # Check what's using port 8080
 lsof -i :8080
@@ -191,15 +248,17 @@ kill -9 <PID>
 ```
 
 **Database connection failed**
+
 ```bash
-# Verify PostgreSQL is running
-docker ps | grep postgres
+# Verify MySQL is running
+docker ps | grep mysql
 
 # Check connection
-psql -h localhost -U sarc -d sarc_ng
+mysql -h localhost -u root -p sarcng
 ```
 
 **Go modules issues**
+
 ```bash
 # Clean module cache
 go clean -modcache

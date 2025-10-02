@@ -2,10 +2,13 @@
 
 //go:generate go run -mod=mod github.com/google/wire/cmd/wire
 //go:build !wireinject
+// +build !wireinject
 
 package main
 
 import (
+	"github.com/google/wire"
+	"gorm.io/gorm"
 	"sarc-ng/internal/adapter/db"
 	"sarc-ng/internal/adapter/gorm/building"
 	"sarc-ng/internal/adapter/gorm/class"
@@ -24,10 +27,9 @@ import (
 	reservation2 "sarc-ng/internal/service/reservation"
 	resource2 "sarc-ng/internal/service/resource"
 	"sarc-ng/internal/transport/rest"
+)
 
-	"github.com/google/wire"
-	"gorm.io/gorm"
-
+import (
 	_ "sarc-ng/api/swagger"
 )
 
