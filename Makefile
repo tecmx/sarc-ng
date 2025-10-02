@@ -57,11 +57,16 @@ help: ## Show available commands
 	@echo "SARC-NG Development Makefile"
 	@echo "Usage: make <target>"
 	@echo ""
+	@echo "Development Commands:"
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
-	@echo "Other environments:"
-	@echo "  Docker:         cd infrastructure/docker && docker compose up -d"
-	@echo "  Infrastructure: cd infrastructure/terraform (see docs/AWS.md)"
+	@echo "Docker Commands:"
+	@echo "  docker-up       Start Docker services"
+	@echo "  docker-down     Stop Docker services"
+	@echo "  docker-logs     View logs (add service=<name> for specific service)"
+	@echo "  docker-clean    Remove all data (WARNING: deletes database)"
+	@echo ""
+	@echo "For SAM and Terraform, see: infrastructure/README.md"
 
 setup: ## Setup development environment and install dependencies
 	@echo "Setting up development environment..."
@@ -84,9 +89,12 @@ debug: ## Run with hot reloading (requires air)
 
 wire: ## Generate dependency injection code
 	@echo "Generating Wire dependency injection code..."
-	go generate ./cmd/server
-	go generate ./cmd/lambda
-	@echo "Wire code generated"
+	@go generate ./cmd/server
+	@go generate ./cmd/lambda
+	@echo "Verifying generated files..."
+	@test -f cmd/server/wire_gen.go || (echo "✗ Failed: cmd/server/wire_gen.go not generated" && exit 1)
+	@test -f cmd/lambda/wire_gen.go || (echo "✗ Failed: cmd/lambda/wire_gen.go not generated" && exit 1)
+	@echo "✓ Wire code generated successfully"
 
 
 
@@ -166,14 +174,46 @@ coverage: ## Generate test coverage report
 	@echo "Coverage report: $(COVERAGE_HTML)"
 
 #
+# WORKFLOW HELPERS
+#
+
+.PHONY: pre-commit check ci
+pre-commit: format wire lint test ## Run all pre-commit checks
+	@echo "✓ All pre-commit checks passed"
+
+check: wire lint test ## Quick validation (format, lint, test)
+	@echo "✓ Code checks passed"
+
+ci: ## CI pipeline (wire, lint, test, build)
+	@echo "Running CI pipeline..."
+	@$(MAKE) wire
+	@$(MAKE) lint
+	@$(MAKE) test
+	@$(MAKE) build
+	@echo "✓ CI pipeline completed"
+
+#
 # CLEANUP
 #
 
 .PHONY: clean
-clean: ## Remove build artifacts and Go caches
-	rm -rf $(BUILD_DIR) dist .env
-	go clean -modcache -cache
+clean: ## Remove build artifacts
+	rm -rf $(BUILD_DIR) dist .env tmp
+	go clean -cache
 	@echo "Cleanup completed"
+
+.PHONY: clean-all
+clean-all: clean ## Clean all artifacts (codebase only)
+	@echo "All codebase artifacts cleaned"
+	@echo "For Docker cleanup: make docker-clean"
+
+#
+# INFRASTRUCTURE DELEGATION
+#
+
+.PHONY: docker-up docker-down docker-logs docker-clean
+docker-up docker-down docker-logs docker-clean:
+	@$(MAKE) -C infrastructure $@
 
 # Internal helpers
 .PHONY: bin-dir

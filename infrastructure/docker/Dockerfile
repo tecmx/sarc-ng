@@ -29,8 +29,8 @@ RUN apk add --no-cache \
     libc-dev \
     shadow
 
-# Install Go development tools
-RUN go install github.com/air-verse/air@latest && \
+# Install Go development tools (pinned versions for compatibility)
+RUN go install github.com/air-verse/air@v1.52.3 && \
     go install github.com/go-delve/delve/cmd/dlv@latest
 
 # Copy Air configuration

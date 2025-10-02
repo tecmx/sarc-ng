@@ -71,7 +71,7 @@ services:
       GOCACHE: /go/cache
       GOMODCACHE: /go/pkg/mod
     volumes:
-      - ../:/app
+      - ../../:/app
       - go-modules:/go/pkg/mod
       - go-cache:/go/cache
     restart: unless-stopped
@@ -97,25 +97,6 @@ services:
       - sarc-network
     restart: unless-stopped
     # No healthcheck needed for adminer
-
-  info:
-    image: alpine
-    container_name: sarc-ng-info
-    volumes:
-      - ./show-info.sh:/show-info.sh:ro
-    depends_on:
-      - db
-      - app
-      - adminer
-    entrypoint: ["/bin/sh", "-c"]
-    command: >
-      "apk add --no-cache bash curl &&
-       echo 'Waiting for services to start...' &&
-       sleep 10 &&
-       echo 'All services are up! Displaying service information...' &&
-       bash /show-info.sh"
-    restart: "no"
-    network_mode: "host"
 
 networks:
   sarc-network:

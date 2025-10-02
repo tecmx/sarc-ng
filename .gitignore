@@ -55,3 +55,6 @@ coverage.html
 *.tfplan
 *.tfvars
 .terraform.lock.hcl
+
+# SAM local environment files
+infrastructure/sam/env.json

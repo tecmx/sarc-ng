@@ -37,8 +37,10 @@ Resources:
   # Lambda Function for SARC-NG API
   SarcNgFunction:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
-      CodeUri: ../../cmd/lambda/
+      CodeUri: ./
       Handler: bootstrap
       Role: arn:aws:iam::358904054604:role/LabRole
       Environment:
