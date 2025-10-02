@@ -40,7 +40,7 @@ Before you begin, ensure you have the following installed:
 
 3. **Start with Docker Compose** (Recommended for first-time setup)
    ```bash
-   cd docker && docker compose up -d
+   cd infrastructure/docker && docker compose up -d
    ```
    This starts:
    - PostgreSQL database
@@ -62,11 +62,11 @@ Before you begin, ensure you have the following installed:
 
 The easiest way to get started is using Docker Compose:
 
-**Note:** All Docker commands should be run from the `docker/` directory.
+**Note:** All Docker commands should be run from the `infrastructure/docker/` directory.
 
 ```bash
 # Navigate to docker directory
-cd docker
+cd infrastructure/docker
 
 # Start all services
 docker compose up -d

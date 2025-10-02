@@ -74,7 +74,7 @@ SARC-NG follows REST API principles with:
 
 2. **Start with Docker Compose**
    ```bash
-   cd docker
+   cd infrastructure/docker
    docker compose up -d
    ```
 

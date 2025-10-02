@@ -42,11 +42,11 @@ go run cmd/cli/main.go migrate down
 ### 3. Running Services
 
 #### Option A: Full Docker Environment
-**Note:** All Docker commands should be run from the `docker/` directory.
+**Note:** All Docker commands should be run from the `infrastructure/docker/` directory.
 
 ```bash
 # Navigate to docker directory
-cd docker
+cd infrastructure/docker
 
 # Start all services (recommended)
 docker compose up -d

@@ -133,7 +133,7 @@ sudo mv terraform /usr/local/bin/
 
 ```bash
 # Navigate to infrastructure directory
-cd infrastructure/aws
+cd infrastructure/terraform
 
 # Initialize Terraform
 terraform init
@@ -172,7 +172,7 @@ aws lambda update-function-code \
   --zip-file fileb://lambda-deployment.zip
 
 # Or using Terraform
-cd infrastructure/aws
+cd infrastructure/terraform
 terraform apply -target=aws_lambda_function.sarc_ng
 ```
 
@@ -337,7 +337,7 @@ export S3_BUCKET=sarc-ng-assets
 
 ```bash
 # Create RDS instance via Terraform
-cd infrastructure/aws
+cd infrastructure/terraform
 terraform apply -target=aws_db_instance.sarc_ng
 
 # Or via AWS CLI

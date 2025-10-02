@@ -1,0 +1,76 @@
+# SAM configuration file
+version = 0.1
+
+[default]
+[default.global.parameters]
+stack_name = "sarc-ng-dev"
+resolve_s3 = true
+s3_prefix = "sarc-ng"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.validate.parameters]
+lint = true
+
+[default.deploy.parameters]
+# Parameter overrides for development environment
+parameter_overrides = [
+    "Environment=dev",
+    "DBName=sarcng",
+    # Add your VPC and subnet IDs here
+    # "VpcId=vpc-xxxxxxxxx",
+    # "PrivateSubnetIds=subnet-xxxxxxxx,subnet-yyyyyyyy",
+    # "PublicSubnetIds=subnet-aaaaaaaa,subnet-bbbbbbbb"
+]
+
+[default.package.parameters]
+resolve_s3 = true
+
+[default.sync.parameters]
+watch = true
+
+[default.local_start_api.parameters]
+warm_containers = "EAGER"
+
+[default.local_start_lambda.parameters]
+warm_containers = "EAGER"
+
+# Staging environment configuration
+[staging]
+[staging.global.parameters]
+stack_name = "sarc-ng-staging"
+resolve_s3 = true
+s3_prefix = "sarc-ng"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+
+[staging.deploy.parameters]
+parameter_overrides = [
+    "Environment=staging",
+    "DBName=sarcng",
+    # Add your staging VPC and subnet IDs here
+]
+
+# Production environment configuration
+[production]
+[production.global.parameters]
+stack_name = "sarc-ng-prod"
+resolve_s3 = true
+s3_prefix = "sarc-ng"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+
+[production.deploy.parameters]
+parameter_overrides = [
+    "Environment=prod",
+    "DBName=sarcng",
+    # Add your production VPC and subnet IDs here
+]

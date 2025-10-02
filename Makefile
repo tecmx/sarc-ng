@@ -13,7 +13,7 @@ SHELL := /bin/bash
 #   make help         - Show all available commands
 #
 # For Docker deployment:
-#   cd docker && docker compose up -d
+#   cd infrastructure/docker && docker compose up -d
 #
 
 #
@@ -60,8 +60,8 @@ help: ## Show available commands
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "Other environments:"
-	@echo "  Docker:         cd docker && docker compose up -d"
-	@echo "  Infrastructure: cd infrastructure/aws (see docs/AWS.md)"
+	@echo "  Docker:         cd infrastructure/docker && docker compose up -d"
+	@echo "  Infrastructure: cd infrastructure/terraform (see docs/AWS.md)"
 
 setup: ## Setup development environment and install dependencies
 	@echo "Setting up development environment..."

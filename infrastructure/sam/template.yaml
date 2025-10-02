@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SARC-NG Serverless Application
+
+  SAM Template for SARC-NG deployment using Lambda and RDS
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: provided.al2
+    Architectures:
+      - x86_64
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+    Description: Environment name
+
+  DBPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: Password for RDS MySQL instance
+    Default: "ChangeMe123!"
+
+  DBName:
+    Type: String
+    Default: sarcng
+    Description: Database name
+
+Resources:
+  # Lambda Function for SARC-NG API
+  SarcNgFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../../cmd/lambda/
+      Handler: bootstrap
+      Role: arn:aws:iam::358904054604:role/LabRole
+      Environment:
+        Variables:
+          DB_HOST: !GetAtt SarcDatabase.Endpoint.Address
+          DB_PORT: !GetAtt SarcDatabase.Endpoint.Port
+          DB_NAME: !Ref DBName
+          DB_USER: root
+          DB_PASSWORD: !Ref DBPassword
+          GIN_MODE: release
+          LOG_LEVEL: info
+          ENVIRONMENT: !Ref Environment
+      Events:
+        ApiGateway:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+        ApiGatewayRoot:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+
+  # RDS MySQL Database
+  SarcDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub "${Environment}-sarc-ng-db"
+      DBInstanceClass: db.t3.micro
+      Engine: mysql
+      EngineVersion: "8.0"
+      MasterUsername: root
+      MasterUserPassword: !Ref DBPassword
+      DBName: !Ref DBName
+      AllocatedStorage: 20
+      StorageType: gp2
+      BackupRetentionPeriod: 0
+      DeleteAutomatedBackups: true
+      DeletionProtection: false
+      PubliclyAccessible: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-sarc-ng-database"
+        - Key: Environment
+          Value: !Ref Environment
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  SarcNgApi:
+    Description: "API Gateway endpoint URL for Prod stage for SARC-NG function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Export:
+      Name: !Sub "${Environment}-sarc-ng-api-url"
+
+  SarcNgFunction:
+    Description: "SARC-NG Lambda Function ARN"
+    Value: !GetAtt SarcNgFunction.Arn
+    Export:
+      Name: !Sub "${Environment}-sarc-ng-function-arn"
+
+  DatabaseEndpoint:
+    Description: "RDS Database Endpoint"
+    Value: !GetAtt SarcDatabase.Endpoint.Address
+    Export:
+      Name: !Sub "${Environment}-sarc-ng-db-endpoint"
+
+  DatabasePort:
+    Description: "RDS Database Port"
+    Value: !GetAtt SarcDatabase.Endpoint.Port
+    Export:
+      Name: !Sub "${Environment}-sarc-ng-db-port"

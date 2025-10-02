@@ -29,7 +29,7 @@ A modern Go-based API for managing resource reservations with support for buildi
    make debug
 
    # Full Docker environment (with database)
-   cd docker && docker compose up -d
+   cd infrastructure/docker && docker compose up -d
    ```
 
 ## Development Commands
@@ -50,14 +50,14 @@ make clean        # Remove build artifacts
 
 ### Docker Development
 ```bash
-cd docker
+cd infrastructure/docker
 docker compose up -d                        # Start development environment
 docker compose down -v --remove-orphans     # Stop and cleanup all
 ```
 
 ### Infrastructure
 ```bash
-cd infrastructure/aws
+cd infrastructure/terraform
 # See docs/AWS.md for Terragrunt commands
 ```
 
@@ -134,7 +134,7 @@ DELETE /api/v1/{entity}/:id  # Delete by ID
 make test
 
 # Integration tests
-cd docker && docker compose up -d && docker compose run --rm app go test -tags=integration ./test/integration/... && docker compose down -v --remove-orphans
+cd infrastructure/docker && docker compose up -d && docker compose run --rm app go test -tags=integration ./test/integration/... && docker compose down -v --remove-orphans
 
 # Coverage report
 make coverage

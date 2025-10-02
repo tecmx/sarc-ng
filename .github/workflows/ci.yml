@@ -30,7 +30,7 @@ jobs:
 
       - name: Start services
         run: |
-          cd docker
+          cd infrastructure/docker
           make dev-bg
 
       - name: Wait for services
@@ -39,19 +39,19 @@ jobs:
 
       - name: Run integration tests
         run: |
-          cd docker
+          cd infrastructure/docker
           make test-integration
 
       - name: Show logs on failure
         if: failure()
         run: |
-          cd docker
+          cd infrastructure/docker
           make logs
 
       - name: Cleanup
         if: always()
         run: |
-          cd docker
+          cd infrastructure/docker
           make clean
 
   build:

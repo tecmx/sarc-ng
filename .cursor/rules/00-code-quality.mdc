@@ -1,0 +1,208 @@
+---
+description: Apply when writing code, refactoring for maintainability, or implementing quality practices across the codebase
+alwaysApply: true
+---
+
+# Code Quality Standards (SOLID, Clean Code & Design Patterns)
+
+> **PRIORITY**: HIGH - Grounded in proven software engineering principles
+
+## **QUICK REFERENCE**
+
+- Apply Single Responsibility Principle (SRP) - one reason to change per class/function
+- Keep functions at single level of abstraction (SLAP) with ≤10 cyclomatic complexity
+- Separate commands (side effects) from queries (return values) - Command-Query Separation
+- Replace complex conditionals with polymorphism - but only when complexity justifies it
+- Write small, focused functions that do one thing well (Clean Code)
+- Use meaningful names that reveal intent (Clean Code)
+- **Start simple, refactor to patterns when pain emerges (YAGNI)**
+- Avoid over-engineering - don't create abstractions for single implementations
+
+## **FOUNDATIONAL PRINCIPLES**
+
+### **SOLID PRINCIPLES (Martin/Meyer)**
+
+- **Single Responsibility**: Classes/functions have one reason to change
+- **Open-Closed**: Open for extension, closed for modification
+- **Command-Query Separation**: Functions either do something OR return something
+
+### **CLEAN CODE STANDARDS (Martin)**
+
+- Functions do one thing well (≤20 lines typical, max 50)
+- Use descriptive names that explain intent
+- Minimize parameters (0-2 ideal, max 3)
+- Single Level of Abstraction - all statements at same abstraction level
+
+### **COMPLEXITY MANAGEMENT (McCabe/Fowler)**
+
+- Cyclomatic complexity ≤10 per function
+- Extract complex logic into separate functions
+- Replace long conditionals with polymorphism (Strategy pattern)
+- Refactor when code becomes hard to understand
+
+## **PRAGMATIC APPLICATION (Anti-Over-Engineering)**
+
+### **YAGNI - You Aren't Gonna Need It (Extreme Programming)**
+
+- Apply patterns only when complexity justifies them
+- Start simple, refactor to patterns when pain points emerge
+- Don't create abstract interfaces for single implementations
+- Avoid premature optimization and abstraction layers
+
+### **WHEN TO KEEP IT SIMPLE**
+
+- **Skip Strategy pattern** for 2-3 simple conditions - use if/elif instead
+- **Skip Factory pattern** for single concrete class creation
+- **Skip Repository pattern** for simple CRUD without complex queries
+- **Skip Observer pattern** for single listener relationships
+- Write straightforward code first, extract patterns during refactoring
+
+### **OVER-ENGINEERING WARNING SIGNS**
+
+- Creating interfaces/abstractions with only one implementation
+- Splitting functions that are naturally cohesive and simple
+- Adding layers of indirection without clear benefit
+- Following patterns religiously without considering context
+
+## **ESSENTIAL PATTERNS**
+
+### **Single Responsibility & Command-Query Separation**
+
+```python
+# CORRECT - SRP & CQS Applied
+class UserService:
+    """Handles user operations following SRP."""
+
+    def find_user_by_id(self, user_id: int) -> User | None:
+        """Query - returns user without side effects."""
+        return self._repository.find_by_id(user_id)
+
+    def update_user_email(self, user_id: int, email: str) -> None:
+        """Command - changes state, returns nothing."""
+        user = self._repository.find_by_id(user_id)
+        if user is None:
+            raise UserNotFoundError(f"User {user_id} not found")
+        user.email = email
+        self._repository.save(user)
+
+# AVOID - Mixed responsibilities and CQS violation
+class UserManager:
+    def update_and_get_user_count(self, user_id: int, email: str) -> int:
+        # Violates CQS - both updates AND returns count
+        user = self._repository.find_by_id(user_id)
+        user.email = email
+        self._repository.save(user)
+        return self._repository.count()  # Side effect + return value
+```
+
+### **Cyclomatic Complexity ≤10 (McCabe)**
+
+```python
+# CORRECT - Low complexity, single level of abstraction
+def calculate_shipping_cost(order: Order) -> Decimal:
+    """Calculate shipping cost with complexity ≤10."""
+    base_cost = self._get_base_shipping_cost(order)
+    weight_cost = self._calculate_weight_surcharge(order)
+    location_cost = self._calculate_location_surcharge(order)
+    return base_cost + weight_cost + location_cost
+
+def _get_base_shipping_cost(self, order: Order) -> Decimal:
+    """Extract base cost calculation."""
+    if order.is_express:
+        return Decimal("15.00")
+    return Decimal("5.00")
+
+# AVOID - High complexity, mixed abstraction levels
+def calculate_shipping(order):
+    cost = 5.00
+    if order.weight > 10:
+        if order.country == "US":
+            if order.state in ["AK", "HI"]:
+                cost += 20.00
+            elif order.zip_code.startswith("9"):
+                cost += 10.00
+        elif order.country == "CA":
+            if order.province in ["YT", "NT", "NU"]:
+                cost += 25.00
+    # ... more nested conditions (complexity >> 10)
+```
+
+### **Strategy Pattern Over Conditionals (GoF)**
+
+```python
+# CORRECT - Strategy pattern replaces complex conditionals
+class DiscountCalculator:
+    def __init__(self, strategy):
+        self._strategy = strategy
+
+    def calculate(self, order):
+        return self._strategy.calculate_discount(order)
+
+class PremiumDiscount:
+    def calculate_discount(self, order): return order.total * 0.15
+
+class RegularDiscount:
+    def calculate_discount(self, order): return order.total * 0.05
+
+# AVOID - Long conditional chains (>5 conditions, complex logic)
+def calculate_discount(order, customer_type, order_count, region, seasonal_promo):
+    if customer_type == "premium" and order_count > 10 and region == "EU":
+        if seasonal_promo and order.total > 500:
+            return order.total * 0.25
+        return order.total * 0.15
+    # ... 10+ more complex nested conditions
+```
+
+### **Pragmatic Simplicity vs Patterns**
+
+```python
+# CORRECT Simple - Keep it simple for 2-3 straightforward conditions
+def get_shipping_cost(weight: float, is_express: bool) -> float:
+    """Simple logic doesn't need patterns."""
+    if is_express:
+        return 15.0
+    return 5.0 if weight < 10 else 10.0
+
+# CORRECT Complex - Use patterns when logic becomes unwieldy
+class ShippingCalculator:
+    """Apply patterns when complexity justifies the abstraction."""
+    def __init__(self):
+        self._strategies = {
+            'standard': StandardShipping(),
+            'express': ExpressShipping(),
+            'overnight': OvernightShipping()
+        }
+
+    def calculate(self, weight: float, service: str) -> float:
+        return self._strategies[service].calculate_cost(weight)
+
+# AVOID - Over-engineering simple logic
+class TwoOptionShippingStrategyFactory:
+    """Don't create patterns for simple 2-option logic."""
+    def create_express_strategy(self): return ExpressStrategy()
+    def create_standard_strategy(self): return StandardStrategy()
+```
+
+## **ENFORCEMENT CHECKLIST**
+
+### **SOLID Principles Compliance**
+
+- [ ] Single Responsibility: Each class/function has one reason to change
+- [ ] Open-Closed: Extensions possible without modifying existing code
+- [ ] Command-Query Separation: Functions either do something OR return something
+
+### **Clean Code Standards (Martin/Fowler)**
+
+- [ ] Functions are small (≤20 lines typical, max 50)
+- [ ] Function names reveal intent and purpose
+- [ ] Single Level of Abstraction maintained within functions
+- [ ] Function parameters minimized (0-2 ideal, max 3)
+
+### **Complexity & Maintainability (McCabe/GoF)**
+
+- [ ] Cyclomatic complexity ≤10 per function
+- [ ] Complex conditionals replaced with polymorphism/strategy patterns
+- [ ] Nested code structures limited (max 3 levels)
+- [ ] Magic numbers/strings extracted to named constants
+
+**CRITICAL**: These principles are proven foundations of maintainable software - they represent decades of collective engineering wisdom!
