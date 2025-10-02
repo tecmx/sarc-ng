@@ -263,6 +263,30 @@ Resources:
         - Key: Environment
           Value: !Ref Environment
 
+  # AWS Secrets Manager Secret for Database Credentials
+  DatabaseSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub "${Environment}-sarc-ng-db-credentials"
+      Description: !Sub "Database credentials for SARC-NG ${Environment} environment"
+      SecretString: !Sub |
+        {
+          "username": "root",
+          "password": "${DBPassword}",
+          "host": "${SarcDatabase.Endpoint.Address}",
+          "port": "${SarcDatabase.Endpoint.Port}",
+          "database": "${DBName}"
+        }
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-sarc-ng-db-secret"
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Application
+          Value: sarc-ng
+        - Key: ManagedBy
+          Value: SAM
+
   # Lambda Function for SARC-NG API
   SarcNgFunction:
     Type: AWS::Serverless::Function
@@ -281,14 +305,24 @@ Resources:
           - !Ref PublicSubnet3
       Environment:
         Variables:
-          DB_HOST: !GetAtt SarcDatabase.Endpoint.Address
-          DB_PORT: !GetAtt SarcDatabase.Endpoint.Port
-          DB_NAME: !Ref DBName
-          DB_USER: root
-          DB_PASSWORD: !Ref DBPassword
+          # Secrets Manager ARN
+          DB_SECRET_ARN: !Ref DatabaseSecret
+          # Application configuration
           GIN_MODE: release
           LOG_LEVEL: info
           ENVIRONMENT: !Ref Environment
+          # Fallback values (optional - for debugging)
+          DB_HOST: !GetAtt SarcDatabase.Endpoint.Address
+          DB_PORT: !GetAtt SarcDatabase.Endpoint.Port
+          DB_NAME: !Ref DBName
+      Policies:
+        # Grant permission to read the database secret
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+                - secretsmanager:DescribeSecret
+              Resource: !Ref DatabaseSecret
       Events:
         ApiGateway:
           Type: Api
@@ -354,6 +388,12 @@ Outputs:
     Value: !GetAtt SarcDatabase.Endpoint.Port
     Export:
       Name: !Sub "${Environment}-sarc-ng-db-port"
+
+  DatabaseSecretArn:
+    Description: "ARN of the database credentials secret in Secrets Manager"
+    Value: !Ref DatabaseSecret
+    Export:
+      Name: !Sub "${Environment}-sarc-ng-db-secret-arn"
 
   VpcId:
     Description: "VPC ID"

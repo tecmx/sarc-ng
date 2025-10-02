@@ -7,14 +7,18 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"github.com/google/wire"
 	"gorm.io/gorm"
+	"os"
 	"sarc-ng/internal/adapter/db"
 	"sarc-ng/internal/adapter/gorm/building"
 	"sarc-ng/internal/adapter/gorm/class"
 	"sarc-ng/internal/adapter/gorm/lesson"
 	"sarc-ng/internal/adapter/gorm/reservation"
 	"sarc-ng/internal/adapter/gorm/resource"
+	"sarc-ng/internal/adapter/secrets"
 	"sarc-ng/internal/config"
 	building3 "sarc-ng/internal/domain/building"
 	class3 "sarc-ng/internal/domain/class"
@@ -82,18 +86,55 @@ type Application struct {
 // ProviderSet for the application
 var ProviderSet = wire.NewSet(config.LoadConfig, provideDatabaseConnection, building.NewGormAdapter, class.NewGormAdapter, lesson.NewGormAdapter, resource.NewGormAdapter, reservation.NewGormAdapter, wire.Bind(new(building3.Repository), new(*building.GormAdapter)), wire.Bind(new(class3.Repository), new(*class.GormAdapter)), wire.Bind(new(lesson3.Repository), new(*lesson.GormAdapter)), wire.Bind(new(resource3.Repository), new(*resource.GormAdapter)), wire.Bind(new(reservation3.Repository), new(*reservation.GormAdapter)), building2.NewService, class2.NewService, lesson2.NewService, resource2.NewService, reservation2.NewService, wire.Bind(new(building3.Usecase), new(*building2.Service)), wire.Bind(new(class3.Usecase), new(*class2.Service)), wire.Bind(new(lesson3.Usecase), new(*lesson2.Service)), wire.Bind(new(resource3.Usecase), new(*resource2.Service)), wire.Bind(new(reservation3.Usecase), new(*reservation2.Service)), rest.NewRouter, wire.Struct(new(Application), "*"))
 
-// provideDatabaseConnection provides a database connection using the new structure
+// provideDatabaseConnection provides a database connection using Secrets Manager or config
 func provideDatabaseConnection(config2 *config.Config) (*gorm.DB, error) {
-	dbConfig := db.Config{
-		Host:            config2.Database.Host,
-		Port:            config2.Database.Port,
-		User:            config2.Database.User,
-		Password:        config2.Database.Password,
-		Database:        config2.Database.Name,
-		MaxOpenConns:    config2.Database.MaxOpenConns,
-		MaxIdleConns:    config2.Database.MaxIdleConns,
-		ConnMaxLifetime: config2.Database.ConnMaxLifetime,
-		ConnMaxIdleTime: config2.Database.ConnMaxIdleTime,
+	ctx := context.Background()
+
+	secretArn := os.Getenv("DB_SECRET_ARN")
+
+	var dbConfig db.Config
+	if secretArn != "" {
+
+		creds, err := secrets.GetDatabaseCredentials(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get database credentials from Secrets Manager: %w", err)
+		}
+
+		dbConfig = db.Config{
+			Host:            creds.Host,
+			Port:            parsePort(creds.Port),
+			User:            creds.Username,
+			Password:        creds.Password,
+			Database:        creds.Database,
+			MaxOpenConns:    config2.Database.MaxOpenConns,
+			MaxIdleConns:    config2.Database.MaxIdleConns,
+			ConnMaxLifetime: config2.Database.ConnMaxLifetime,
+			ConnMaxIdleTime: config2.Database.ConnMaxIdleTime,
+		}
+	} else {
+
+		dbConfig = db.Config{
+			Host:            config2.Database.Host,
+			Port:            config2.Database.Port,
+			User:            config2.Database.User,
+			Password:        config2.Database.Password,
+			Database:        config2.Database.Name,
+			MaxOpenConns:    config2.Database.MaxOpenConns,
+			MaxIdleConns:    config2.Database.MaxIdleConns,
+			ConnMaxLifetime: config2.Database.ConnMaxLifetime,
+			ConnMaxIdleTime: config2.Database.ConnMaxIdleTime,
+		}
 	}
+
 	return db.Connect(dbConfig)
+}
+
+// parsePort converts string port to int
+func parsePort(portStr string) int {
+	var port int
+	fmt.Sscanf(portStr, "%d", &port)
+	if port == 0 {
+		port = 3306
+	}
+	return port
 }

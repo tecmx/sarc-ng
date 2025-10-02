@@ -3,7 +3,7 @@ version = 0.1
 
 [default]
 [default.global.parameters]
-stack_name = "sarc-ng-dev"
+stack_name = "sarc-ng-prod"
 resolve_s3 = true
 s3_prefix = "sarc-ng"
 region = "us-east-1"
@@ -19,15 +19,8 @@ parallel = true
 lint = true
 
 [default.deploy.parameters]
-# Parameter overrides for development environment
-parameter_overrides = [
-    "Environment=dev",
-    "DBName=sarcng",
-    # Add your VPC and subnet IDs here
-    # "VpcId=vpc-xxxxxxxxx",
-    # "PrivateSubnetIds=subnet-xxxxxxxx,subnet-yyyyyyyy",
-    # "PublicSubnetIds=subnet-aaaaaaaa,subnet-bbbbbbbb"
-]
+# Parameter overrides for production environment
+parameter_overrides = ["Environment=prod", "DBName=sarcng"]
 
 [default.package.parameters]
 resolve_s3 = true
