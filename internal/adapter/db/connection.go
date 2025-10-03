@@ -26,7 +26,7 @@ func Connect(config Config) (*gorm.DB, error) {
 
 	// Configure GORM with improved settings
 	gormConfig := &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Error),
 		// Let GORM handle connection issues during operations
 		DisableForeignKeyConstraintWhenMigrating: true,
 	}

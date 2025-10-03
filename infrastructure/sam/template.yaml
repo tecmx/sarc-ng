@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 30
+    Timeout: 60
     MemorySize: 512
     Runtime: provided.al2
     Architectures:
@@ -263,7 +263,42 @@ Resources:
         - Key: Environment
           Value: !Ref Environment
 
+  # VPC Endpoint Security Group
+  VPCEndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTPS for VPC Endpoints
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          SourceSecurityGroupId: !Ref LambdaSecurityGroup
+          Description: Allow HTTPS from Lambda
+      Tags:
+        - Key: Name
+          Value: !Sub "${Environment}-sarc-ng-vpce-sg"
+        - Key: Environment
+          Value: !Ref Environment
+
+  # VPC Endpoint for Secrets Manager
+  SecretsManagerVPCEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref VPC
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.secretsmanager"
+      VpcEndpointType: Interface
+      PrivateDnsEnabled: true
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+        - !Ref PublicSubnet3
+      SecurityGroupIds:
+        - !Ref VPCEndpointSecurityGroup
+
   # AWS Secrets Manager Secret for Database Credentials
+  # NOTE: Automatic rotation is NOT enabled due to AWS Academy limitations
+  # For production AWS accounts, see infrastructure/sam/SECRETS-MANAGER-GUIDE.md for rotation setup
   DatabaseSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
