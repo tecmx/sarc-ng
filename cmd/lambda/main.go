@@ -10,6 +10,8 @@ import (
 	"sarc-ng/internal/domain/reservation"
 	"sarc-ng/internal/domain/resource"
 
+	docs "sarc-ng/api/swagger"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
@@ -82,17 +84,23 @@ func pingDatabase(database *gorm.DB) error {
 	return sqlDB.Ping()
 }
 
-// Handler is the Lambda function entry point
-// It receives API Gateway proxy requests and returns proxy responses
-func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// Only log requests in debug mode
-	if os.Getenv("GIN_MODE") == "debug" {
-		log.Printf("Received request: %s %s", request.HTTPMethod, request.Path)
+// Handler is the Lambda function handler
+// It receives API Gateway proxy events and returns HTTP responses
+func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// Update Swagger host and basePath dynamically from API Gateway context
+	if req.RequestContext.DomainName != "" {
+		expectedHost := req.RequestContext.DomainName
+		expectedBasePath := "/" + req.RequestContext.Stage + "/api/v1"
+		
+		if docs.SwaggerInfo.Host != expectedHost || docs.SwaggerInfo.BasePath != expectedBasePath {
+			log.Printf("Updating Swagger config - Host: %s, BasePath: %s", expectedHost, expectedBasePath)
+			docs.SwaggerInfo.Host = expectedHost
+			docs.SwaggerInfo.BasePath = expectedBasePath
+			docs.SwaggerInfo.Schemes = []string{"https"}
+		}
 	}
 
-	// Convert API Gateway request to HTTP request and get response
-	response, err := ginLambda.ProxyWithContext(ctx, request)
-	return response, err
+	return ginLambda.ProxyWithContext(ctx, req)
 }
 
 // main function starts the Lambda runtime
