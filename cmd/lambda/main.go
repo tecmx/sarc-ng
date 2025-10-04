@@ -91,7 +91,7 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	if req.RequestContext.DomainName != "" {
 		expectedHost := req.RequestContext.DomainName
 		expectedBasePath := "/" + req.RequestContext.Stage + "/api/v1"
-		
+
 		if docs.SwaggerInfo.Host != expectedHost || docs.SwaggerInfo.BasePath != expectedBasePath {
 			log.Printf("Updating Swagger config - Host: %s, BasePath: %s", expectedHost, expectedBasePath)
 			docs.SwaggerInfo.Host = expectedHost
