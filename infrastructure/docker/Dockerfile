@@ -3,7 +3,7 @@
 # Build production image: docker build --target production -t sarc-ng:prod .
 
 # Base stage with common dependencies
-FROM golang:1.24-alpine AS base
+FROM golang:1.25-alpine AS base
 
 # Install common system dependencies and update packages for security
 RUN apk update && apk upgrade && apk add --no-cache \
