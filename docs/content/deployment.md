@@ -23,7 +23,6 @@ SARC-NG uses GitHub Actions for automated building, testing, and deployment.
 2. **Unit Tests** - Run all unit tests with coverage
 3. **Integration Tests** - Test with MySQL database
 4. **Build** - Build all binaries
-5. **Security** - Scan for vulnerabilities (Gosec, Trivy)
 
 **Status:** [![CI](https://github.com/tecmx/sarc-ng/workflows/CI/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/ci.yml)
 
