@@ -2,202 +2,123 @@
 sidebar_position: 2
 tags:
   - getting-started
-  - backend
 ---
 
 # Getting Started
 
-This guide will help you get up and running with the SARC-NG backend development environment.
-
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-### Required
-
-- **Go 1.24+** - [Download & Install Go](https://golang.org/dl/)
+- **Go 1.24+** - [Download](https://golang.org/dl/)
 - **Docker & Docker Compose** - [Get Docker](https://docs.docker.com/get-docker/)
-- **Git** - Version control
-- **Make** - Build automation (usually pre-installed on Unix systems)
-
-### Optional but Recommended
-
-- **MySQL 8.0** - For local database development without Docker
-- **AWS CLI** - For cloud deployment (Lambda/RDS)
-- **AWS SAM CLI** - For serverless deployment
-- **Terraform/Terragrunt** - For infrastructure management
+- **Make** - Usually pre-installed on Unix systems
 
 ## Quick Start
 
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/tecmx/sarc-ng.git
-   cd sarc-ng
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   go mod download
-   ```
-
-3. **Start with Docker Compose** (Recommended for first-time setup)
-
-   ```bash
-   make docker-up
-   ```
-
-   This starts:
-   - MySQL 8.0 database
-   - SARC-NG API server
-   - Adminer (database management UI)
-
-4. **Verify the setup**
-
-   ```bash
-   # Check if API is running
-   curl http://localhost:8080/health
-
-   # Should return: {"service":"sarc-ng","status":"healthy"}
-
-   # Access Swagger documentation
-   open http://localhost:8080/swagger/index.html
-   ```
-
-## Development Environment
-
-### Using Docker (Recommended)
-
-The easiest way to get started is using Docker Compose via Make commands:
-
 ```bash
-# Start all services
+# Clone repository
+git clone https://github.com/tecmx/sarc-ng.git
+cd sarc-ng
+
+# Start with Docker
 make docker-up
 
-# View logs
-make docker-logs
-
-# View specific service logs
-make docker-logs service=app
-
-# Stop services (keeps data)
-make docker-down
-
-# Remove all data (WARNING: deletes database)
-make docker-clean
+# Verify
+curl http://localhost:8080/health
+# Response: {"service":"sarc-ng","status":"healthy"}
 ```
 
-**Services Available:**
+**Access Points:**
+- API: http://localhost:8080/api/v1
+- Swagger: http://localhost:8080/swagger/index.html
+- DB Admin: http://localhost:8081
+- Metrics: http://localhost:8080/metrics
 
-- API: `http://localhost:8080/api/v1`
-- Swagger: `http://localhost:8080/swagger/index.html`
-- DB Admin (Adminer): `http://localhost:8081`
-- Metrics: `http://localhost:8080/metrics`
+## Manual Setup (Optional)
 
-### Manual Setup
+### Start MySQL
+```bash
+docker run --name sarc-mysql \
+  -e MYSQL_ROOT_PASSWORD=example \
+  -e MYSQL_DATABASE=sarcng \
+  -p 3306:3306 \
+  -d mysql:8.0
+```
 
-If you prefer to run services individually:
+### Run API Server
+```bash
+make run
+# or
+go run cmd/server/main.go
+```
 
-1. **Start MySQL**
+### Configuration
+Override via environment variables:
+```bash
+DB_HOST=localhost DB_PASSWORD=mypass make run
+```
 
-   ```bash
-   # Using Docker
-   docker run --name sarc-mysql \
-     -e MYSQL_ROOT_PASSWORD=example \
-     -e MYSQL_DATABASE=sarcng \
-     -p 3306:3306 \
-     -d mysql:8.0
-
-   # Or install locally and create database
-   mysql -u root -p -e "CREATE DATABASE sarcng;"
-   ```
-
-2. **Run the API server**
-
-   ```bash
-   make run
-   # or
-   go run cmd/server/main.go
-   ```
-
-   **Configuration:**
-   - Configuration is managed via `configs/default.yaml` and `configs/development.yaml`
-   - Override settings using environment variables: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
-   - Example: `DB_HOST=localhost DB_PASSWORD=mypass make run`
+Config files:
+- `configs/default.yaml` - Base configuration
+- `configs/development.yaml` - Development overrides
 
 ## Available Commands
 
-The project includes several useful commands:
-
 ```bash
 # Development
-make run            # Run API server locally
-make debug          # Run with hot reloading (requires air)
-make wire           # Generate dependency injection code
+make run            # Run API server
+make debug          # Hot reload mode
+make wire           # Generate dependency injection
 
-# Build & Release
-make build          # Build server and CLI applications
-make release        # Build production binaries
+# Build
+make build          # Build binaries
+make release        # Production build
 
-# Testing & Quality
+# Testing
 make test           # Run tests
-make coverage       # Generate test coverage report
+make coverage       # Coverage report
 make lint           # Run linters
-make format         # Format Go code
-
-# Documentation
-make swagger        # Generate Swagger API documentation
-make docs-build     # Build documentation site
-make docs-serve     # Start documentation dev server
+make format         # Format code
 
 # Docker
-make docker-up      # Start Docker services
-make docker-down    # Stop Docker services
+make docker-up      # Start services
+make docker-down    # Stop services
 make docker-logs    # View logs
-make docker-clean   # Remove all data
+make docker-clean   # Remove data
 
 # Workflow
-make pre-commit     # Run all pre-commit checks
-make check          # Quick validation (lint, test)
-make ci             # CI pipeline (wire, lint, test, build)
+make pre-commit     # All pre-commit checks
+make check          # Quick validation
 ```
 
 ## Project Structure
 
 ```
-sarc-ng/
-├── cmd/                    # Application entrypoints
-│   ├── cli/               # CLI application
-│   ├── lambda/            # AWS Lambda function
-│   └── server/            # HTTP API server
-├── internal/              # Internal application code
-│   ├── adapter/           # External service adapters (GORM, etc.)
-│   ├── config/            # Configuration loader
-│   ├── domain/            # Business logic (entities, repositories, use cases)
-│   ├── service/           # Application services
-│   └── transport/         # HTTP handlers (REST)
-├── pkg/                   # Shared packages
-│   ├── metrics/           # Metrics collection
-│   └── rest/              # REST client utilities
-├── api/                   # API specifications
-│   └── swagger/           # Generated Swagger docs
-├── configs/               # Configuration files
-├── infrastructure/        # Infrastructure as Code
-│   ├── docker/            # Docker Compose configurations
-│   ├── sam/               # AWS SAM (Serverless) deployment
-│   └── terraform/         # Terraform/Terragrunt IaC
-└── test/                  # Integration tests
+cmd/                # Entry points (cli, lambda, server)
+internal/           # Private code
+  ├── domain/       # Business logic & entities
+  ├── service/      # Application services
+  ├── adapter/      # External adapters (GORM, etc)
+  └── transport/    # HTTP handlers
+pkg/                # Public packages
+api/                # OpenAPI specifications
+configs/            # Configuration files
+infrastructure/     # Docker, SAM, Terraform
+test/               # Integration tests
 ```
 
-## Configuration
+## Configuration Priority
 
-The application uses a hierarchical configuration system with the following priority (highest to lowest):
+1. **Environment Variables** (highest)
+2. **Environment YAML** (`development.yaml`)
+3. **Base YAML** (`default.yaml`)
+4. **Code Defaults** (lowest)
 
-1. **Environment Variables** - Override any config setting
-2. **Environment-Specific Config** - `configs/development.yaml` (based on `ENVIRONMENT` or `ENV` variable)
-3. **Base Config** - `configs/default.yaml`
-4. **Hardcoded Defaults** - In `internal/config/loader.go`
+## Next Steps
+
+- Browse [API Reference](http://localhost:8080/swagger/index.html)
+- Read [Development Guide](development.md)
+- Explore [Architecture](architecture.md)
+- Learn about [Deployment](deployment.md)
 
 ### Configuration Files
 

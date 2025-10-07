@@ -2,202 +2,171 @@
 sidebar_position: 3
 tags:
   - development
-  - local
-  - workflow
 ---
 
-# Local Development
+# Development Guide
 
-This guide covers the development workflow for building and testing SARC-NG locally.
-
-## Development Workflow
-
-### 1. Environment Setup
+## Setup
 
 ```bash
-# Set up your development environment
-export SARC_ENV=development
-export SARC_CONFIG_PATH=./configs/development.yaml
+# Clone and install
+git clone https://github.com/tecmx/sarc-ng.git
+cd sarc-ng
+go mod download
 
-# Or create a .env file
-echo "SARC_ENV=development" > .env
-echo "SARC_CONFIG_PATH=./configs/development.yaml" >> .env
-```
-
-### 2. Database Migrations
-
-The application automatically handles database migrations on startup. For manual control:
-
-```bash
-# Run migrations manually
-go run cmd/cli/main.go migrate up
-
-# Check migration status
-go run cmd/cli/main.go migrate status
-
-# Rollback migrations
-go run cmd/cli/main.go migrate down
-```
-
-### 3. Running Services
-
-#### Option A: Full Docker Environment (Recommended)
-
-```bash
-# Start all services
+# Start services
 make docker-up
 
-# Follow logs
-make docker-logs
-
-# Follow specific service logs
-make docker-logs service=app
-
-# Restart services
-make docker-down && make docker-up
+# Verify
+curl http://localhost:8080/health
 ```
 
-#### Option B: Hybrid Development
+## Running the Application
 
+### Docker (Recommended)
 ```bash
-# Start only database
-cd infrastructure/docker
-docker compose up -d db
-
-# Run API server locally (from project root)
-make run
-# or
-go run cmd/server/main.go
-
-# In another terminal, run CLI commands
-go run cmd/cli/main.go --help
+make docker-up      # Start all services
+make docker-logs    # View logs
+make docker-down    # Stop services
 ```
 
-#### Option C: Full Local Setup
-
+### Local Go
 ```bash
-# Start MySQL (adjust connection settings in config)
-mysql.server start
+make run            # Run server
+make debug          # Run with hot reload (requires air)
+```
 
-# Run the server
-make run
+### Hybrid
+```bash
+# Database in Docker, app locally
+cd infrastructure/docker && docker compose up -d db
+cd ../.. && make run
 ```
 
 ## Development Commands
 
-### Server Management
-
 ```bash
-# Start HTTP server
-make run
+# Build & Run
+make build          # Build binaries
+make run            # Run server
+make debug          # Hot reload dev mode
 
-# Start server with hot reload (requires air)
-make debug
+# Code Quality
+make lint           # Run linters
+make format         # Format code
+make test           # Run tests
+make coverage       # Test coverage
 
-# Generate Wire dependency injection code
-make wire
+# Documentation
+make swagger        # Generate API docs
+make wire           # Generate DI code
 
-# Build server binary
-make build
+# Workflow
+make pre-commit     # Run all checks before commit
 ```
 
-### CLI Operations
+## Testing
 
-```bash
-# View all CLI commands
-go run cmd/cli/main.go --help
-
-# Create a building
-go run cmd/cli/main.go buildings create --name "Main Building" --code "MAIN"
-
-# List resources
-go run cmd/cli/main.go resources list
-
-# Import data from CSV
-go run cmd/cli/main.go import --file data.csv --type buildings
-```
-
-### Testing
-
-```bash
-# Run all tests
-make test
-
-# Run tests with coverage report
-make coverage
-
-# Run specific test package
-go test ./internal/domain/building/...
-
-# Run tests with verbose output
-go test -v -race ./...
-```
-
-### Code Quality
-
-```bash
-# Run linter
-make lint
-
-# Format code
-make format
-
-# Generate Swagger documentation
-make swagger
-
-# Run pre-commit checks (format, wire, lint, test)
-make pre-commit
-
-# Run CI pipeline (wire, lint, test, build)
-make ci
-```
-
-## API Development
-
-### Testing API Endpoints
-
+### API Testing
 ```bash
 # Health check
 curl http://localhost:8080/health
 
-# Get buildings
-curl -H "Authorization: Bearer <token>" http://localhost:8080/api/v1/buildings
+# Get all buildings (with auth)
+curl -H "Authorization: Bearer <token>" \
+  http://localhost:8080/api/v1/buildings
 
-# Create a building
+# Create building
 curl -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"name": "Library", "code": "LIB"}' \
   http://localhost:8080/api/v1/buildings
 
-# View Swagger documentation
+# Swagger UI
 open http://localhost:8080/swagger/index.html
-
-# Access API documentation JSON
-curl http://localhost:8080/swagger/doc.json
 ```
 
-### Authentication
-
-For development, you can generate a test JWT token:
-
+### Unit Tests
 ```bash
-# Generate a development token
-go run cmd/cli/main.go auth generate-token --user-id 1 --role admin
-
-# Or use the development token endpoint (if enabled)
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "admin"}' \
-  http://localhost:8080/api/v1/auth/login
+make test                              # All tests
+go test -v ./internal/domain/...       # Specific package
+go test -v -race ./...                 # With race detection
 ```
 
-## Database Operations
+## Database
 
-### Direct Database Access
+### Access
+```bash
+# Docker CLI
+docker exec -it sarc-ng-db-dev mysql -u root -p
+# Password: example
+
+# Adminer UI
+open http://localhost:8081
+```
+
+### Migrations
+Auto-run on startup. Manual control:
 
 ```bash
-# Connect to development database
+go run cmd/cli/main.go migrate up
+go run cmd/cli/main.go migrate status
+go run cmd/cli/main.go migrate down
+```
+
+## CLI Commands
+
+```bash
+go run cmd/cli/main.go --help
+
+# Examples
+go run cmd/cli/main.go buildings create --name "Main" --code "MAIN"
+go run cmd/cli/main.go resources list
+go run cmd/cli/main.go auth generate-token --user-id 1
+```
+
+## Configuration
+
+Environment variables override YAML config:
+
+```bash
+export DB_HOST=localhost
+export DB_PASSWORD=mypass
+export JWT_SECRET=mysecret
+make run
+```
+
+Config files:
+- `configs/default.yaml` - Base settings
+- `configs/development.yaml` - Dev overrides
+
+## Troubleshooting
+
+### Database Connection
+```bash
+# Test connectivity
+nc -zv localhost 3306
+
+# Check container
+docker ps
+docker logs sarc-ng-db-dev
+```
+
+### Port Conflicts
+```bash
+# Find process using port
+lsof -i :8080
+
+# Kill process
+kill -9 <PID>
+```
+
+### Clean Start
+```bash
+make docker-clean    # Remove all data
+make docker-up       # Fresh start
+```
 mysql -h localhost -u root -p sarcng
 
 # Or using Docker

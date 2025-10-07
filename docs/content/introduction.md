@@ -1,113 +1,56 @@
 ---
 sidebar_position: 1
-tags:
-  - getting-started
-  - introduction
 ---
 
 # Introduction
 
-Welcome to **SARC-NG** (Resource Management and Scheduling System) - a comprehensive solution for managing educational resources and scheduling.
+**SARC-NG** - A modern resource management and scheduling API for educational institutions.
 
 ## What is SARC-NG?
 
-SARC-NG is a modern resource management and scheduling system designed for educational institutions. It provides a complete API-driven solution for:
-
-- **Building Management** - Organize and track your campus buildings
-- **Classroom Management** - Manage classrooms, labs, and other learning spaces
-- **Resource Management** - Handle equipment, facilities, and other resources
-- **Scheduling** - Create and manage lessons, reservations, and time slots
-- **User Management** - Authentication and authorization system
+An API-driven system for managing:
+- **Buildings** - Campus facilities and locations
+- **Classrooms** - Learning spaces and labs
+- **Resources** - Equipment and facilities
+- **Scheduling** - Lessons and reservations
+- **Classes** - Course management with instructors
 
 ## Key Features
 
-### 🏢 Building & Resource Management
+- 🏢 **Building & Resource Management** - Track buildings, rooms, equipment with custom attributes
+- 📅 **Smart Scheduling** - Flexible repeat patterns (daily, weekly, biweekly) with conflict detection
+- 👥 **Class Management** - Organize classes with instructors, semesters, and enrollment
+- 🔐 **Secure Authentication** - JWT-based with bearer tokens and role-based access
+- 📊 **RESTful API** - OpenAPI 3.1 spec with standardized responses
 
-- Track buildings with detailed information (floors, addresses, codes)
-- Manage different types of resources (classrooms, equipment, labs)
-- Flexible resource details with custom attributes
-- Capacity tracking and location management
+## Quick Start
 
-### 📅 Smart Scheduling
+```bash
+git clone https://github.com/tecmx/sarc-ng.git
+cd sarc-ng
+make docker-up
+```
 
-- Create lessons with flexible repeat patterns (once, daily, weekly, biweekly)
-- Resource reservations with conflict detection
-- Time-based filtering and availability checking
-- Automated scheduling validation
+**API**: http://localhost:8080/api/v1
+**Swagger**: http://localhost:8080/swagger/index.html
 
-### 👥 Class Management
+## API Structure
 
-- Organize classes with instructor information
-- Track semester information and capacity
-- Link classes to scheduled lessons
-- Student enrollment capabilities
+Standard REST operations for all entities:
 
-### 🔐 Authentication & Security
+```
+GET    /api/v1/{entity}        # List all
+POST   /api/v1/{entity}        # Create
+GET    /api/v1/{entity}/:id    # Get by ID
+PUT    /api/v1/{entity}/:id    # Update
+DELETE /api/v1/{entity}/:id    # Delete
+```
 
-- JWT-based authentication system
-- Secure API endpoints with bearer token authentication
-- Role-based access control
-- User session management
-
-## API Architecture
-
-SARC-NG follows REST API principles with:
-
-- **OpenAPI 3.1 specification** for complete API documentation
-- **JSON-based** request/response format
-- **HTTP status codes** for proper error handling
-- **Standardized error responses** across all endpoints
-- **Bearer token authentication** for security
-
-## Getting Started
-
-### Prerequisites
-
-- Go 1.24 or higher
-- Docker and Docker Compose
-- MySQL 8.0 database
-
-### Quick Start
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/tecmx/sarc-ng.git
-   cd sarc-ng
-   ```
-
-2. **Start with Docker Compose**
-
-   ```bash
-   make docker-up
-   ```
-
-3. **API will be available at**
-
-   ```
-   http://localhost:8080/api/v1
-   ```
-
-   **Swagger documentation:**
-
-   ```
-   http://localhost:8080/swagger/index.html
-   ```
-
-### Explore the API
-
-Check out our [**API Reference**](/content/category/api-reference) for complete endpoint documentation with:
-
-- Interactive API explorer
-- Request/response examples
-- Authentication details
-- Error code references
+**Entities**: `buildings`, `classes`, `lessons`, `resources`, `reservations`
 
 ## Next Steps
 
-- 📚 Browse the [API Reference](/content/category/api-reference) to explore all available endpoints
-- 🚀 Try the interactive API examples to test functionality
-- 💡 Check out our tutorials for common use cases
-- 🐛 Report issues on our [GitHub repository](https://github.com/tecmx/sarc-ng)
-
-Ready to get started? Jump into our [API Reference](/content/category/api-reference) and start building!
+- 📚 [Getting Started Guide](getting-started.md)
+- 🚀 [Development Guide](development.md)
+- 🏗️ [Architecture Overview](architecture.md)
+- 🌐 [Deployment Guide](deployment.md)

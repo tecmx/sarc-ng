@@ -2,204 +2,110 @@
 sidebar_position: 5
 tags:
   - deployment
-  - cloud
-  - docker
-  - aws
 ---
 
 # Deployment
 
-This guide covers building and deploying SARC-NG in various environments.
-
-## Building for Production
-
-### Local Build
+## Build Commands
 
 ```bash
-# Build all binaries (includes Wire code generation)
-make build
-
-# Build production release binaries
-make release
-
-# Cross-compile for different platforms
-GOOS=linux GOARCH=amd64 go build -o bin/server-linux cmd/server/main.go
+make build          # Build all binaries
+make release        # Production build with optimizations
 ```
 
-### Docker Build
+## Docker Deployment
 
 ```bash
-# Build Docker image
+# Build image
 docker build -t sarc-ng:latest .
 
-# Build with specific tag
-docker build -t sarc-ng:v1.0.0 .
-
-# Multi-stage build for smaller production image
-docker build --target production -t sarc-ng:prod .
-```
-
-### Production Optimizations
-
-```bash
-# Build with optimizations
-CGO_ENABLED=0 GOOS=linux go build \
-  -ldflags="-w -s -X main.version=${VERSION}" \
-  -a -installsuffix cgo \
-  -o bin/server cmd/server/main.go
-
-# Strip debugging information
-strip bin/server
-```
-
-## Local Deployment
-
-### Docker Compose
-
-```bash
-# Production-like local deployment
+# Run production stack
 docker compose -f docker-compose.prod.yml up -d
-
-# Scale services
-docker compose -f docker-compose.prod.yml up -d --scale sarc-ng=3
-
-# Update specific service
-docker compose -f docker-compose.prod.yml up -d --no-deps sarc-ng
 ```
 
-### Environment Configuration
+## AWS SAM (Serverless)
 
-Create production configuration:
+**Prerequisites:** AWS CLI and SAM CLI installed, credentials configured.
 
-```yaml
-# configs/production.yaml
-server:
-  port: 8080
-  timeout: 30s
-  graceful_timeout: 10s
-
-database:
-  host: ${DB_HOST}
-  port: 3306
-  name: ${DB_NAME}
-  user: ${DB_USER}
-  password: ${DB_PASSWORD}
-  max_connections: 100
-  max_idle_connections: 10
-
-auth:
-  jwt_secret: ${JWT_SECRET}
-  token_ttl: 24h
-
-logging:
-  level: info
-  format: json
-  output: stdout
-
-metrics:
-  enabled: true
-  port: 9090
-  path: /metrics
-```
-
-## Cloud Deployment
-
-### AWS Deployment
-
-#### Prerequisites
-
-```bash
-# Install AWS CLI
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-
-# Configure AWS credentials
-aws configure
-
-# Install AWS SAM CLI (for serverless deployment)
-pip install aws-sam-cli
-# or on macOS
-brew install aws-sam-cli
-
-# Install Terraform (for infrastructure as code)
-wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
-unzip terraform_1.6.0_linux_amd64.zip
-sudo mv terraform /usr/local/bin/
-```
-
-#### AWS SAM (Serverless) Deployment
-
-AWS SAM deployment includes Lambda function, RDS MySQL, API Gateway, and VPC configuration.
-
-**Architecture:**
-
-- Lambda Function (Go provided.al2 runtime)
-- RDS MySQL 8.0 Database
-- API Gateway (HTTP API)
-- VPC with public, private, and database subnets
-- CloudWatch Logs
-
-**Build Lambda:**
+### Deploy
 
 ```bash
 cd infrastructure/sam
-sam build
+
+# First time (interactive)
+sam build && sam deploy --guided
+
+# Subsequent deploys
+sam build && sam deploy
 ```
 
-**First-time Deploy (Interactive):**
+### Local Testing
 
 ```bash
-cd infrastructure/sam
-sam deploy --guided
-```
-
-This will prompt for:
-
-- Stack name (e.g., `sarc-ng-prod`)
-- AWS Region (e.g., `us-east-1`)
-- Environment parameter (dev/staging/prod)
-- Database password
-- Confirmation for capabilities
-
-**Subsequent Deploys:**
-
-```bash
-cd infrastructure/sam
-sam deploy
-```
-
-**Environment-Specific Deployment:**
-
-```bash
-# Development
-cd infrastructure/sam && sam deploy --config-env development
-
-# Production
-cd infrastructure/sam && sam deploy --config-env production
-```
-
-**Custom Parameters:**
-
-```bash
-cd infrastructure/sam && sam deploy \
-    --parameter-overrides \
-    Environment=prod \
-    DBPassword=secure-password
-```
-
-**Local Testing:**
-
-```bash
-# Start database first
+# Start database
 make docker-up
 
-# Start SAM local API
+# Start local API
 cd infrastructure/sam
-sam local start-api \
-  --port 3001 \
-  --docker-network sarc-ng-network \
+sam local start-api --port 3001 \
+    --docker-network sarc-ng-network \
   --env-vars env.json
+```
+
+## AWS Terraform
+
+```bash
+cd infrastructure/terraform/live/dev
+terraform init
+terraform plan
+terraform apply
+```
+
+## Configuration
+
+Key environment variables:
+
+```bash
+# Database
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=sarcng
+DB_USER=root
+DB_PASSWORD=<password>
+
+# Auth
+JWT_SECRET=<secret>
+
+# Server
+SERVER_PORT=8080
+SARC_ENV=production
+GIN_MODE=release
+```
+
+See `configs/production.yaml` for full configuration options.
+
+## Monitoring
+
+```bash
+# Health check
+curl http://your-domain.com/health
+
+# Metrics
+curl http://your-domain.com/metrics
+```
+
+## Troubleshooting
+
+```bash
+# Check logs
+docker logs <container-name>
+
+# Test database connection
+nc -zv $DB_HOST $DB_PORT
+
+# Check container resources
+docker stats <container-name>
+```
 ```
 
 **Delete Stack:**

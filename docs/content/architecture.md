@@ -2,202 +2,171 @@
 sidebar_position: 4
 tags:
   - architecture
-  - design
-  - structure
 ---
 
-# Architecture Overview
+# Architecture
 
-SARC-NG follows Clean Architecture principles with a clear separation of concerns and dependency inversion.
+SARC-NG follows Clean Architecture principles with clear separation of concerns.
 
-## High-Level Architecture
+## Layers
 
-```mermaid
-graph TB
-    subgraph "Client Layer"
-        Web[Web UI]
-        CLI[CLI Tool]
-        API[External APIs]
-    end
-
-    subgraph "Transport Layer"
-        HTTP[HTTP/REST]
-        GraphQL[GraphQL]
-        gRPC[gRPC]
-    end
-
-    subgraph "Application Layer"
-        Server[HTTP Server]
-        Handlers[HTTP Handlers]
-        Middleware[Middleware]
-    end
-
-    subgraph "Business Layer"
-        Services[Application Services]
-        Domain[Domain Logic]
-        Entities[Domain Entities]
-    end
-
-    subgraph "Data Layer"
-        Repositories[Repositories]
-        Database[(MySQL 8.0)]
-        Files[(File Storage)]
-    end
-
-    Web --> HTTP
-    CLI --> Server
-    API --> HTTP
-
-    HTTP --> Handlers
-    GraphQL --> Handlers
-    gRPC --> Handlers
-
-    Handlers --> Services
-    Middleware --> Handlers
-
-    Services --> Domain
-    Services --> Repositories
-
-    Repositories --> Database
-    Repositories --> Files
+```
+Transport Layer (HTTP/REST)
+    ↓
+Service Layer (Business Logic)
+    ↓
+Domain Layer (Entities & Use Cases)
+    ↓
+Repository Layer (Data Access)
+    ↓
+Database (MySQL 8.0)
 ```
 
 ## Project Structure
 
 ```
 sarc-ng/
-├── cmd/                    # Application entrypoints
-│   ├── cli/               # Command-line interface
-│   ├── lambda/            # AWS Lambda function
-│   └── server/            # HTTP API server
-│
-├── internal/              # Internal application code
-│   ├── adapter/           # External service adapters
-│   │   ├── db/           # Database interfaces
-│   │   └── gorm/         # GORM implementations
-│   │
-│   ├── domain/            # Business domain logic
-│   │   ├── building/     # Building entity & logic
-│   │   ├── class/        # Class entity & logic
-│   │   ├── lesson/       # Lesson entity & logic
-│   │   ├── reservation/  # Reservation entity & logic
-│   │   ├── resource/     # Resource entity & logic
-│   │   └── common/       # Shared domain logic
-│   │
+├── cmd/                    # Application entry points
+│   ├── cli/               # CLI tool
+│   ├── lambda/            # AWS Lambda
+│   └── server/            # HTTP server
+├── internal/
+│   ├── domain/            # Business entities & interfaces
+│   │   ├── building/
+│   │   ├── class/
+│   │   ├── lesson/
+│   │   ├── reservation/
+│   │   └── resource/
 │   ├── service/           # Application services
-│   │   ├── building/     # Building service
-│   │   ├── class/        # Class service
-│   │   ├── lesson/       # Lesson service
-│   │   ├── reservation/  # Reservation service
-│   │   └── resource/     # Resource service
-│   │
-│   └── transport/         # Transport layer
-│       ├── rest/         # REST API handlers
-│       └── common/       # Shared transport logic
-│
+│   ├── adapter/           # External adapters (DB, etc)
+│   └── transport/         # HTTP handlers
 ├── pkg/                   # Public packages
-│   ├── metrics/          # Metrics collection
-│   └── rest/             # REST client utilities
-│
-├── api/                   # API specifications
-│   └── swagger/          # Generated Swagger documentation
-├── configs/               # Configuration files
-├── infrastructure/        # Infrastructure as Code
-│   ├── docker/           # Docker Compose configurations
-│   ├── sam/              # AWS SAM (Serverless) deployment
-│   └── terraform/        # Terraform/Terragrunt IaC
-└── test/                 # Integration tests
+├── api/                   # OpenAPI specs
+└── configs/               # Configuration files
 ```
 
 ## Core Components
 
-### 1. Domain Layer (`internal/domain/`)
-
-The domain layer contains the business logic and entities:
+### Domain Layer
+Business entities and repository interfaces:
 
 ```go
-// Domain Entity
 type Building struct {
-    ID        int       `json:"id"`
-    Name      string    `json:"name"`
-    Code      string    `json:"code"`
-    Address   string    `json:"address,omitempty"`
-    Floors    int       `json:"floors,omitempty"`
-    CreatedAt time.Time `json:"createdAt"`
-    UpdatedAt time.Time `json:"updatedAt"`
+    ID        int
+    Name      string
+    Code      string
+    CreatedAt time.Time
 }
 
-// Domain Repository Interface
 type BuildingRepository interface {
     Create(ctx context.Context, building *Building) error
     GetByID(ctx context.Context, id int) (*Building, error)
     GetAll(ctx context.Context) ([]*Building, error)
-    Update(ctx context.Context, building *Building) error
-    Delete(ctx context.Context, id int) error
 }
+```
 
-// Domain Service
+### Service Layer
+Orchestrates business operations:
+
+```go
 type BuildingService struct {
     repo BuildingRepository
 }
-```
 
-### 2. Service Layer (`internal/service/`)
-
-Application services orchestrate business operations:
-
-```go
-type BuildingService struct {
-    buildingRepo domain.BuildingRepository
-    logger       *slog.Logger
-}
-
-func (s *BuildingService) CreateBuilding(ctx context.Context, req CreateBuildingRequest) (*Building, error) {
-    // Validation logic
-    if err := s.validateBuilding(req); err != nil {
-        return nil, err
-    }
-
+func (s *BuildingService) CreateBuilding(ctx context.Context, req Request) (*Building, error) {
+    // Validation
     // Business logic
-    building := &Building{
-        Name:    req.Name,
-        Code:    strings.ToUpper(req.Code),
-        Address: req.Address,
-        Floors:  req.Floors,
-    }
-
     // Persist
-    if err := s.buildingRepo.Create(ctx, building); err != nil {
-        return nil, err
-    }
-
-    return building, nil
+    return s.repo.Create(ctx, building)
 }
 ```
 
-### 3. Transport Layer (`internal/transport/`)
-
-HTTP handlers handle request/response concerns:
+### Transport Layer
+HTTP handlers:
 
 ```go
 type BuildingHandler struct {
-    buildingService service.BuildingService
+    service BuildingService
 }
 
 func (h *BuildingHandler) CreateBuilding(w http.ResponseWriter, r *http.Request) {
-    var req CreateBuildingRequest
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-        http.Error(w, "Invalid request", http.StatusBadRequest)
-        return
-    }
+    // Parse request
+    // Call service
+    // Return response
+}
+```
 
-    building, err := h.buildingService.CreateBuilding(r.Context(), req)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+## Dependency Injection
 
-    w.Header().Set("Content-Type", "application/json")
+Uses [Wire](https://github.com/google/wire) for compile-time DI:
+
+```go
+// cmd/server/wire.go
+//go:build wireinject
+
+func InitializeServer() (*Server, error) {
+    wire.Build(
+        config.Load,
+        adapter.NewDB,
+        gorm.NewBuildingRepository,
+        service.NewBuildingService,
+        rest.NewBuildingHandler,
+        NewServer,
+    )
+    return nil, nil
+}
+```
+
+Generate with: `make wire`
+
+## API Design
+
+RESTful endpoints following standard patterns:
+
+```
+GET    /api/v1/{entity}        # List all
+POST   /api/v1/{entity}        # Create
+GET    /api/v1/{entity}/:id    # Get by ID
+PUT    /api/v1/{entity}/:id    # Update
+DELETE /api/v1/{entity}/:id    # Delete
+```
+
+Entities: `buildings`, `classes`, `lessons`, `resources`, `reservations`
+
+## Database
+
+- **Engine**: MySQL 8.0
+- **ORM**: GORM
+- **Migrations**: Auto-migrate on startup
+- **Connection Pooling**: Configurable via settings
+
+## Error Handling
+
+Standardized error responses:
+
+```go
+type ErrorResponse struct {
+    Error   string `json:"error"`
+    Message string `json:"message"`
+    Code    int    `json:"code"`
+}
+```
+
+## Configuration
+
+Hierarchical config system:
+1. Environment variables (highest priority)
+2. Environment-specific YAML (`development.yaml`)
+3. Base YAML (`default.yaml`)
+4. Defaults in code
+
+## Testing
+
+- **Unit Tests**: Domain and service layers
+- **Integration Tests**: Full API endpoints
+- **Mocking**: Repository interfaces for testing
+
+Run with: `make test`
     w.WriteStatus(http.StatusCreated)
     json.NewEncoder(w).Encode(building)
 }

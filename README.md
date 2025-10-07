@@ -1,158 +1,95 @@
 # SARC-NG
 
-SARC Next Generation - Resource Reservation and Management API
-
-A modern Go-based API for managing resource reservations with support for buildings, classes, lessons, and resource allocation.
+Resource Management and Scheduling API - A modern Go-based system for managing buildings, classes, lessons, and resource reservations.
 
 ## Quick Start
 
-### Prerequisites
+```bash
+git clone <repository-url>
+cd sarc-ng
+make docker-up
+```
+
+**Access:**
+- API: http://localhost:8080/api/v1
+- Swagger: http://localhost:8080/swagger/index.html
+
+## Prerequisites
+
 - Go 1.24+
-- Make
 - Docker & Docker Compose
+- Make
 
-### Development Setup
+## Commands
 
-1. **Clone and setup**:
-   ```bash
-   git clone <repository-url>
-   cd sarc-ng
-   make setup
-   ```
-
-2. **Start development**:
-   ```bash
-   # Native Go (fastest)
-   make run
-
-   # With hot reloading
-   make debug
-
-   # Full Docker environment (with database)
-   cd infrastructure/docker && docker compose up -d
-   ```
-
-## Development Commands
-
-### Go Development
 ```bash
-make setup        # Install dependencies and tools
-make run          # Run the application
-make debug        # Run with hot reloading
-make test         # Run tests
-make build        # Build applications
-make lint         # Run linters
-make format       # Format code
-make coverage     # Generate test coverage
-make swagger      # Generate API documentation
-make clean        # Remove build artifacts
+# Development
+make run            # Run locally
+make debug          # Hot reload mode
+make test           # Run tests
+
+# Build
+make build          # Build binaries
+make release        # Production build
+
+# Docker
+make docker-up      # Start services
+make docker-down    # Stop services
+make docker-logs    # View logs
+
+# Code Quality
+make lint           # Run linters
+make format         # Format code
+make swagger        # Generate API docs
 ```
 
-### Docker Development
-```bash
-cd infrastructure/docker
-docker compose up -d                        # Start development environment
-docker compose down -v --remove-orphans     # Stop and cleanup all
-```
+## API Endpoints
 
-### Infrastructure
-```bash
-cd infrastructure/terraform
-# See docs/AWS.md for Terragrunt commands
-```
+Base: `/api/v1/`
 
-## Project Structure
+**Entities:** `buildings`, `classes`, `lessons`, `resources`, `reservations`
 
+**Operations:**
 ```
-sarc-ng/
-├── api/                    # API documentation (Swagger)
-├── cmd/                    # Application entry points
-│   ├── cli/               # CLI application
-│   ├── lambda/            # AWS Lambda entry point
-│   └── server/            # HTTP server
-├── configs/               # Configuration files
-├── docker/                # Docker development & deployment
-├── docs/                  # Project documentation
-├── infrastructure/        # Infrastructure as Code
-│   └── aws/              # AWS infrastructure configurations
-├── internal/              # Private application code
-│   ├── adapter/          # External service adapters
-│   ├── config/           # Configuration management
-│   ├── domain/           # Business logic & entities
-│   ├── service/          # Application services
-│   └── transport/        # HTTP handlers & middleware
-├── pkg/                   # Public libraries & client packages
-└── test/                  # Test files
+GET    /api/v1/{entity}        # List
+POST   /api/v1/{entity}        # Create
+GET    /api/v1/{entity}/:id    # Get
+PUT    /api/v1/{entity}/:id    # Update
+DELETE /api/v1/{entity}/:id    # Delete
 ```
 
 ## Configuration
 
 Environment variables:
 ```bash
-# Database
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=password
 DB_NAME=sarcng
-
-# Server
 PORT=8080
-ENVIRONMENT=development
 ```
 
-Configuration files:
-- `configs/default.yaml` - Base configuration
-- `configs/development.yaml` - Development overrides
+Config files:
+- `configs/default.yaml`
+- `configs/development.yaml`
 
-## API Endpoints
+## Project Structure
 
-Base URL: `/api/v1/`
-
-**Core Entities:**
-- `/buildings` - Physical structures and locations
-- `/classes` - Academic or training classes
-- `/lessons` - Individual lesson instances
-- `/resources` - Bookable resources (rooms, equipment)
-- `/reservations` - Resource booking records
-
-**Standard Operations:**
 ```
-GET    /api/v1/{entity}      # List all
-POST   /api/v1/{entity}      # Create new
-GET    /api/v1/{entity}/:id  # Get by ID
-PUT    /api/v1/{entity}/:id  # Update by ID
-DELETE /api/v1/{entity}/:id  # Delete by ID
-```
-
-**API Documentation:** http://localhost:8080/swagger/index.html
-
-## Testing
-
-```bash
-# Unit tests
-make test
-
-# Integration tests
-cd infrastructure/docker && docker compose up -d && docker compose run --rm app go test -tags=integration ./test/integration/... && docker compose down -v --remove-orphans
-
-# Coverage report
-make coverage
-```
-
-## Building
-
-```bash
-# Development build
-make build
-
-# Production release
-make release
+cmd/            # Entry points (cli, lambda, server)
+internal/       # Application code
+  ├── domain/   # Business logic
+  ├── service/  # Services
+  ├── adapter/  # External adapters
+  └── transport/# HTTP handlers
+infrastructure/ # Docker, SAM, Terraform
 ```
 
 ## Documentation
 
-- [CONTRIBUTING.md](docs/CONTRIBUTING.md) - Development guidelines and setup
-- [DOCKER.md](docs/DOCKER.md) - Docker environment documentation
-- [AWS.md](docs/AWS.md) - AWS infrastructure setup
-- [AWS_MODULES.md](docs/AWS_MODULES.md) - AWS infrastructure modules
+See `docs/content/` for detailed guides:
+- [Getting Started](docs/content/getting-started.md)
+- [Development](docs/content/development.md)
+- [Architecture](docs/content/architecture.md)
+- [Deployment](docs/content/deployment.md)

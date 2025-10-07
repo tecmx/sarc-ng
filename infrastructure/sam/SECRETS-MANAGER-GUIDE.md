@@ -1,63 +1,29 @@
-# AWS Secrets Manager Integration with SAM
+# AWS Secrets Manager with SAM
 
-Guide for integrating AWS Secrets Manager with your SARC-NG Lambda function.
+Guide for managing database credentials with AWS Secrets Manager.
 
-## ✅ Yes, It's Fully Supported
+## Benefits
 
-AWS Secrets Manager is natively supported in SAM templates and is the **recommended approach** for managing sensitive data like database credentials.
+- No hardcoded credentials
+- Encryption at rest (KMS) and in transit (TLS)
+- Centralized management - update without redeploying
+- Audit trail via CloudTrail
+- Optional automatic rotation
 
----
+## Costs
 
-## 🎯 Benefits
+- $0.40/secret/month
+- $0.05/10,000 API calls
+- Example: ~$0.65/month for typical usage
 
-### Security
-
-- ✅ **No hardcoded credentials** in code or environment variables
-- ✅ **Encryption at rest** (AWS KMS)
-- ✅ **Encryption in transit** (TLS)
-- ✅ **Audit trail** (CloudTrail logs all secret access)
-- ✅ **Automatic rotation** (optional)
-
-### Operations
-
-- ✅ **Centralized management** - Update secrets without redeploying Lambda
-- ✅ **Version control** - Track secret changes
-- ✅ **Fine-grained IAM permissions** - Control who can access secrets
-- ✅ **Multi-region replication** (optional)
-
----
-
-## 📊 Costs
-
-**AWS Secrets Manager Pricing:**
-
-- **$0.40 per secret per month**
-- **$0.05 per 10,000 API calls**
-
-**Example for SARC-NG:**
-
-- 1 secret (database credentials): **$0.40/month**
-- ~50,000 Lambda invocations/month: **$0.25/month** (secret access)
-- **Total: ~$0.65/month**
-
-**Note:** Free tier includes 30-day trial for secrets rotation.
-
----
-
-## 🚀 Implementation Options
-
-### Option 1: Simple Secret (Recommended for Your Case)
-
-**Best for:** Storing database credentials that rarely change.
+## Option 1: Simple Secret (Recommended)
 
 ```yaml
 Resources:
-  # Create the secret
   DatabaseSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
       Name: !Sub "${Environment}-sarc-ng-db-credentials"
-      Description: Database credentials for SARC-NG
       SecretString: !Sub |
         {
           "username": "root",
@@ -66,138 +32,208 @@ Resources:
           "port": "${SarcDatabase.Endpoint.Port}",
           "database": "${DBName}"
         }
-      Tags:
-        - Key: Environment
-          Value: !Ref Environment
 
-  # Grant Lambda permission to read the secret
   SarcNgFunction:
     Type: AWS::Serverless::Function
     Properties:
-      # ... existing properties ...
       Environment:
         Variables:
           DB_SECRET_ARN: !Ref DatabaseSecret
-          ENVIRONMENT: !Ref Environment
       Policies:
         - Statement:
             - Effect: Allow
-              Action:
-                - secretsmanager:GetSecretValue
+              Action: secretsmanager:GetSecretValue
               Resource: !Ref DatabaseSecret
 ```
 
----
-
-### Option 2: Auto-Generated Password with RDS
-
-**Best for:** Maximum security with automatic password generation.
-
-```yaml
-Resources:
-  # Generate random password
-  DatabaseSecret:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Name: !Sub "${Environment}-sarc-ng-db-credentials"
-      GenerateSecretString:
-        SecretStringTemplate: '{"username": "root"}'
-        GenerateStringKey: "password"
-        PasswordLength: 32
-        ExcludeCharacters: '"@/\\'
-        RequireEachIncludedType: true
-
-  # Attach secret to RDS (CloudFormation manages RDS password)
-  SecretRDSAttachment:
-    Type: AWS::SecretsManager::SecretTargetAttachment
-    Properties:
-      SecretId: !Ref DatabaseSecret
-      TargetId: !Ref SarcDatabase
-      TargetType: AWS::RDS::DBInstance
-
-  # Update RDS to use secret
-  SarcDatabase:
-    Type: AWS::RDS::DBInstance
-    Properties:
-      # Remove MasterUserPassword parameter
-      MasterUsername: !GetAtt DatabaseSecret.SecretString:username
-      MasterUserPassword: !Sub '{{resolve:secretsmanager:${DatabaseSecret}:SecretString:password}}'
-      # ... other properties ...
-```
-
----
-
-### Option 3: Automatic Secret Rotation
-
-**Best for:** Production environments requiring periodic password rotation.
+## Option 2: Auto-Generated Password
 
 ```yaml
 Resources:
   DatabaseSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: !Sub "${Environment}-sarc-ng-db-credentials"
       GenerateSecretString:
         SecretStringTemplate: '{"username": "root"}'
         GenerateStringKey: "password"
         PasswordLength: 32
         ExcludeCharacters: '"@/\\'
 
-  # Attach to RDS
   SecretRDSAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
     Properties:
       SecretId: !Ref DatabaseSecret
       TargetId: !Ref SarcDatabase
       TargetType: AWS::RDS::DBInstance
-
-  # Rotate every 30 days
-  SecretRotationSchedule:
-    Type: AWS::SecretsManager::RotationSchedule
-    Properties:
-      SecretId: !Ref DatabaseSecret
-      HostedRotationLambda:
-        RotationType: MySQLSingleUser
-        RotationLambdaName: !Sub "${Environment}-sarc-ng-db-rotation"
-      RotationRules:
-        AutomaticallyAfterDays: 30
 ```
 
-**Note:** LabRole may not support automatic rotation. Use Option 1 or 2 for AWS Academy.
+## Go Code Integration
 
----
-
-## 💻 Go Code Integration
-
-### 1. Add AWS SDK Dependencies
+### 1. Add Dependencies
 
 ```bash
 go get github.com/aws/aws-sdk-go-v2/config
 go get github.com/aws/aws-sdk-go-v2/service/secretsmanager
 ```
 
-Update `go.mod`:
+### 2. Create Secrets Helper
 
 ```go
-require (
-    github.com/aws/aws-sdk-go-v2/config v1.27.0
-    github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.28.0
-)
-```
-
-### 2. Create Secret Retrieval Helper
-
-Create `internal/adapter/secrets/manager.go`:
-
-```go
+// internal/adapter/secrets/manager.go
 package secrets
 
 import (
- "context"
- "encoding/json"
- "fmt"
- "os"
- "sync"
+    "context"
+    "encoding/json"
+    "github.com/aws/aws-sdk-go-v2/config"
+    "github.com/aws/aws-sdk-go-v2/service/secretsmanager"
+)
+
+type DBCredentials struct {
+    Username string `json:"username"`
+    Password string `json:"password"`
+    Host     string `json:"host"`
+    Port     string `json:"port"`
+    Database string `json:"database"`
+}
+
+func GetDBCredentials(ctx context.Context, secretARN string) (*DBCredentials, error) {
+    cfg, err := config.LoadDefaultConfig(ctx)
+    if err != nil {
+        return nil, err
+    }
+
+    client := secretsmanager.NewFromConfig(cfg)
+    result, err := client.GetSecretValue(ctx, &secretsmanager.GetSecretValueInput{
+        SecretId: &secretARN,
+    })
+    if err != nil {
+        return nil, err
+    }
+
+    var creds DBCredentials
+    err = json.Unmarshal([]byte(*result.SecretString), &creds)
+    return &creds, err
+}
+```
+
+### 3. Use in Application
+
+```go
+// cmd/lambda/main.go
+package main
+
+import (
+    "context"
+    "os"
+    "your-app/internal/adapter/secrets"
+)
+
+func main() {
+    ctx := context.Background()
+    secretARN := os.Getenv("DB_SECRET_ARN")
+
+    creds, err := secrets.GetDBCredentials(ctx, secretARN)
+    if err != nil {
+        panic(err)
+    }
+
+    // Use credentials
+    dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+        creds.Username, creds.Password, creds.Host, creds.Port, creds.Database)
+}
+```
+
+## Caching Strategy
+
+```go
+type SecretCache struct {
+    secret    *DBCredentials
+    expiresAt time.Time
+    mu        sync.RWMutex
+}
+
+func (c *SecretCache) Get(ctx context.Context, arn string) (*DBCredentials, error) {
+    c.mu.RLock()
+    if c.secret != nil && time.Now().Before(c.expiresAt) {
+        c.mu.RUnlock()
+        return c.secret, nil
+    }
+    c.mu.RUnlock()
+
+    c.mu.Lock()
+    defer c.mu.Unlock()
+
+    creds, err := GetDBCredentials(ctx, arn)
+    if err != nil {
+        return nil, err
+    }
+
+    c.secret = creds
+    c.expiresAt = time.Now().Add(5 * time.Minute)
+    return creds, nil
+}
+```
+
+## Testing
+
+### Local Testing
+
+Use env.json for local development:
+
+```json
+{
+  "SarcNgFunction": {
+    "DB_HOST": "db",
+    "DB_USER": "root",
+    "DB_PASSWORD": "example"
+  }
+}
+```
+
+### Fallback Logic
+
+```go
+func initDB(ctx context.Context) (*gorm.DB, error) {
+    var dsn string
+
+    if secretARN := os.Getenv("DB_SECRET_ARN"); secretARN != "" {
+        // Production: Use Secrets Manager
+        creds, err := secrets.GetDBCredentials(ctx, secretARN)
+        if err != nil {
+            return nil, err
+        }
+        dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+            creds.Username, creds.Password, creds.Host, creds.Port, creds.Database)
+    } else {
+        // Development: Use environment variables
+        dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+            os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"),
+            os.Getenv("DB_HOST"), os.Getenv("DB_PORT"),
+            os.Getenv("DB_NAME"))
+    }
+
+    return gorm.Open(mysql.Open(dsn), &gorm.Config{})
+}
+```
+
+## Deployment
+
+```bash
+# Deploy with Secrets Manager
+cd infrastructure/sam
+sam build
+sam deploy --parameter-overrides DBPassword=<secure-password>
+```
+
+## Best Practices
+
+1. **Cache secrets** - Don't fetch on every request (5-minute TTL recommended)
+2. **Fallback to env vars** - For local development
+3. **Never log secrets** - Mask in logs
+4. **Use IAM policies** - Restrict secret access per function
+5. **Monitor access** - Enable CloudTrail logging
+6. **Rotate regularly** - Use automatic rotation for production
 
  "github.com/aws/aws-sdk-go-v2/config"
  "github.com/aws/aws-sdk-go-v2/service/secretsmanager"
