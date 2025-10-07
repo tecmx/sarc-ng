@@ -2,9 +2,184 @@
 sidebar_position: 5
 tags:
   - deployment
+  - ci-cd
+  - github-actions
 ---
 
 # Deployment
+
+## CI/CD Pipeline
+
+SARC-NG uses GitHub Actions for automated building, testing, and deployment.
+
+### Workflows
+
+#### 🔄 CI (Continuous Integration)
+
+**Trigger:** Push or PR to `main` or `develop`
+
+**Jobs:**
+1. **Lint** - Code quality checks with golangci-lint
+2. **Unit Tests** - Run all unit tests with coverage
+3. **Integration Tests** - Test with MySQL database
+4. **Build** - Build all binaries
+5. **Security** - Scan for vulnerabilities (Gosec, Trivy)
+
+**Status:** [![CI](https://github.com/tecmx/sarc-ng/workflows/CI/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/ci.yml)
+
+#### 🚀 Deploy (Continuous Deployment)
+
+**Trigger:**
+- Push to `main` → Deploy to **production**
+- Push to `develop` → Deploy to **dev**
+- Manual trigger → Choose environment
+
+**Steps:**
+1. Build SAM application
+2. Deploy to AWS Lambda + RDS
+3. Run health checks
+4. Post deployment summary
+
+**Status:** [![Deploy](https://github.com/tecmx/sarc-ng/workflows/Deploy/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/deploy.yml)
+
+#### 📦 Release
+
+**Trigger:** Push tag `v*.*.*` (e.g., `v1.0.0`)
+
+**Artifacts:**
+- Binaries for Linux (amd64, arm64)
+- Binaries for macOS (amd64, arm64)
+- Lambda bootstrap binary
+- Docker image pushed to GHCR
+- Checksums and changelog
+
+**Status:** [![Release](https://github.com/tecmx/sarc-ng/workflows/Release/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/release.yml)
+
+### Setup Requirements
+
+#### GitHub Secrets
+
+Configure these secrets in your repository settings:
+
+```
+AWS_ACCESS_KEY_ID       - AWS access key for deployment
+AWS_SECRET_ACCESS_KEY   - AWS secret key for deployment
+DB_PASSWORD             - Database password for SAM deployment
+```
+
+#### Environment Protection (Optional)
+
+Configure branch protection and environment rules:
+
+1. **Settings** → **Environments**
+2. Create: `dev`, `staging`, `production`
+3. Add reviewers for production
+4. Configure branch restrictions
+
+### Usage
+
+#### Manual Deployment
+
+Deploy to specific environment via GitHub Actions:
+
+```yaml
+# Go to Actions → Deploy → Run workflow
+# Select environment: dev/staging/production
+```
+
+#### Creating a Release
+
+```bash
+# Tag a new version
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
+
+# Workflow automatically:
+# - Builds all binaries
+# - Creates GitHub release
+# - Builds and pushes Docker image
+```
+
+#### Local Testing
+
+Test workflows locally with [act](https://github.com/nektos/act):
+
+```bash
+# Install act
+brew install act  # macOS
+
+# Run CI workflow
+act push -W .github/workflows/ci.yml
+
+# Run specific job
+act -j test
+```
+
+### Deployment Environments
+
+**Development (`develop` branch)**
+- Stack: `sarc-ng-dev`
+- Auto-deploy on push
+- Lower resources
+- Faster iterations
+
+**Staging (manual trigger)**
+- Stack: `sarc-ng-staging`
+- Manual deployment
+- Production-like config
+- Pre-release testing
+
+**Production (`main` branch)**
+- Stack: `sarc-ng-prod`
+- Auto-deploy on push to main
+- Full resources
+- Protected environment
+
+### Monitoring CI/CD
+
+**Build Status**
+- Actions tab in GitHub
+- Status badges in README
+- Email notifications (Settings)
+
+**Deployment URLs**
+
+After deployment, check job summary for:
+- API endpoint URL
+- Swagger documentation URL
+- Health check status
+
+**Logs**
+
+```bash
+# CloudWatch (AWS)
+aws logs tail /aws/lambda/sarc-ng-prod --follow
+
+# GitHub Actions
+# Actions → Select workflow → View logs
+```
+
+### Rollback
+
+**Revert Deployment:**
+
+```bash
+# Rollback to previous version
+git revert <commit-hash>
+git push origin main
+
+# Or redeploy specific tag
+git checkout v1.0.0
+# Manually trigger Deploy workflow
+```
+
+**Manual SAM Rollback:**
+
+```bash
+cd infrastructure/sam
+sam deploy --config-env production \
+  --parameter-overrides Version=v1.0.0
+```
 
 ## Build Commands
 
@@ -586,4 +761,35 @@ openssl s_client -connect your-domain.com:443 -servername your-domain.com
 sudo certbot renew
 ```
 
-This deployment guide provides comprehensive coverage for getting SARC-NG running in production environments with proper security, monitoring, and scalability considerations.
+## Best Practices
+
+### CI/CD Best Practices
+
+1. **Always create PRs** - Never push directly to main
+2. **Wait for CI** - Ensure all checks pass before merging
+3. **Tag releases** - Use semantic versioning (v1.0.0)
+4. **Test deployments** - Use staging before production
+5. **Monitor logs** - Check CloudWatch after deployment
+6. **Use secrets** - Never hardcode credentials
+7. **Review changes** - Use SAM changeset review before deploy
+
+### Deployment Best Practices
+
+1. **Backup before deployment** - Always backup database
+2. **Use blue-green deployments** - Minimize downtime
+3. **Monitor after deployment** - Watch logs and metrics
+4. **Have rollback plan** - Document rollback procedures
+5. **Test in staging first** - Never test in production
+6. **Use configuration management** - Keep configs in version control
+7. **Document incidents** - Learn from deployment issues
+
+## References
+
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [AWS SAM Documentation](https://docs.aws.amazon.com/serverless-application-model/)
+- [Semantic Versioning](https://semver.org/)
+- [Twelve-Factor App](https://12factor.net/)
+
+---
+
+This deployment guide provides comprehensive coverage for getting SARC-NG running in production environments with proper CI/CD automation, security, monitoring, and scalability considerations.

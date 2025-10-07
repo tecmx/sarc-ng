@@ -1,0 +1,116 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+env:
+  GO_VERSION: "1.24"
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || (github.ref == 'refs/heads/main' && 'production' || 'dev') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Setup AWS SAM
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          else
+            echo "environment=dev" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build SAM application
+        run: |
+          cd infrastructure/sam
+          sam build --use-container
+
+      - name: Deploy to AWS
+        run: |
+          cd infrastructure/sam
+          sam deploy \
+            --config-env ${{ steps.env.outputs.environment }} \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides DBPassword=${{ secrets.DB_PASSWORD }}
+
+      - name: Get deployment info
+        id: deployment
+        run: |
+          cd infrastructure/sam
+          STACK_NAME=$(sam list stack-outputs --output json | jq -r '.[0].StackId' | cut -d'/' -f2)
+          API_URL=$(sam list stack-outputs --stack-name $STACK_NAME --output json | jq -r '.[] | select(.OutputKey=="SarcNgApi") | .OutputValue')
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          echo "stack_name=$STACK_NAME" >> $GITHUB_OUTPUT
+
+      - name: Test deployment
+        run: |
+          sleep 10
+          curl -f ${{ steps.deployment.outputs.api_url }}health || exit 1
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🚀 Deployment Complete
+
+              **Environment:** ${{ steps.env.outputs.environment }}
+              **API URL:** ${{ steps.deployment.outputs.api_url }}
+              **Swagger:** ${{ steps.deployment.outputs.api_url }}swagger/index.html
+
+              Health check: ✅ Passed`
+            })
+
+      - name: Deployment summary
+        run: |
+          echo "## 🚀 Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ steps.env.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Stack:** ${{ steps.deployment.outputs.stack_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**API URL:** ${{ steps.deployment.outputs.api_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Swagger:** ${{ steps.deployment.outputs.api_url }}swagger/index.html" >> $GITHUB_STEP_SUMMARY

@@ -1,5 +1,10 @@
 # SARC-NG
 
+[![CI](https://github.com/tecmx/sarc-ng/workflows/CI/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/ci.yml)
+[![Deploy](https://github.com/tecmx/sarc-ng/workflows/Deploy/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/deploy.yml)
+[![Release](https://github.com/tecmx/sarc-ng/workflows/Release/badge.svg)](https://github.com/tecmx/sarc-ng/actions/workflows/release.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tecmx/sarc-ng)](https://goreportcard.com/report/github.com/tecmx/sarc-ng)
+
 Resource Management and Scheduling API - A modern Go-based system for managing buildings, classes, lessons, and resource reservations.
 
 ## Quick Start
@@ -89,7 +94,19 @@ infrastructure/ # Docker, SAM, Terraform
 ## Documentation
 
 See `docs/content/` for detailed guides:
+
 - [Getting Started](docs/content/getting-started.md)
 - [Development](docs/content/development.md)
 - [Architecture](docs/content/architecture.md)
 - [Deployment](docs/content/deployment.md)
+- [CI/CD Pipeline](.github/CICD.md)
+
+## CI/CD
+
+Automated workflows for testing, building, and deploying:
+
+- **CI:** Runs on every push/PR (lint, test, build, security scan)
+- **Deploy:** Auto-deploys to AWS Lambda on push to `main`/`develop`
+- **Release:** Creates multi-platform binaries on version tags
+
+See [CI/CD Documentation](.github/CICD.md) for details.
