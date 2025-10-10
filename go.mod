@@ -20,7 +20,7 @@ require (
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/files v1.0.1
-	github.com/swaggo/gin-swagger v1.6.0
+	github.com/swaggo/gin-swagger v1.6.1
 	github.com/swaggo/swag v1.16.4
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.26.1
