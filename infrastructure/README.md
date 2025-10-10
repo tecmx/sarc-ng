@@ -28,10 +28,10 @@ make docker-clean    # Remove all data
 
 ### Services
 
-- API: http://localhost:8080/api/v1
-- Swagger: http://localhost:8080/swagger/index.html
-- DB Admin: http://localhost:8081
-- Metrics: http://localhost:8080/metrics
+- API: <http://localhost:8080/api/v1>
+- Swagger: <http://localhost:8080/swagger/index.html>
+- DB Admin: <http://localhost:8081>
+- Metrics: <http://localhost:8080/metrics>
 
 ### Manual Commands
 
@@ -56,80 +56,46 @@ docker exec -it sarc-ng-db-dev mysql -u root -p
 
 ## AWS SAM (Lambda)
 
+### Local Development (No AWS credentials needed)
+
 ```bash
 cd infrastructure/sam
 
+# Start everything (MySQL + API Gateway)
+make local-dev
+
+# Stop everything
+make local-stop
+```
+
+**Configuration**: Edit `sam/local.env` for environment variables (simple key=value format).  
+`env.json` is auto-generated from `local.env` automatically.
+
+📖 **See [sam/README.md](sam/README.md) for detailed guide**
+
+### Deployment to AWS (Requires AWS credentials)
+
+```bash
+cd infrastructure/sam
+
+# Deploy
+make deploy
+
+# Show deployed URLs
+make urls
+
+# Delete stack
+make delete
+```
+
+### Manual Commands
+
+```bash
 # Build
-sam build
+make build
 
-# Deploy (first time)
-sam deploy --guided
-
-# Deploy (subsequent)
-sam build && sam deploy
-
-# Local testing
-sam local start-api --port 3001 \
-  --docker-network sarc-ng-network \
-  --env-vars env.json
-```
-
-### Local Testing Setup
-
-```bash
-# Start database
-cd ../docker && docker compose up -d --wait
-
-# Create env file
-cd ../sam
-cp env.json.example env.json
-# Edit env.json with database credentials
-
-# Start local API
-sam build
-sam local start-api --port 3001 \
-sam deploy \
-  --parameter-overrides \
-    Environment=dev \
-    DBPassword=secure-password
-```
-
-### Validate Template
-
-```bash
-sam validate
-```
-
-Checks `template.yaml` syntax and configuration.
-
-### Delete Stack
-
-```bash
-sam delete
-```
-
-Deletes the entire CloudFormation stack and all AWS resources.
-
-### Get Stack Outputs
-
-```bash
-# Using SAM
-sam list stack-outputs
-
-# Using AWS CLI
-aws cloudformation describe-stacks \
-  --stack-name sarc-ng-dev \
-  --query 'Stacks[0].Outputs'
-```
-
-### Clean Build Artifacts
-
-```bash
-# If writable
-rm -rf .aws-sam
-
-# If Docker-created (requires sudo)
-sudo rm -rf .aws-sam
+# Clean build artifacts
+make clean
 ```
 
 ---
@@ -201,28 +167,6 @@ terragrunt apply tfplan
   --env-vars env.json
 ```
 
-### Cleanup
-
-```bash
-# Delete SAM stack
-sam delete --stack-name <stack-name>
-```
-
-## Terraform
-
-```bash
-cd infrastructure/terraform/live/accounts/dev/us-east-1/<module>
-
-# Plan
-terragrunt plan
-
-# Apply
-terragrunt apply
-
-# Multi-environment
-cd infrastructure/terraform/live/accounts/prod/us-east-1/<module>
-```
-
 ## Troubleshooting
 
 ### Docker
@@ -266,25 +210,21 @@ terragrunt init -upgrade
 terraform force-unlock <lock-id>
 ```
 
-## Common Workflows
+## Quick Reference
 
-### Local Development
-```bash
-cd infrastructure/docker
-docker compose up -d --wait
-# Access: http://localhost:8080
-docker compose down
-```
+### Local Development Workflows
 
-### Lambda Testing
-```bash
-cd infrastructure/docker && docker compose up -d --wait
-cd ../sam && sam build
-sam local start-api --port 3001 --docker-network sarc-ng-network --env-vars env.json
-```
+| What | Command |
+|------|---------|
+| **Full local environment** | `cd infrastructure/sam && make local-dev` |
+| **Just Docker services** | `cd infrastructure/docker && docker compose up -d` |
+| **Stop local SAM** | `cd infrastructure/sam && make local-stop` |
+| **Stop Docker services** | `cd infrastructure/docker && docker compose down` |
 
-### AWS Deployment
-```bash
-cd infrastructure/sam
-sam build && sam validate && sam deploy
-```
+### AWS Deployment Workflows
+
+| What | Command |
+|------|---------|
+| **Deploy to AWS** | `cd infrastructure/sam && make deploy` |
+| **Show deployed URLs** | `cd infrastructure/sam && make urls` |
+| **Delete AWS stack** | `cd infrastructure/sam && make delete` |
