@@ -4,8 +4,8 @@
 # Server Configuration - Development settings
 server:
   port: 8080
-  mode: debug  # Enable debug mode for development
-  host: 0.0.0.0  # Allow connections from all interfaces
+  mode: debug # Enable debug mode for development
+  host: 0.0.0.0 # Allow connections from all interfaces
 
 # Database Configuration - Development with optimized settings
 database:
@@ -13,12 +13,12 @@ database:
   port: 3306
   user: root
   password: password
-  name: sarcng_dev  # Use development database
+  name: sarcng_dev # Use development database
   # Connection pool settings optimized for development
-  max_open_conns: 10       # Lower connection limit for development
-  max_idle_conns: 5        # Fewer idle connections
-  conn_max_lifetime: 30m   # Longer lifetime for development
-  conn_max_idle_time: 10m  # Longer idle time for development
+  max_open_conns: 10 # Lower connection limit for development
+  max_idle_conns: 5 # Fewer idle connections
+  conn_max_lifetime: 30m # Longer lifetime for development
+  conn_max_idle_time: 10m # Longer idle time for development
 
 # API Configuration
 api:
@@ -31,19 +31,27 @@ api:
 
 # Logging Configuration - Development
 logging:
-  level: debug  # More verbose logging for development
-  format: text  # Human-readable format for development
-  file: ""  # Log to stdout
+  level: debug # More verbose logging for development
+  format: text # Human-readable format for development
+  file: "" # Log to stdout
+
+# AWS Cognito Configuration - Development
+cognito:
+  region: us-east-1
+  user_pool_id: ${COGNITO_USER_POOL_ID} # Set via environment variable
+  client_id: ${COGNITO_CLIENT_ID} # Set via environment variable
+  jwks_cache_expiry: 1h
 
 # Authentication Configuration
 auth:
   jwt:
     secret: "dev-secret-key-not-for-production"
-    expiration: 168h  # 7 days for development convenience
+    expiration: 168h # 7 days for development convenience
 
 # CORS Configuration - Development (permissive)
 cors:
-  allowOrigins: ["http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:3000"]
+  allowOrigins:
+    ["http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:3000"]
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
   allowHeaders: ["Origin", "Content-Type", "Accept", "Authorization"]
   exposeHeaders: ["Content-Length"]
@@ -52,7 +60,7 @@ cors:
 
 # Swagger Configuration - Development
 swagger:
-  enabled: true  # Always enable in development
+  enabled: true # Always enable in development
   path: "/swagger/*any"
 
 # Health Check Configuration
@@ -61,11 +69,11 @@ health:
 
 # Rate Limiting Configuration
 rateLimit:
-  enabled: false  # Disable rate limiting in development
+  enabled: false # Disable rate limiting in development
 
 # Cache Configuration
 cache:
-  enabled: false  # Disable caching in development for easier testing
+  enabled: false # Disable caching in development for easier testing
 
 # Development-specific settings
 development:
@@ -77,5 +85,5 @@ development:
 # Docker-specific overrides (when running in Docker)
 docker:
   database:
-    host: db  # Docker service name
+    host: db # Docker service name
     port: 3306

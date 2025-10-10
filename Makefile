@@ -120,6 +120,11 @@ release: ## Build production release binaries
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o $(BIN_DIR)/sarc-linux-amd64 $(CLI_MAIN)
 	@echo "Production binaries built in $(BIN_DIR)"
 
+build-SarcNgFunction: ## Build Lambda function binary (used by SAM)
+	@echo "Building Lambda function..."
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -buildvcs=false -ldflags="$(LDFLAGS)" -o $(ARTIFACTS_DIR)/bootstrap ./cmd/lambda
+	@echo "Lambda binary built: $(ARTIFACTS_DIR)/bootstrap"
+
 #
 # DOCUMENTATION
 #

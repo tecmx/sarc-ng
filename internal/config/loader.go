@@ -40,8 +40,8 @@ func LoadConfigWithPath(configPath string) (*Config, error) {
 	// Set default values
 	setDefaults()
 
-	// Override with standard database environment variables
-	mapDatabaseEnvVars()
+	// Override with standard database and Cognito environment variables
+	mapEnvironmentVars()
 
 	// Read config file
 	if err := viper.ReadInConfig(); err != nil {
@@ -102,6 +102,12 @@ func setDefaults() {
 	viper.SetDefault("redis.password", "")
 	viper.SetDefault("redis.db", 0)
 
+	// Cognito defaults
+	viper.SetDefault("cognito.region", "us-east-1")
+	viper.SetDefault("cognito.user_pool_id", "")
+	viper.SetDefault("cognito.client_id", "")
+	viper.SetDefault("cognito.jwks_cache_expiry", "1h")
+
 	// JWT defaults
 	viper.SetDefault("jwt.secret", "your-secret-key")
 	viper.SetDefault("jwt.expiry", "24h")
@@ -116,8 +122,8 @@ func setDefaults() {
 	viper.SetDefault("api.timeout", "30s")
 }
 
-// mapDatabaseEnvVars maps standard database environment variables to viper keys
-func mapDatabaseEnvVars() {
+// mapEnvironmentVars maps standard environment variables to viper keys
+func mapEnvironmentVars() {
 	// Map standard DB_* environment variables
 	dbEnvMap := map[string]string{
 		"DB_HOST":     "database.host",
@@ -128,8 +134,22 @@ func mapDatabaseEnvVars() {
 		"DB_CHARSET":  "database.charset",
 	}
 
-	// Apply environment variable mappings
+	// Map Cognito environment variables
+	cognitoEnvMap := map[string]string{
+		"COGNITO_USER_POOL_ID": "cognito.user_pool_id",
+		"COGNITO_CLIENT_ID":    "cognito.client_id",
+		"COGNITO_REGION":       "cognito.region",
+	}
+
+	// Apply database environment variable mappings
 	for envVar, configKey := range dbEnvMap {
+		if value := os.Getenv(envVar); value != "" {
+			viper.Set(configKey, value)
+		}
+	}
+
+	// Apply Cognito environment variable mappings
+	for envVar, configKey := range cognitoEnvMap {
 		if value := os.Getenv(envVar); value != "" {
 			viper.Set(configKey, value)
 		}

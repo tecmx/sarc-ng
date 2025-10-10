@@ -37,6 +37,13 @@ logging:
   format: json # json, text
   file: "" # empty means log to stdout
 
+# AWS Cognito Configuration
+cognito:
+  region: us-east-1
+  user_pool_id: "" # To be provided via environment variable
+  client_id: "" # To be provided via environment variable
+  jwks_cache_expiry: 1h
+
 # Authentication Configuration (for future use)
 auth:
   jwt:

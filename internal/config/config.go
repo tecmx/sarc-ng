@@ -9,6 +9,7 @@ type Config struct {
 	Server   ServerConfig   `mapstructure:"server"`
 	Database DatabaseConfig `mapstructure:"database"`
 	Redis    RedisConfig    `mapstructure:"redis"`
+	Cognito  CognitoConfig  `mapstructure:"cognito"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
 	Logging  LoggingConfig  `mapstructure:"logging"`
 	API      APIConfig      `mapstructure:"api"`
@@ -42,6 +43,14 @@ type RedisConfig struct {
 	Port     int    `mapstructure:"port"`
 	Password string `mapstructure:"password"`
 	DB       int    `mapstructure:"db"`
+}
+
+// CognitoConfig holds AWS Cognito-related configuration
+type CognitoConfig struct {
+	Region       string        `mapstructure:"region"`
+	UserPoolID   string        `mapstructure:"user_pool_id"`
+	ClientID     string        `mapstructure:"client_id"`
+	JWKSCacheExp time.Duration `mapstructure:"jwks_cache_expiry"`
 }
 
 // JWTConfig holds JWT-related configuration

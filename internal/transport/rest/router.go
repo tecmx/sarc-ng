@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"os"
+	"sarc-ng/internal/domain/auth"
 	"sarc-ng/internal/domain/building"
 	"sarc-ng/internal/domain/class"
 	"sarc-ng/internal/domain/lesson"
@@ -28,6 +30,7 @@ type Router struct {
 	lessonService      lesson.Usecase
 	reservationService reservation.Usecase
 	resourceService    resource.Usecase
+	tokenValidator     auth.TokenValidator
 }
 
 // NewRouter creates a new router with all dependencies
@@ -37,6 +40,7 @@ func NewRouter(
 	lessonService lesson.Usecase,
 	reservationService reservation.Usecase,
 	resourceService resource.Usecase,
+	tokenValidator auth.TokenValidator,
 ) *Router {
 	return &Router{
 		buildingService:    buildingService,
@@ -44,6 +48,7 @@ func NewRouter(
 		lessonService:      lessonService,
 		reservationService: reservationService,
 		resourceService:    resourceService,
+		tokenValidator:     tokenValidator,
 	}
 }
 
@@ -69,8 +74,18 @@ func (r *Router) setupMiddleware(router *gin.Engine) {
 
 // setupSystemRoutes configures system routes like health and swagger
 func (r *Router) setupSystemRoutes(router *gin.Engine) {
-	// Swagger routes
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// Get Cognito Client ID from environment
+	cognitoClientID := os.Getenv("COGNITO_CLIENT_ID")
+	if cognitoClientID == "" {
+		cognitoClientID = "17a1f3l2i1nt2h95gg0pks7e61" // Default Cognito Client ID
+	}
+
+	// Swagger routes with OAuth2 configuration
+	// Use ConfigURL to point to a custom config that includes OAuth2 client ID
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(
+		swaggerFiles.Handler,
+		ginSwagger.PersistAuthorization(true),
+	))
 
 	// Health check route
 	router.GET("/health", func(c *gin.Context) {
@@ -84,15 +99,31 @@ func (r *Router) setupSystemRoutes(router *gin.Engine) {
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 }
 
-// setupAPIRoutes configures API v1 routes
+// setupAPIRoutes configures API v1 routes with authentication
 func (r *Router) setupAPIRoutes(router *gin.Engine) {
-	// API v1 routes
-	v1 := router.Group("/api/v1")
+	// Public API routes (no authentication required)
+	// These are read-only endpoints accessible to everyone
+	publicV1 := router.Group("/api/v1")
+	{
+		buildingRest.RegisterRoutes(publicV1, r.buildingService)
+		classRest.RegisterRoutes(publicV1, r.classService)
+		lessonRest.RegisterRoutes(publicV1, r.lessonService)
+		resourceRest.RegisterRoutes(publicV1, r.resourceService)
+	}
 
-	// Register resource-specific routes
-	buildingRest.RegisterRoutes(v1, r.buildingService)
-	classRest.RegisterRoutes(v1, r.classService)
-	lessonRest.RegisterRoutes(v1, r.lessonService)
-	reservationRest.RegisterRoutes(v1, r.reservationService)
-	resourceRest.RegisterRoutes(v1, r.resourceService)
+	// Protected API routes (authentication required)
+	// Users must be authenticated to access these endpoints
+	protectedV1 := router.Group("/api/v1")
+	protectedV1.Use(middleware.AuthMiddleware(r.tokenValidator))
+	{
+		// Reservations require authentication
+		reservationRest.RegisterRoutes(protectedV1, r.reservationService)
+	}
+
+	// TODO: Implement admin-only routes once handlers support role-based access
+	// adminV1 := protectedV1.Group("")
+	// adminV1.Use(middleware.RequireAdmin())
+	// {
+	//     // Admin endpoints (create, update, delete operations)
+	// }
 }

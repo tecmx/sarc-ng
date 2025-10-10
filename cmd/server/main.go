@@ -15,6 +15,18 @@ package main
 //	@host		localhost:8080
 //	@BasePath	/api/v1
 //	@schemes	http https
+//
+//	@securityDefinitions.oauth2.accessCode	CognitoOAuth
+//	@tokenUrl								https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/token
+//	@authorizationUrl						https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize
+//	@scope.openid							OpenID Connect scope
+//	@scope.email							Access to user email
+//	@scope.profile							Access to user profile
+//
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+//	@description				JWT token from Cognito (use the access_token from OAuth2 login)
 
 import (
 	"fmt"

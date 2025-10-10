@@ -33,7 +33,10 @@ func NewHandler(service reservation.Usecase) *Handler {
 // @Tags reservations
 // @Accept json
 // @Produce json
+// @Security CognitoOAuth
+// @Security BearerAuth
 // @Success 200 {array} ReservationDTO "List of reservations"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 500 {object} common.ErrorResponse "Internal server error"
 // @Router /reservations [get]
 func (h *Handler) GetAll(c *gin.Context) {
@@ -56,9 +59,12 @@ func (h *Handler) GetAll(c *gin.Context) {
 // @Tags reservations
 // @Accept json
 // @Produce json
+// @Security CognitoOAuth
+// @Security BearerAuth
 // @Param id path int true "Reservation ID" minimum(1)
 // @Success 200 {object} ReservationDTO "Reservation details"
 // @Failure 400 {object} common.ErrorResponse "Invalid reservation ID"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 404 {object} common.ErrorResponse "Reservation not found"
 // @Failure 500 {object} common.ErrorResponse "Internal server error"
 // @Router /reservations/{id} [get]
@@ -88,9 +94,12 @@ func (h *Handler) GetByID(c *gin.Context) {
 // @Tags reservations
 // @Accept json
 // @Produce json
+// @Security CognitoOAuth
+// @Security BearerAuth
 // @Param reservation body CreateReservationDTO true "Reservation creation data"
 // @Success 201 {object} ReservationDTO "Created reservation"
 // @Failure 400 {object} common.ErrorResponse "Invalid input data"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 500 {object} common.ErrorResponse "Internal server error"
 // @Router /reservations [post]
 func (h *Handler) Create(c *gin.Context) {
@@ -115,10 +124,13 @@ func (h *Handler) Create(c *gin.Context) {
 // @Tags reservations
 // @Accept json
 // @Produce json
+// @Security CognitoOAuth
+// @Security BearerAuth
 // @Param id path int true "Reservation ID" minimum(1)
 // @Param reservation body UpdateReservationDTO true "Reservation update data"
 // @Success 200 {object} ReservationDTO "Updated reservation"
 // @Failure 400 {object} common.ErrorResponse "Invalid input data"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 404 {object} common.ErrorResponse "Reservation not found"
 // @Failure 500 {object} common.ErrorResponse "Internal server error"
 // @Router /reservations/{id} [put]
@@ -144,9 +156,12 @@ func (h *Handler) Update(c *gin.Context) {
 // @Tags reservations
 // @Accept json
 // @Produce json
+// @Security CognitoOAuth
+// @Security BearerAuth
 // @Param id path int true "Reservation ID" minimum(1)
 // @Success 200 {object} common.SuccessResponse "Reservation deleted successfully"
 // @Failure 400 {object} common.ErrorResponse "Invalid reservation ID"
+// @Failure 401 {object} common.ErrorResponse "Unauthorized"
 // @Failure 404 {object} common.ErrorResponse "Reservation not found"
 // @Failure 500 {object} common.ErrorResponse "Internal server error"
 // @Router /reservations/{id} [delete]

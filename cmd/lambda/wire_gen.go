@@ -20,11 +20,13 @@ import (
 	"sarc-ng/internal/adapter/gorm/resource"
 	"sarc-ng/internal/adapter/secrets"
 	"sarc-ng/internal/config"
+	"sarc-ng/internal/domain/auth"
 	building3 "sarc-ng/internal/domain/building"
 	class3 "sarc-ng/internal/domain/class"
 	lesson3 "sarc-ng/internal/domain/lesson"
 	reservation3 "sarc-ng/internal/domain/reservation"
 	resource3 "sarc-ng/internal/domain/resource"
+	auth2 "sarc-ng/internal/service/auth"
 	building2 "sarc-ng/internal/service/building"
 	class2 "sarc-ng/internal/service/class"
 	lesson2 "sarc-ng/internal/service/lesson"
@@ -55,7 +57,8 @@ func InitializeApplication() (*Application, error) {
 	reservationService := reservation2.NewService(reservationGormAdapter)
 	resourceGormAdapter := resource.NewGormAdapter(db)
 	resourceService := resource2.NewService(resourceGormAdapter)
-	router := rest.NewRouter(service, classService, lessonService, reservationService, resourceService)
+	jwtValidator := provideTokenValidator(configConfig)
+	router := rest.NewRouter(service, classService, lessonService, reservationService, resourceService, jwtValidator)
 	application := &Application{
 		DB:                 db,
 		Config:             configConfig,
@@ -84,7 +87,10 @@ type Application struct {
 }
 
 // ProviderSet for the application
-var ProviderSet = wire.NewSet(config.LoadConfig, provideDatabaseConnection, building.NewGormAdapter, class.NewGormAdapter, lesson.NewGormAdapter, resource.NewGormAdapter, reservation.NewGormAdapter, wire.Bind(new(building3.Repository), new(*building.GormAdapter)), wire.Bind(new(class3.Repository), new(*class.GormAdapter)), wire.Bind(new(lesson3.Repository), new(*lesson.GormAdapter)), wire.Bind(new(resource3.Repository), new(*resource.GormAdapter)), wire.Bind(new(reservation3.Repository), new(*reservation.GormAdapter)), building2.NewService, class2.NewService, lesson2.NewService, resource2.NewService, reservation2.NewService, wire.Bind(new(building3.Usecase), new(*building2.Service)), wire.Bind(new(class3.Usecase), new(*class2.Service)), wire.Bind(new(lesson3.Usecase), new(*lesson2.Service)), wire.Bind(new(resource3.Usecase), new(*resource2.Service)), wire.Bind(new(reservation3.Usecase), new(*reservation2.Service)), rest.NewRouter, wire.Struct(new(Application), "*"))
+var ProviderSet = wire.NewSet(config.LoadConfig, provideDatabaseConnection,
+
+	provideTokenValidator, wire.Bind(new(auth.TokenValidator), new(*auth2.JWTValidator)), building.NewGormAdapter, class.NewGormAdapter, lesson.NewGormAdapter, resource.NewGormAdapter, reservation.NewGormAdapter, wire.Bind(new(building3.Repository), new(*building.GormAdapter)), wire.Bind(new(class3.Repository), new(*class.GormAdapter)), wire.Bind(new(lesson3.Repository), new(*lesson.GormAdapter)), wire.Bind(new(resource3.Repository), new(*resource.GormAdapter)), wire.Bind(new(reservation3.Repository), new(*reservation.GormAdapter)), building2.NewService, class2.NewService, lesson2.NewService, resource2.NewService, reservation2.NewService, wire.Bind(new(building3.Usecase), new(*building2.Service)), wire.Bind(new(class3.Usecase), new(*class2.Service)), wire.Bind(new(lesson3.Usecase), new(*lesson2.Service)), wire.Bind(new(resource3.Usecase), new(*resource2.Service)), wire.Bind(new(reservation3.Usecase), new(*reservation2.Service)), rest.NewRouter, wire.Struct(new(Application), "*"),
+)
 
 // provideDatabaseConnection provides a database connection using Secrets Manager or config
 func provideDatabaseConnection(config2 *config.Config) (*gorm.DB, error) {
@@ -137,4 +143,14 @@ func parsePort(portStr string) int {
 		port = 3306
 	}
 	return port
+}
+
+// provideTokenValidator creates a new JWT token validator
+func provideTokenValidator(cfg *config.Config) *auth2.JWTValidator {
+	return auth2.NewJWTValidator(
+		cfg.Cognito.Region,
+		cfg.Cognito.UserPoolID,
+		cfg.Cognito.ClientID,
+		cfg.Cognito.JWKSCacheExp,
+	)
 }

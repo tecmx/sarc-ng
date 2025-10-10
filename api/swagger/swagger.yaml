@@ -1,6 +1,222 @@
 basePath: /api/v1
 definitions:
-  internal_transport_rest_handler.ErrorResponse:
+  internal_transport_rest_building.BuildingDTO:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_transport_rest_building.CreateBuildingDTO:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  internal_transport_rest_building.UpdateBuildingDTO:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - code
+    - id
+    - name
+    type: object
+  internal_transport_rest_class.ClassDTO:
+    properties:
+      capacity:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_transport_rest_class.CreateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  internal_transport_rest_class.UpdateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  internal_transport_rest_lesson.CreateLessonDTO:
+    properties:
+      duration:
+        minimum: 1
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  internal_transport_rest_lesson.LessonDTO:
+    properties:
+      createdAt:
+        type: string
+      duration:
+        type: integer
+      endTime:
+        type: string
+      id:
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_transport_rest_lesson.UpdateLessonDTO:
+    properties:
+      duration:
+        minimum: 1
+        type: integer
+      id:
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+    required:
+    - id
+    - title
+    type: object
+  internal_transport_rest_reservation.CreateReservationDTO:
+    properties:
+      endTime:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      userId:
+        type: integer
+    required:
+    - endTime
+    - resourceId
+    - startTime
+    - userId
+    type: object
+  internal_transport_rest_reservation.ReservationDTO:
+    properties:
+      createdAt:
+        type: string
+      endTime:
+        type: string
+      id:
+        type: integer
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+  internal_transport_rest_reservation.UpdateReservationDTO:
+    properties:
+      endTime:
+        type: string
+      id:
+        type: integer
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      userId:
+        type: integer
+    required:
+    - endTime
+    - id
+    - resourceId
+    - startTime
+    - userId
+    type: object
+  internal_transport_rest_resource.CreateResourceDTO:
+    properties:
+      isAvailable:
+        type: boolean
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - name
+    - type
+    type: object
+  internal_transport_rest_resource.ResourceDTO:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      isAvailable:
+        type: boolean
+      name:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_transport_rest_resource.UpdateResourceDTO:
+    properties:
+      id:
+        type: integer
+      isAvailable:
+        type: boolean
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - id
+    - name
+    - type
+    type: object
+  sarc-ng_internal_transport_common.ErrorResponse:
     properties:
       code:
         example: 400
@@ -12,249 +228,12 @@ definitions:
         example: The provided data is invalid
         type: string
     type: object
-  internal_transport_rest_handler.SuccessResponse:
+  sarc-ng_internal_transport_common.SuccessResponse:
     properties:
       data: {}
       message:
         example: Operation completed successfully
         type: string
-    type: object
-  sarc-ng_internal_domain_building.Building:
-    properties:
-      code:
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  sarc-ng_internal_domain_class.Class:
-    properties:
-      capacity:
-        type: integer
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  sarc-ng_internal_domain_lesson.Lesson:
-    properties:
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      description:
-        type: string
-      duration:
-        description: Duration in minutes
-        type: integer
-      endTime:
-        type: string
-      id:
-        type: integer
-      startTime:
-        type: string
-      title:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  sarc-ng_internal_domain_reservation.Reservation:
-    properties:
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      description:
-        type: string
-      endTime:
-        type: string
-      id:
-        type: integer
-      purpose:
-        type: string
-      resourceID:
-        type: integer
-      startTime:
-        type: string
-      status:
-        type: string
-      updatedAt:
-        type: string
-      userID:
-        type: integer
-    type: object
-  sarc-ng_internal_domain_resource.Resource:
-    properties:
-      createdAt:
-        type: string
-      deletedAt:
-        type: string
-      description:
-        type: string
-      id:
-        type: integer
-      isAvailable:
-        type: boolean
-      location:
-        type: string
-      name:
-        type: string
-      type:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  sarc-ng_internal_service_building.CreateBuildingDTO:
-    properties:
-      code:
-        type: string
-      name:
-        type: string
-    required:
-    - code
-    - name
-    type: object
-  sarc-ng_internal_service_building.UpdateBuildingDTO:
-    properties:
-      code:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    required:
-    - code
-    - id
-    - name
-    type: object
-  sarc-ng_internal_service_class.CreateClassDTO:
-    properties:
-      capacity:
-        minimum: 1
-        type: integer
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  sarc-ng_internal_service_class.UpdateClassDTO:
-    properties:
-      capacity:
-        minimum: 1
-        type: integer
-      id:
-        type: integer
-      name:
-        type: string
-    required:
-    - id
-    - name
-    type: object
-  sarc-ng_internal_service_lesson.CreateLessonDTO:
-    properties:
-      duration:
-        minimum: 1
-        type: integer
-      startTime:
-        type: string
-      title:
-        type: string
-    required:
-    - title
-    type: object
-  sarc-ng_internal_service_lesson.UpdateLessonDTO:
-    properties:
-      duration:
-        minimum: 1
-        type: integer
-      id:
-        type: integer
-      startTime:
-        type: string
-      title:
-        type: string
-    required:
-    - id
-    - title
-    type: object
-  sarc-ng_internal_service_reservation.CreateReservationDTO:
-    properties:
-      endTime:
-        type: string
-      resourceId:
-        type: integer
-      startTime:
-        type: string
-      status:
-        type: string
-      userId:
-        type: integer
-    required:
-    - endTime
-    - resourceId
-    - startTime
-    - userId
-    type: object
-  sarc-ng_internal_service_reservation.UpdateReservationDTO:
-    properties:
-      endTime:
-        type: string
-      id:
-        type: integer
-      resourceId:
-        type: integer
-      startTime:
-        type: string
-      status:
-        type: string
-      userId:
-        type: integer
-    required:
-    - endTime
-    - id
-    - resourceId
-    - startTime
-    - userId
-    type: object
-  sarc-ng_internal_service_resource.CreateResourceDTO:
-    properties:
-      isAvailable:
-        type: boolean
-      name:
-        type: string
-      type:
-        type: string
-    required:
-    - name
-    - type
-    type: object
-  sarc-ng_internal_service_resource.UpdateResourceDTO:
-    properties:
-      id:
-        type: integer
-      isAvailable:
-        type: boolean
-      name:
-        type: string
-      type:
-        type: string
-    required:
-    - id
-    - name
-    - type
     type: object
 host: localhost:8080
 info:
@@ -282,12 +261,12 @@ paths:
           description: List of buildings
           schema:
             items:
-              $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+              $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
             type: array
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all buildings
       tags:
       - buildings
@@ -301,22 +280,22 @@ paths:
         name: building
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_building.CreateBuildingDTO'
+          $ref: '#/definitions/internal_transport_rest_building.CreateBuildingDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created building
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+            $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new building
       tags:
       - buildings
@@ -338,19 +317,19 @@ paths:
         "200":
           description: Building deleted successfully
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid building ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Building not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a building
       tags:
       - buildings
@@ -371,19 +350,19 @@ paths:
         "200":
           description: Building details
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+            $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
         "400":
           description: Invalid building ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Building not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get building by ID
       tags:
       - buildings
@@ -403,26 +382,26 @@ paths:
         name: building
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_building.UpdateBuildingDTO'
+          $ref: '#/definitions/internal_transport_rest_building.UpdateBuildingDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated building
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_building.Building'
+            $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Building not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing building
       tags:
       - buildings
@@ -438,12 +417,12 @@ paths:
           description: List of classes
           schema:
             items:
-              $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+              $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
             type: array
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all classes
       tags:
       - classes
@@ -457,22 +436,22 @@ paths:
         name: class
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_class.CreateClassDTO'
+          $ref: '#/definitions/internal_transport_rest_class.CreateClassDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created class
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+            $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new class
       tags:
       - classes
@@ -494,19 +473,19 @@ paths:
         "200":
           description: Class deleted successfully
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid class ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Class not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a class
       tags:
       - classes
@@ -527,19 +506,19 @@ paths:
         "200":
           description: Class details
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+            $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
         "400":
           description: Invalid class ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Class not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get class by ID
       tags:
       - classes
@@ -559,26 +538,26 @@ paths:
         name: class
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_class.UpdateClassDTO'
+          $ref: '#/definitions/internal_transport_rest_class.UpdateClassDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated class
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_class.Class'
+            $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Class not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing class
       tags:
       - classes
@@ -594,12 +573,12 @@ paths:
           description: List of lessons
           schema:
             items:
-              $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+              $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
             type: array
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all lessons
       tags:
       - lessons
@@ -614,22 +593,22 @@ paths:
         name: lesson
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_lesson.CreateLessonDTO'
+          $ref: '#/definitions/internal_transport_rest_lesson.CreateLessonDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created lesson
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+            $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new lesson
       tags:
       - lessons
@@ -651,19 +630,19 @@ paths:
         "200":
           description: Lesson deleted successfully
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid lesson ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Lesson not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a lesson
       tags:
       - lessons
@@ -684,19 +663,19 @@ paths:
         "200":
           description: Lesson details
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+            $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
         "400":
           description: Invalid lesson ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Lesson not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get lesson by ID
       tags:
       - lessons
@@ -717,26 +696,26 @@ paths:
         name: lesson
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_lesson.UpdateLessonDTO'
+          $ref: '#/definitions/internal_transport_rest_lesson.UpdateLessonDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated lesson
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_lesson.Lesson'
+            $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Lesson not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing lesson
       tags:
       - lessons
@@ -752,12 +731,19 @@ paths:
           description: List of reservations
           schema:
             items:
-              $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+              $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
       summary: Get all reservations
       tags:
       - reservations
@@ -771,22 +757,29 @@ paths:
         name: reservation
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_reservation.CreateReservationDTO'
+          $ref: '#/definitions/internal_transport_rest_reservation.CreateReservationDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created reservation
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+            $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
       summary: Create a new reservation
       tags:
       - reservations
@@ -808,19 +801,26 @@ paths:
         "200":
           description: Reservation deleted successfully
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid reservation ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Reservation not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
       summary: Delete a reservation
       tags:
       - reservations
@@ -841,19 +841,26 @@ paths:
         "200":
           description: Reservation details
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+            $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
         "400":
           description: Invalid reservation ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Reservation not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
       summary: Get reservation by ID
       tags:
       - reservations
@@ -874,26 +881,33 @@ paths:
         name: reservation
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_reservation.UpdateReservationDTO'
+          $ref: '#/definitions/internal_transport_rest_reservation.UpdateReservationDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated reservation
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_reservation.Reservation'
+            $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Reservation not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
       summary: Update an existing reservation
       tags:
       - reservations
@@ -909,12 +923,12 @@ paths:
           description: List of resources
           schema:
             items:
-              $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+              $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
             type: array
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all resources
       tags:
       - resources
@@ -928,22 +942,22 @@ paths:
         name: resource
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_resource.CreateResourceDTO'
+          $ref: '#/definitions/internal_transport_rest_resource.CreateResourceDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created resource
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+            $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new resource
       tags:
       - resources
@@ -965,19 +979,19 @@ paths:
         "200":
           description: Resource deleted successfully
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid resource ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Resource not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a resource
       tags:
       - resources
@@ -998,19 +1012,19 @@ paths:
         "200":
           description: Resource details
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+            $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
         "400":
           description: Invalid resource ID
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Resource not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get resource by ID
       tags:
       - resources
@@ -1030,30 +1044,45 @@ paths:
         name: resource
         required: true
         schema:
-          $ref: '#/definitions/sarc-ng_internal_service_resource.UpdateResourceDTO'
+          $ref: '#/definitions/internal_transport_rest_resource.UpdateResourceDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated resource
           schema:
-            $ref: '#/definitions/sarc-ng_internal_domain_resource.Resource'
+            $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Resource not found
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/internal_transport_rest_handler.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing resource
       tags:
       - resources
 schemes:
 - http
 - https
+securityDefinitions:
+  BearerAuth:
+    description: JWT token from Cognito (use the access_token from OAuth2 login)
+    in: header
+    name: Authorization
+    type: apiKey
+  CognitoOAuth:
+    authorizationUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize
+    flow: accessCode
+    scopes:
+      email: Access to user email
+      openid: OpenID Connect scope
+      profile: Access to user profile
+    tokenUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/token
+    type: oauth2
 swagger: "2.0"

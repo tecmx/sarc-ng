@@ -15,11 +15,13 @@ import (
 	resourceAdapter "sarc-ng/internal/adapter/gorm/resource"
 	"sarc-ng/internal/adapter/secrets"
 	"sarc-ng/internal/config"
+	"sarc-ng/internal/domain/auth"
 	"sarc-ng/internal/domain/building"
 	"sarc-ng/internal/domain/class"
 	"sarc-ng/internal/domain/lesson"
 	"sarc-ng/internal/domain/reservation"
 	"sarc-ng/internal/domain/resource"
+	authService "sarc-ng/internal/service/auth"
 	buildingService "sarc-ng/internal/service/building"
 	classService "sarc-ng/internal/service/class"
 	lessonService "sarc-ng/internal/service/lesson"
@@ -50,6 +52,10 @@ var ProviderSet = wire.NewSet(
 
 	// Database
 	provideDatabaseConnection,
+
+	// Authentication
+	provideTokenValidator,
+	wire.Bind(new(auth.TokenValidator), new(*authService.JWTValidator)),
 
 	// GORM Adapters - these provide the repository implementations
 	buildingAdapter.NewGormAdapter,
@@ -139,6 +145,16 @@ func parsePort(portStr string) int {
 		port = 3306 // Default MySQL port
 	}
 	return port
+}
+
+// provideTokenValidator creates a new JWT token validator
+func provideTokenValidator(cfg *config.Config) *authService.JWTValidator {
+	return authService.NewJWTValidator(
+		cfg.Cognito.Region,
+		cfg.Cognito.UserPoolID,
+		cfg.Cognito.ClientID,
+		cfg.Cognito.JWKSCacheExp,
+	)
 }
 
 // InitializeApplication initializes the application with all dependencies

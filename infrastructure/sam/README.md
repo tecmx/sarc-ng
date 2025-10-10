@@ -1,89 +1,245 @@
-# AWS SAM Deployment
+# SARC-NG SAM Deployment
 
-AWS SAM deployment configuration for SARC-NG Lambda function.
+> **Two-Stack Architecture** - Authentication and API deployed separately
 
 ## Quick Start
 
 ```bash
-cd infrastructure/sam
+# Deploy everything to production
+make deploy-all ENV=prod
 
-# Validate template
-make validate
-
-# Deploy to AWS
-make deploy
+# See endpoints
+make urls ENV=prod
 ```
 
-## Prerequisites
+## Stack Architecture
 
-- AWS CLI configured with credentials
-- AWS SAM CLI installed
-- Go 1.21+ installed
-
-## AWS Credentials
-
-Edit `aws.env` with your AWS credentials:
-
-```bash
-AWS_ACCESS_KEY_ID=your-access-key
-AWS_SECRET_ACCESS_KEY=your-secret-key
-AWS_SESSION_TOKEN=your-session-token
 ```
-
-## Available Commands
-
-```bash
-make build        # Build Lambda function
-make validate     # Validate SAM template
-make deploy       # Deploy to AWS (requires aws.env)
-make delete       # Delete CloudFormation stack
-make status       # Show deployment status
-make urls         # Show deployed URLs
-make clean        # Remove build artifacts
-make help         # Show all commands
+📦 sarc-ng-cognito-{env}          📦 sarc-ng-{env}
+├── Cognito User Pool              ├── VPC & Networking
+├── User Pool Client               ├── RDS Database
+├── User Groups                    ├── Lambda Function
+├── SSM Parameters                 ├── API Gateway
+└── CloudFormation Exports     ◄───┤ Custom Resource
+                                    └── (Auto-adds Swagger callback)
 ```
-
-## Deployment Workflow
-
-1. **Configure AWS credentials** in `aws.env`
-2. **Validate template**: `make validate`
-3. **Deploy to AWS**: `make deploy`
-4. **Check status**: `make status`
-5. **Get URLs**: `make urls`
 
 ## Files
 
-- `template.yaml` - CloudFormation/SAM template
-- `samconfig.toml` - SAM deployment configuration
-- `aws.env` - AWS credentials 🔐 **Edit this**
-- `Makefile` - Build and deployment commands
+- **`stacks/cognito-stack.yaml`** - Authentication infrastructure (Cognito)
+- **`stacks/api-stack.yaml`** - API infrastructure (Lambda, RDS, VPC)
+- **`Makefile`** - Deployment automation
+- **`TWO-STACK-DEPLOYMENT.md`** - Complete deployment guide
+- **`COGNITO-ARCHITECTURE.md`** - Architecture patterns and solutions
 
-## Deployed Resources
+## Common Commands
 
-After deployment, the stack creates:
+### Deploy
 
-- **Lambda Function** - SARC-NG API handler
-- **API Gateway** - REST API endpoint
-- **VPC** - Isolated network for Lambda and RDS
-- **RDS MySQL** - Database instance
-- **Secrets Manager** - Database credentials storage
+```bash
+# Deploy to specific environment
+make deploy-all ENV=dev
+make deploy-all ENV=staging
+make deploy-all ENV=prod
 
-Access your deployed app via the URLs from `make urls`.
+# Deploy only Cognito
+make deploy-cognito ENV=dev
+
+# Deploy only API
+make deploy-api ENV=dev
+```
+
+### Manage
+
+```bash
+# Check status
+make status ENV=prod
+
+# Get URLs
+make urls ENV=prod
+
+# Validate templates
+make validate
+
+# Clean build artifacts
+make clean
+```
+
+### Delete
+
+```bash
+# Delete API stack
+make delete-api ENV=dev
+
+# Delete Cognito (⚠️ deletes users!)
+make delete-cognito ENV=dev
+
+# Delete everything
+make delete-all ENV=dev
+```
+
+## Environment Variables
+
+Required in `../../aws.env`:
+
+```bash
+# AWS Credentials
+AWS_ACCESS_KEY_ID=xxx
+AWS_SECRET_ACCESS_KEY=xxx
+AWS_DEFAULT_REGION=us-east-1
+
+# Database (optional - can be set during deploy)
+DB_PASSWORD=YourSecurePassword
+```
+
+Load before deployment:
+
+```bash
+source ../../aws.env
+```
+
+## First Deployment
+
+```bash
+# 1. Load AWS credentials
+cd infrastructure/sam
+source ../../aws.env
+
+# 2. Validate templates
+make validate
+
+# 3. Deploy both stacks
+make deploy-all ENV=prod
+
+# 4. Get URLs
+make urls ENV=prod
+
+# 5. Create users
+USER_POOL_ID=$(aws cloudformation describe-stacks \
+  --stack-name sarc-ng-cognito-prod \
+  --query 'Stacks[0].Outputs[?OutputKey==`CognitoUserPoolId`].OutputValue' \
+  --output text)
+
+aws cognito-idp admin-create-user \
+  --user-pool-id $USER_POOL_ID \
+  --username admin \
+  --user-attributes Name=email,Value=admin@example.com \
+  --temporary-password "Admin123!"
+
+aws cognito-idp admin-add-user-to-group \
+  --user-pool-id $USER_POOL_ID \
+  --username admin \
+  --group-name admin
+```
+
+## Testing with Swagger
+
+1. **Get Swagger URL:**
+
+   ```bash
+   make urls ENV=prod
+   ```
+
+2. **Open Swagger UI in browser**
+
+3. **Click "Authorize"** - Swagger will redirect to Cognito Hosted UI
+
+4. **Login with Cognito credentials**
+
+5. **Make authenticated API calls**
+
+## Deployment Order
+
+**Critical:** Always deploy in this order:
+
+1. ✅ Deploy **Cognito stack** first
+2. ✅ Deploy **API stack** second (imports Cognito)
+
+The API stack depends on Cognito exports. Deploying in wrong order will fail.
+
+## What Gets Created
+
+### Cognito Stack
+
+- **User Pool** - Manages users
+- **User Pool Client** - OAuth configuration
+- **User Pool Domain** - Hosted UI
+- **User Groups** - admin, manager, teacher, student
+- **SSM Parameters** - Configuration storage
+- **CloudFormation Exports** - For API stack import
+
+### API Stack
+
+- **VPC** - Network isolation (3 AZs)
+- **RDS MySQL** - Database
+- **Secrets Manager** - DB credentials
+- **Lambda Function** - API logic
+- **API Gateway** - HTTP endpoint
+- **Custom Resource** - Adds Swagger callback to Cognito
 
 ## Troubleshooting
 
-### AWS credentials not set
+### "No export named ... found"
 
-Ensure `aws.env` contains valid AWS credentials with proper permissions.
-
-### Template validation fails
-
-Run `make validate` to check for syntax errors in `template.yaml`.
-
-### Deployment fails
-
-Check CloudFormation console for detailed error messages or run:
+Deploy Cognito first:
 
 ```bash
-aws cloudformation describe-stack-events --stack-name sarc-ng-prod
+make deploy-cognito ENV=prod
 ```
+
+### Stack update failed
+
+Check events:
+
+```bash
+aws cloudformation describe-stack-events \
+  --stack-name sarc-ng-prod \
+  --max-items 20
+```
+
+### Custom Resource failed
+
+Check logs:
+
+```bash
+aws logs tail /aws/lambda/prod-sarc-ng-update-cognito-callbacks --follow
+```
+
+## Documentation
+
+- **`TWO-STACK-DEPLOYMENT.md`** - Complete deployment guide
+- **`COGNITO-ARCHITECTURE.md`** - Architecture patterns
+- **`COGNITO-DEPLOYMENT.md`** - Cognito-specific guide (single-stack, legacy)
+
+## Support
+
+For issues, check:
+
+1. CloudFormation Events (see troubleshooting)
+2. CloudWatch Logs
+3. Stack Outputs (`make urls`)
+4. Template validation (`make validate`)
+
+## Architecture Benefits
+
+✅ **No circular dependencies**
+✅ **Independent stack updates**
+✅ **Cleaner infrastructure**
+✅ **Swagger UI auto-configured**
+✅ **Environment isolation**
+✅ **Easy rollbacks**
+
+## Production Checklist
+
+Before deploying to production:
+
+- [ ] Review and update callback URLs
+- [ ] Enable MFA (`MFAConfiguration=ON`)
+- [ ] Enable Advanced Security (`AdvancedSecurityMode=ENFORCED`)
+- [ ] Use strong DB password
+- [ ] Review security groups
+- [ ] Set up CloudWatch alarms
+- [ ] Test in dev/staging first
+- [ ] Document user creation process
+- [ ] Set up backup strategy for Cognito users
+- [ ] Configure custom domain (optional)

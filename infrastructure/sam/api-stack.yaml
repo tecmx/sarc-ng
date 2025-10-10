@@ -33,6 +33,9 @@ Parameters:
     Default: sarcng
     Description: Database name
 
+  # Note: Cognito resources are deployed in a separate cognito-stack.yaml
+  # This allows for independent deployment and avoids circular dependencies
+
 Resources:
   # VPC
   VPC:
@@ -322,22 +325,125 @@ Resources:
         - Key: ManagedBy
           Value: SAM
 
+  # ============================
+  # Custom Resource to Update Cognito Callbacks with Swagger UI
+  # This imports Cognito from the separate stack and adds Swagger callback
+  # ============================
+  UpdateCognitoCallbacksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${Environment}-sarc-ng-update-cognito-callbacks"
+      Runtime: python3.11
+      Handler: index.handler
+      Timeout: 30
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/LabRole"
+      InlineCode: |
+        import boto3
+        import cfnresponse
+        import json
+
+        def handler(event, context):
+            print(f"Event: {json.dumps(event)}")
+
+            # On delete, just return success
+            if event['RequestType'] == 'Delete':
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+                return
+
+            cognito = boto3.client('cognito-idp')
+
+            try:
+                user_pool_id = event['ResourceProperties']['UserPoolId']
+                client_id = event['ResourceProperties']['ClientId']
+                swagger_callback = event['ResourceProperties']['SwaggerCallback']
+                swagger_logout = event['ResourceProperties']['SwaggerLogout']
+
+                print(f"Adding Swagger callback to Cognito client {client_id}")
+                print(f"Swagger Callback: {swagger_callback}")
+
+                # Get current callbacks
+                response = cognito.describe_user_pool_client(
+                    UserPoolId=user_pool_id,
+                    ClientId=client_id
+                )
+
+                current_client = response['UserPoolClient']
+                callback_urls = current_client.get('CallbackURLs', [])
+                logout_urls = current_client.get('LogoutURLs', [])
+
+                # Add Swagger URLs if not already present
+                if swagger_callback not in callback_urls:
+                    callback_urls.append(swagger_callback)
+                if swagger_logout not in logout_urls:
+                    logout_urls.append(swagger_logout)
+
+                print(f"Updated Callback URLs: {callback_urls}")
+                print(f"Updated Logout URLs: {logout_urls}")
+
+                # Update client with Swagger URLs
+                cognito.update_user_pool_client(
+                    UserPoolId=user_pool_id,
+                    ClientId=client_id,
+                    CallbackURLs=callback_urls,
+                    LogoutURLs=logout_urls,
+                    AllowedOAuthFlows=current_client.get('AllowedOAuthFlows', []),
+                    AllowedOAuthScopes=current_client.get('AllowedOAuthScopes', []),
+                    AllowedOAuthFlowsUserPoolClient=True,
+                    ExplicitAuthFlows=current_client.get('ExplicitAuthFlows', []),
+                    ReadAttributes=current_client.get('ReadAttributes', []),
+                    WriteAttributes=current_client.get('WriteAttributes', []),
+                    PreventUserExistenceErrors=current_client.get('PreventUserExistenceErrors', 'ENABLED'),
+                    EnableTokenRevocation=current_client.get('EnableTokenRevocation', True),
+                    AccessTokenValidity=current_client.get('AccessTokenValidity', 60),
+                    IdTokenValidity=current_client.get('IdTokenValidity', 60),
+                    RefreshTokenValidity=current_client.get('RefreshTokenValidity', 30),
+                    TokenValidityUnits=current_client.get('TokenValidityUnits', {})
+                )
+
+                print(f"Successfully added Swagger callback URLs")
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, {
+                    'Message': 'Successfully added Swagger callback URLs',
+                    'CallbackURLs': ','.join(callback_urls)
+                })
+
+            except Exception as e:
+                print(f"Error: {str(e)}")
+                import traceback
+                traceback.print_exc()
+                cfnresponse.send(event, context, cfnresponse.FAILED, {}, str(e))
+
+  # Invoke Custom Resource AFTER API Gateway exists
+  # This adds the Swagger UI URL as a callback
+  CognitoCallbackUpdate:
+    Type: Custom::UpdateCognitoCallbacks
+    DependsOn:
+      - ServerlessRestApi
+      - SarcNgFunction
+    Properties:
+      ServiceToken: !GetAtt UpdateCognitoCallbacksFunction.Arn
+      UserPoolId:
+        Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-user-pool-id"
+      ClientId:
+        Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-client-id"
+      SwaggerCallback: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/swagger/oauth2-redirect.html"
+      SwaggerLogout: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
   # Lambda Function for SARC-NG API
   SarcNgFunction:
     Type: AWS::Serverless::Function
     Metadata:
       BuildMethod: makefile
     Properties:
-      CodeUri: ./
+      CodeUri: ../../
       Handler: bootstrap
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/LabRole"
       VpcConfig:
         SecurityGroupIds:
           - !Ref LambdaSecurityGroup
         SubnetIds:
-          - !Ref PublicSubnet1
-          - !Ref PublicSubnet2
-          - !Ref PublicSubnet3
+          - !Ref PrivateSubnet1 # Use private subnets (same as RDS)
+          - !Ref PrivateSubnet2
+          - !Ref PrivateSubnet3
       Environment:
         Variables:
           # Secrets Manager ARN
@@ -346,6 +452,14 @@ Resources:
           GIN_MODE: release
           LOG_LEVEL: info
           ENVIRONMENT: !Ref Environment
+          # Cognito configuration (imported from cognito-stack)
+          COGNITO_USER_POOL_ID:
+            Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-user-pool-id"
+          COGNITO_CLIENT_ID:
+            Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-client-id"
+          COGNITO_REGION: !Ref AWS::Region
+          # Pre-fetched JWKS (Lambda in VPC can't fetch from Cognito without NAT Gateway)
+          COGNITO_JWKS: '{"keys":[{"alg":"RS256","e":"AQAB","kid":"mwN+/S7QhdvnO8/C34CVsve4XauklPMiTFVwO69X6TI=","kty":"RSA","n":"y6gzs8USpATf-lVu4fR4R-kokVgyCI-qBIwfFst_cYRf5mAvH76H6JULh5nRJAzhAU8eoSqQG16afdUuFpJszY0vlxnuAlOjWg7FA7XolnZydZi4mK0kSC0-C4ioDMKz8b4luFllkyBNGo7l_TeKeIbIs_HS1fn02UVV-s38Hz8DRh0ZM1ZKGk6tjifdcMai_rwlmSQRMIVtgTIzNzE4fshSE3JzVZqrxim2YHQZrKp3G2HnZff4GeeHj5l0jljs5AOu6EKSjh-I6QvasBmwmdSPuwgaL35IIK3gvf_XRqsmavsYBiNvzfGKjnRHlgUUesH9Sc3tkPi8NUxQOp8BRw","use":"sig"},{"alg":"RS256","e":"AQAB","kid":"LwNLnYx5JlGD8E5EvZu5ITv7NcOUOgnvqxGkDpePWW0=","kty":"RSA","n":"vFSmSoZPS8a6JxCKYNbdy6Y3dIqY6L5tXSfKcIUBPkoP5kAt8b66uCd-knqoUrHjua5Z5ROjhvaaOOLHDMgPntl5DBun5UAJ8OOiYxVxSgoKmSeyjc0BTwGokW6fGCQyoDs0RYlhDssAP3w9igzxxmpjSALRp6ExEwUt05m9XrYU0K9MqW8m2I2jDuqcumSyxJtMAqc3n0fLldyCxpvUbWxDXqV1TSoHyyEvxtJoLWoshw5-gmIQy3GOY_aXsgJchLcSvqYEpXSlQyOWiicO_H2fBBj5Z9HPBQm0QJ9dj7fEE_KMx-y04KOvNbATlyBIIci7E98OQdwyu72qUluuCw","use":"sig"}]}'
           # Fallback values (optional - for debugging)
           DB_HOST: !GetAtt SarcDatabase.Endpoint.Address
           DB_PORT: !GetAtt SarcDatabase.Endpoint.Port
@@ -386,7 +500,7 @@ Resources:
       BackupRetentionPeriod: 0
       DeleteAutomatedBackups: true
       DeletionProtection: false
-      PubliclyAccessible: false
+      PubliclyAccessible: false # Lambda is in VPC
       DBSubnetGroupName: !Ref DBSubnetGroup
       VPCSecurityGroups:
         - !GetAtt RDSSecurityGroup.GroupId
@@ -462,3 +576,19 @@ Outputs:
       ]
     Export:
       Name: !Sub "${Environment}-sarc-ng-database-subnets"
+
+  # Cognito Outputs (from separate cognito-stack)
+  CognitoUserPoolId:
+    Description: "Cognito User Pool ID (imported from cognito-stack)"
+    Value:
+      Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-user-pool-id"
+
+  CognitoUserPoolClientId:
+    Description: "Cognito User Pool Client ID (imported from cognito-stack)"
+    Value:
+      Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-client-id"
+
+  CognitoUserPoolDomain:
+    Description: "Cognito User Pool Domain (imported from cognito-stack)"
+    Value:
+      Fn::ImportValue: !Sub "${Environment}-sarc-ng-cognito-domain"

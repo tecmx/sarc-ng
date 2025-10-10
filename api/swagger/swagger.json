@@ -41,14 +41,14 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sarc-ng_internal_domain_building.Building"
+                                "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -72,7 +72,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_building.CreateBuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.CreateBuildingDTO"
                         }
                     }
                 ],
@@ -80,19 +80,19 @@
                     "201": {
                         "description": "Created building",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_building.Building"
+                            "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -125,25 +125,25 @@
                     "200": {
                         "description": "Building details",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_building.Building"
+                            "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid building ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Building not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -175,7 +175,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_building.UpdateBuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.UpdateBuildingDTO"
                         }
                     }
                 ],
@@ -183,25 +183,25 @@
                     "200": {
                         "description": "Updated building",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_building.Building"
+                            "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Building not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -232,25 +232,25 @@
                     "200": {
                         "description": "Building deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid building ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Building not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -275,14 +275,14 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sarc-ng_internal_domain_class.Class"
+                                "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -306,7 +306,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_class.CreateClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.CreateClassDTO"
                         }
                     }
                 ],
@@ -314,19 +314,19 @@
                     "201": {
                         "description": "Created class",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_class.Class"
+                            "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -359,25 +359,25 @@
                     "200": {
                         "description": "Class details",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_class.Class"
+                            "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid class ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Class not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -409,7 +409,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_class.UpdateClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.UpdateClassDTO"
                         }
                     }
                 ],
@@ -417,25 +417,25 @@
                     "200": {
                         "description": "Updated class",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_class.Class"
+                            "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Class not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -466,25 +466,25 @@
                     "200": {
                         "description": "Class deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid class ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Class not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -509,14 +509,14 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sarc-ng_internal_domain_lesson.Lesson"
+                                "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -540,7 +540,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_lesson.CreateLessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.CreateLessonDTO"
                         }
                     }
                 ],
@@ -548,19 +548,19 @@
                     "201": {
                         "description": "Created lesson",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_lesson.Lesson"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -593,25 +593,25 @@
                     "200": {
                         "description": "Lesson details",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_lesson.Lesson"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid lesson ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Lesson not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -643,7 +643,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_lesson.UpdateLessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.UpdateLessonDTO"
                         }
                     }
                 ],
@@ -651,25 +651,25 @@
                     "200": {
                         "description": "Updated lesson",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_lesson.Lesson"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Lesson not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -700,25 +700,25 @@
                     "200": {
                         "description": "Lesson deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid lesson ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Lesson not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -726,6 +726,14 @@
         },
         "/reservations": {
             "get": {
+                "security": [
+                    {
+                        "CognitoOAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a list of all reservations in the system",
                 "consumes": [
                     "application/json"
@@ -743,19 +751,33 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sarc-ng_internal_domain_reservation.Reservation"
+                                "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "CognitoOAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create a new reservation with resource, user, and time information",
                 "consumes": [
                     "application/json"
@@ -774,7 +796,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_reservation.CreateReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.CreateReservationDTO"
                         }
                     }
                 ],
@@ -782,19 +804,25 @@
                     "201": {
                         "description": "Created reservation",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_reservation.Reservation"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -802,6 +830,14 @@
         },
         "/reservations/{id}": {
             "get": {
+                "security": [
+                    {
+                        "CognitoOAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a specific reservation by its unique identifier",
                 "consumes": [
                     "application/json"
@@ -827,30 +863,44 @@
                     "200": {
                         "description": "Reservation details",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_reservation.Reservation"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid reservation ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Reservation not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "CognitoOAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update an existing reservation's resource, user, time, and status information by ID",
                 "consumes": [
                     "application/json"
@@ -877,7 +927,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_reservation.UpdateReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.UpdateReservationDTO"
                         }
                     }
                 ],
@@ -885,30 +935,44 @@
                     "200": {
                         "description": "Updated reservation",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_reservation.Reservation"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Reservation not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "CognitoOAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a reservation by its ID",
                 "consumes": [
                     "application/json"
@@ -934,25 +998,31 @@
                     "200": {
                         "description": "Reservation deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid reservation ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Reservation not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -977,14 +1047,14 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/sarc-ng_internal_domain_resource.Resource"
+                                "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1008,7 +1078,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_resource.CreateResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.CreateResourceDTO"
                         }
                     }
                 ],
@@ -1016,19 +1086,19 @@
                     "201": {
                         "description": "Created resource",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_resource.Resource"
+                            "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1061,25 +1131,25 @@
                     "200": {
                         "description": "Resource details",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_resource.Resource"
+                            "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid resource ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Resource not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1111,7 +1181,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_service_resource.UpdateResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.UpdateResourceDTO"
                         }
                     }
                 ],
@@ -1119,25 +1189,25 @@
                     "200": {
                         "description": "Updated resource",
                         "schema": {
-                            "$ref": "#/definitions/sarc-ng_internal_domain_resource.Resource"
+                            "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Resource not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1168,25 +1238,25 @@
                     "200": {
                         "description": "Resource deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid resource ID",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Resource not found",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/internal_transport_rest_handler.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1194,7 +1264,329 @@
         }
     },
     "definitions": {
-        "internal_transport_rest_handler.ErrorResponse": {
+        "internal_transport_rest_building.BuildingDTO": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_building.CreateBuildingDTO": {
+            "type": "object",
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_building.UpdateBuildingDTO": {
+            "type": "object",
+            "required": [
+                "code",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_class.ClassDTO": {
+            "type": "object",
+            "properties": {
+                "capacity": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_class.CreateClassDTO": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "capacity": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_class.UpdateClassDTO": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "capacity": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_lesson.CreateLessonDTO": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_lesson.LessonDTO": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_lesson.UpdateLessonDTO": {
+            "type": "object",
+            "required": [
+                "id",
+                "title"
+            ],
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_reservation.CreateReservationDTO": {
+            "type": "object",
+            "required": [
+                "endTime",
+                "resourceId",
+                "startTime",
+                "userId"
+            ],
+            "properties": {
+                "endTime": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_transport_rest_reservation.ReservationDTO": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_transport_rest_reservation.UpdateReservationDTO": {
+            "type": "object",
+            "required": [
+                "endTime",
+                "id",
+                "resourceId",
+                "startTime",
+                "userId"
+            ],
+            "properties": {
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_transport_rest_resource.CreateResourceDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "type"
+            ],
+            "properties": {
+                "isAvailable": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_resource.ResourceDTO": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isAvailable": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_resource.UpdateResourceDTO": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "type"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "isAvailable": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.ErrorResponse": {
             "type": "object",
             "properties": {
                 "code": {
@@ -1211,7 +1603,7 @@
                 }
             }
         },
-        "internal_transport_rest_handler.SuccessResponse": {
+        "sarc-ng_internal_transport_common.SuccessResponse": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -1220,358 +1612,24 @@
                     "example": "Operation completed successfully"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "JWT token from Cognito (use the access_token from OAuth2 login)",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         },
-        "sarc-ng_internal_domain_building.Building": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_domain_class.Class": {
-            "type": "object",
-            "properties": {
-                "capacity": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_domain_lesson.Lesson": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "duration": {
-                    "description": "Duration in minutes",
-                    "type": "integer"
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_domain_reservation.Reservation": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "purpose": {
-                    "type": "string"
-                },
-                "resourceID": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "integer"
-                }
-            }
-        },
-        "sarc-ng_internal_domain_resource.Resource": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "isAvailable": {
-                    "type": "boolean"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_building.CreateBuildingDTO": {
-            "type": "object",
-            "required": [
-                "code",
-                "name"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_building.UpdateBuildingDTO": {
-            "type": "object",
-            "required": [
-                "code",
-                "id",
-                "name"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_class.CreateClassDTO": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "capacity": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_class.UpdateClassDTO": {
-            "type": "object",
-            "required": [
-                "id",
-                "name"
-            ],
-            "properties": {
-                "capacity": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_lesson.CreateLessonDTO": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "duration": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_lesson.UpdateLessonDTO": {
-            "type": "object",
-            "required": [
-                "id",
-                "title"
-            ],
-            "properties": {
-                "duration": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_reservation.CreateReservationDTO": {
-            "type": "object",
-            "required": [
-                "endTime",
-                "resourceId",
-                "startTime",
-                "userId"
-            ],
-            "properties": {
-                "endTime": {
-                    "type": "string"
-                },
-                "resourceId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "sarc-ng_internal_service_reservation.UpdateReservationDTO": {
-            "type": "object",
-            "required": [
-                "endTime",
-                "id",
-                "resourceId",
-                "startTime",
-                "userId"
-            ],
-            "properties": {
-                "endTime": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "resourceId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "sarc-ng_internal_service_resource.CreateResourceDTO": {
-            "type": "object",
-            "required": [
-                "name",
-                "type"
-            ],
-            "properties": {
-                "isAvailable": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "sarc-ng_internal_service_resource.UpdateResourceDTO": {
-            "type": "object",
-            "required": [
-                "id",
-                "name",
-                "type"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "isAvailable": {
-                    "type": "boolean"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
+        "CognitoOAuth": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize",
+            "tokenUrl": "https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/token",
+            "scopes": {
+                "email": "Access to user email",
+                "openid": "OpenID Connect scope",
+                "profile": "Access to user profile"
             }
         }
     }

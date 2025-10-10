@@ -12,7 +12,9 @@ info:
     email: support@example.com
 
 servers:
-  - url: http://localhost:8080/v1
+  - url: https://ebxyw1cz23.execute-api.us-east-1.amazonaws.com/Prod/api/v1
+    description: Production AWS Lambda
+  - url: http://localhost:8080/api/v1
     description: Local development server
 
 tags:
@@ -380,6 +382,9 @@ paths:
       operationId: getAllReservations
       tags:
         - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
       parameters:
         - name: fromDate
           in: query
@@ -419,6 +424,9 @@ paths:
       operationId: createReservation
       tags:
         - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -454,6 +462,9 @@ paths:
       operationId: getReservationById
       tags:
         - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
       responses:
         "200":
           description: Successful operation
@@ -472,6 +483,9 @@ paths:
       operationId: updateReservation
       tags:
         - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -500,6 +514,9 @@ paths:
       operationId: deleteReservation
       tags:
         - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
       responses:
         "204":
           description: Reservation deleted
@@ -1082,6 +1099,19 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-security:
-  - BearerAuth: []
+      description: JWT token from Cognito (use the access_token from OAuth2 login)
+    CognitoOAuth:
+      type: oauth2
+      x-client-id: "17a1f3l2i1nt2h95gg0pks7e61"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize
+          tokenUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/token
+          scopes:
+            openid: OpenID Connect scope
+            email: Access to user email
+            profile: Access to user profile
+      description: OAuth2 authentication with AWS Cognito
+# Note: Security is applied per-endpoint, not globally
+# Public endpoints: buildings, classes, lessons, resources (no auth required)
+# Protected endpoints: reservations (authentication required)

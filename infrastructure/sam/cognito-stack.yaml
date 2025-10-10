@@ -1,0 +1,291 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SARC-NG Cognito Authentication Stack
+
+  This stack creates the Cognito User Pool and related resources for authentication.
+  Deploy this BEFORE the main API stack.
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+    Description: Environment name
+
+  ApplicationName:
+    Type: String
+    Default: sarc-ng
+    Description: Application name
+
+  CognitoDomainPrefix:
+    Type: String
+    Default: sarc-ng-auth
+    Description: Cognito domain prefix (must be globally unique)
+
+  CallbackURLs:
+    Type: CommaDelimitedList
+    Default: "http://localhost:3000/callback,http://localhost:3000/auth/callback"
+    Description: Comma-separated list of callback URLs
+
+  LogoutURLs:
+    Type: CommaDelimitedList
+    Default: "http://localhost:3000"
+    Description: Comma-separated list of logout URLs
+
+  MFAConfiguration:
+    Type: String
+    Default: "OPTIONAL"
+    AllowedValues: ["OFF", "ON", "OPTIONAL"]
+    Description: MFA configuration
+
+  AdvancedSecurityMode:
+    Type: String
+    Default: "AUDIT"
+    AllowedValues: ["OFF", "AUDIT", "ENFORCED"]
+    Description: Advanced security mode
+
+Resources:
+  # ============================
+  # Cognito User Pool
+  # ============================
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub "${Environment}-${ApplicationName}-users"
+      # Password policy
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          TemporaryPasswordValidityDays: 7
+      # Account recovery
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      # Auto-verified attributes
+      AutoVerifiedAttributes:
+        - email
+      # User attributes schema
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+      # MFA configuration
+      MfaConfiguration: !Ref MFAConfiguration
+      EnabledMfas:
+        - SOFTWARE_TOKEN_MFA
+      # Admin create user
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+        InviteMessageTemplate:
+          EmailMessage: "Your username is {username} and temporary password is {####}."
+          EmailSubject: !Sub "Your temporary password for ${ApplicationName}"
+          SMSMessage: "Your username is {username} and temporary password is {####}."
+      # User pool add-ons
+      UserPoolAddOns:
+        AdvancedSecurityMode: !Ref AdvancedSecurityMode
+      # Email configuration
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      UserPoolTags:
+        Name: !Sub "${Environment}-${ApplicationName}-user-pool"
+        Environment: !Ref Environment
+        Application: !Ref ApplicationName
+        ManagedBy: SAM
+
+  # Cognito User Pool Domain
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub "${CognitoDomainPrefix}-${Environment}"
+      UserPoolId: !Ref CognitoUserPool
+
+  # Cognito User Pool Client
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub "${Environment}-${ApplicationName}-client"
+      UserPoolId: !Ref CognitoUserPool
+      GenerateSecret: false
+      # OAuth flows
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+        - aws.cognito.signin.user.admin
+      AllowedOAuthFlowsUserPoolClient: true
+      # Callback URLs
+      CallbackURLs: !Ref CallbackURLs
+      LogoutURLs: !Ref LogoutURLs
+      # Supported identity providers
+      SupportedIdentityProviders:
+        - COGNITO
+      # Token validity
+      AccessTokenValidity: 60
+      IdTokenValidity: 60
+      RefreshTokenValidity: 30
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
+      # Read/Write attributes
+      ReadAttributes:
+        - email
+        - email_verified
+      WriteAttributes:
+        - email
+      # Prevent user existence errors
+      PreventUserExistenceErrors: ENABLED
+      # Enable token revocation
+      EnableTokenRevocation: true
+      # Explicit auth flows
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_PASSWORD_AUTH
+
+  # ============================
+  # User Groups
+  # ============================
+  CognitoUserGroupAdmin:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: admin
+      Description: Administrators with full access
+      UserPoolId: !Ref CognitoUserPool
+      Precedence: 1
+
+  CognitoUserGroupManager:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: manager
+      Description: Managers with resource management access
+      UserPoolId: !Ref CognitoUserPool
+      Precedence: 2
+
+  CognitoUserGroupTeacher:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: teacher
+      Description: Teachers who can create classes
+      UserPoolId: !Ref CognitoUserPool
+      Precedence: 3
+
+  CognitoUserGroupStudent:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: student
+      Description: Students who can make reservations
+      UserPoolId: !Ref CognitoUserPool
+      Precedence: 4
+
+  # ============================
+  # SSM Parameters
+  # ============================
+  CognitoUserPoolIdParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "/${Environment}/${ApplicationName}/cognito/user-pool-id"
+      Description: Cognito User Pool ID
+      Type: String
+      Value: !Ref CognitoUserPool
+      Tags:
+        Environment: !Ref Environment
+        Application: !Ref ApplicationName
+        ManagedBy: SAM
+
+  CognitoClientIdParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "/${Environment}/${ApplicationName}/cognito/client-id"
+      Description: Cognito User Pool Client ID
+      Type: String
+      Value: !Ref CognitoUserPoolClient
+      Tags:
+        Environment: !Ref Environment
+        Application: !Ref ApplicationName
+        ManagedBy: SAM
+
+  CognitoRegionParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "/${Environment}/${ApplicationName}/cognito/region"
+      Description: AWS Region for Cognito
+      Type: String
+      Value: !Ref AWS::Region
+      Tags:
+        Environment: !Ref Environment
+        Application: !Ref ApplicationName
+        ManagedBy: SAM
+
+Outputs:
+  # Cognito Outputs
+  CognitoUserPoolId:
+    Description: Cognito User Pool ID
+    Value: !Ref CognitoUserPool
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-user-pool-id"
+
+  CognitoUserPoolArn:
+    Description: Cognito User Pool ARN
+    Value: !GetAtt CognitoUserPool.Arn
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-user-pool-arn"
+
+  CognitoUserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value: !Ref CognitoUserPoolClient
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-client-id"
+
+  CognitoUserPoolDomain:
+    Description: Cognito User Pool Domain
+    Value: !Sub "https://${CognitoDomainPrefix}-${Environment}.auth.${AWS::Region}.amazoncognito.com"
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-domain"
+
+  CognitoIssuerUrl:
+    Description: Cognito JWT Issuer URL
+    Value: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${CognitoUserPool}"
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-issuer-url"
+
+  CognitoJWKSUrl:
+    Description: Cognito JWKS URL for token validation
+    Value: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${CognitoUserPool}/.well-known/jwks.json"
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-jwks-url"
+
+  CognitoHostedUIUrl:
+    Description: Cognito Hosted UI Login URL
+    Value: !Sub "https://${CognitoDomainPrefix}-${Environment}.auth.${AWS::Region}.amazoncognito.com/login?client_id=${CognitoUserPoolClient}&response_type=code&redirect_uri=http://localhost:3000/callback"
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-cognito-hosted-ui-url"
+
+  # SSM Parameter Names
+  SSMUserPoolIdParameter:
+    Description: SSM Parameter name for User Pool ID
+    Value: !Ref CognitoUserPoolIdParameter
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-ssm-user-pool-id-param"
+
+  SSMClientIdParameter:
+    Description: SSM Parameter name for Client ID
+    Value: !Ref CognitoClientIdParameter
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-ssm-client-id-param"
+
+  SSMRegionParameter:
+    Description: SSM Parameter name for Region
+    Value: !Ref CognitoRegionParameter
+    Export:
+      Name: !Sub "${Environment}-${ApplicationName}-ssm-region-param"
