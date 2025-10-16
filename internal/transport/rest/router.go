@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"os"
 	"sarc-ng/internal/domain/auth"
 	"sarc-ng/internal/domain/building"
 	"sarc-ng/internal/domain/class"
@@ -74,14 +73,7 @@ func (r *Router) setupMiddleware(router *gin.Engine) {
 
 // setupSystemRoutes configures system routes like health and swagger
 func (r *Router) setupSystemRoutes(router *gin.Engine) {
-	// Get Cognito Client ID from environment
-	cognitoClientID := os.Getenv("COGNITO_CLIENT_ID")
-	if cognitoClientID == "" {
-		cognitoClientID = "17a1f3l2i1nt2h95gg0pks7e61" // Default Cognito Client ID
-	}
-
 	// Swagger routes with OAuth2 configuration
-	// Use ConfigURL to point to a custom config that includes OAuth2 client ID
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(
 		swaggerFiles.Handler,
 		ginSwagger.PersistAuthorization(true),
@@ -112,18 +104,9 @@ func (r *Router) setupAPIRoutes(router *gin.Engine) {
 	}
 
 	// Protected API routes (authentication required)
-	// Users must be authenticated to access these endpoints
 	protectedV1 := router.Group("/api/v1")
 	protectedV1.Use(middleware.AuthMiddleware(r.tokenValidator))
 	{
-		// Reservations require authentication
 		reservationRest.RegisterRoutes(protectedV1, r.reservationService)
 	}
-
-	// TODO: Implement admin-only routes once handlers support role-based access
-	// adminV1 := protectedV1.Group("")
-	// adminV1.Use(middleware.RequireAdmin())
-	// {
-	//     // Admin endpoints (create, update, delete operations)
-	// }
 }

@@ -65,7 +65,7 @@ func (h *Handler) GetAll(c *gin.Context) {
 func (h *Handler) GetByID(c *gin.Context) {
 	id, err := common.ParseIDFromPath(c, h.GetEntityName())
 	if err != nil {
-		return // Error already handled by ParseIDFromPath
+		return
 	}
 
 	entity, err := h.service.GetClass(id)
@@ -96,7 +96,7 @@ func (h *Handler) GetByID(c *gin.Context) {
 func (h *Handler) Create(c *gin.Context) {
 	createDTO, err := h.BindCreateJSON(c)
 	if err != nil {
-		return // Error already handled by BindCreateJSON
+		return
 	}
 
 	entity := h.mapper.ToDomain(createDTO)
@@ -125,7 +125,7 @@ func (h *Handler) Create(c *gin.Context) {
 func (h *Handler) Update(c *gin.Context) {
 	id, updateDTO, err := h.ParseIDAndBindJSON(c)
 	if err != nil {
-		return // Error already handled by ParseIDAndBindJSON
+		return
 	}
 
 	entity := h.mapper.ToDomainWithID(updateDTO, id)
@@ -153,7 +153,7 @@ func (h *Handler) Update(c *gin.Context) {
 func (h *Handler) Delete(c *gin.Context) {
 	id, err := common.ParseIDFromPath(c, h.GetEntityName())
 	if err != nil {
-		return // Error already handled by ParseIDFromPath
+		return
 	}
 
 	if err := h.service.DeleteClass(id); err != nil {

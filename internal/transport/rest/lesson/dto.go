@@ -13,7 +13,6 @@ type CreateLessonDTO struct {
 
 // UpdateLessonDTO represents the data needed to update a lesson
 type UpdateLessonDTO struct {
-	ID        uint      `json:"id" validate:"required"`
 	Title     string    `json:"title" validate:"required"`
 	Duration  int       `json:"duration" validate:"min=1"`
 	StartTime time.Time `json:"startTime,omitempty"`

@@ -21,6 +21,8 @@ func (m *Mapper) FromDomain(entity *resource.Resource) *ResourceDTO {
 		ID:          entity.ID,
 		Name:        entity.Name,
 		Type:        entity.Type,
+		Description: entity.Description,
+		Location:    entity.Location,
 		IsAvailable: entity.IsAvailable,
 		CreatedAt:   entity.CreatedAt,
 		UpdatedAt:   entity.UpdatedAt,
@@ -35,6 +37,8 @@ func (m *Mapper) ToDomain(dto *CreateResourceDTO) *resource.Resource {
 	return &resource.Resource{
 		Name:        dto.Name,
 		Type:        dto.Type,
+		Description: dto.Description,
+		Location:    dto.Location,
 		IsAvailable: dto.IsAvailable,
 	}
 }
@@ -48,6 +52,8 @@ func (m *Mapper) ToDomainWithID(dto *UpdateResourceDTO, id uint) *resource.Resou
 		ID:          id,
 		Name:        dto.Name,
 		Type:        dto.Type,
+		Description: dto.Description,
+		Location:    dto.Location,
 		IsAvailable: dto.IsAvailable,
 	}
 }

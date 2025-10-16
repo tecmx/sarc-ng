@@ -12,7 +12,6 @@ type CreateClassDTO struct {
 
 // UpdateClassDTO represents the data needed to update a class
 type UpdateClassDTO struct {
-	ID       uint   `json:"id" validate:"required"`
 	Name     string `json:"name" validate:"required"`
 	Capacity int    `json:"capacity" validate:"min=1"`
 }

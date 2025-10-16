@@ -12,7 +12,6 @@ type CreateBuildingDTO struct {
 
 // UpdateBuildingDTO represents the data needed to update a building
 type UpdateBuildingDTO struct {
-	ID   uint   `json:"id" validate:"required"`
 	Name string `json:"name" validate:"required"`
 	Code string `json:"code" validate:"required"`
 }

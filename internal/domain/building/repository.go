@@ -5,6 +5,7 @@ package building
 type Repository interface {
 	ReadBuildingList() ([]Building, error)
 	ReadBuilding(id uint) (*Building, error)
+	FindBuildingByCode(code string) (*Building, error)
 	CreateBuilding(building *Building) error
 	UpdateBuilding(building *Building) error
 	DeleteBuilding(id uint) error

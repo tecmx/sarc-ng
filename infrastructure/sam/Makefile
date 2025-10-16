@@ -70,7 +70,8 @@ deploy-cognito:
 		--capabilities CAPABILITY_IAM \
 		--parameter-overrides \
 			Environment=$(ENV) \
-			ApplicationName=sarc-ng
+			ApplicationName=sarc-ng \
+		--no-fail-on-empty-changeset
 	@echo "✓ Cognito stack deployed successfully"
 
 # Deploy API stack

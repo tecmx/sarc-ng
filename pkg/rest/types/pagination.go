@@ -1,41 +1,112 @@
 package types
 
-// PaginationMeta represents pagination metadata for REST responses
+import (
+	"math"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+)
+
+const (
+	// DefaultPage is the default page number
+	DefaultPage = 1
+	// DefaultPageSize is the default number of items per page
+	DefaultPageSize = 20
+	// MaxPageSize is the maximum allowed page size
+	MaxPageSize = 100
+)
+
+// PaginationParams represents pagination parameters from request
+type PaginationParams struct {
+	Page     int
+	PageSize int
+	Sort     string
+	Order    string // asc or desc
+}
+
+// PaginationMeta represents pagination metadata in response
 type PaginationMeta struct {
-	Total       int  `json:"total" example:"100"`
-	Page        int  `json:"page" example:"1"`
-	PageSize    int  `json:"pageSize" example:"10"`
-	TotalPages  int  `json:"totalPages" example:"10"`
-	HasNext     bool `json:"hasNext" example:"true"`
-	HasPrevious bool `json:"hasPrevious" example:"false"`
+	Page       int `json:"page"`
+	PageSize   int `json:"pageSize"`
+	TotalItems int `json:"totalItems"`
+	TotalPages int `json:"totalPages"`
 }
 
-// PaginatedResponse represents a generic paginated response envelope
+// PaginatedResponse represents a paginated API response
 type PaginatedResponse[T any] struct {
-	Data       []T            `json:"data"`
-	Pagination PaginationMeta `json:"pagination"`
+	Data []T            `json:"data"`
+	Meta PaginationMeta `json:"meta"`
 }
 
-// SearchRequest represents common search parameters
-type SearchRequest struct {
-	Query    string `json:"query,omitempty" form:"query"`
-	Page     int    `json:"page,omitempty" form:"page" minimum:"1"`
-	PageSize int    `json:"pageSize,omitempty" form:"pageSize" minimum:"1" maximum:"100"`
+// ExtractPaginationParams extracts pagination parameters from Gin context
+func ExtractPaginationParams(c *gin.Context) PaginationParams {
+	page := parseIntParam(c.Query("page"), DefaultPage)
+	pageSize := parseIntParam(c.Query("pageSize"), DefaultPageSize)
+
+	// Enforce max page size
+	if pageSize > MaxPageSize {
+		pageSize = MaxPageSize
+	}
+
+	// Ensure minimum values
+	if page < 1 {
+		page = DefaultPage
+	}
+	if pageSize < 1 {
+		pageSize = DefaultPageSize
+	}
+
+	sort := c.DefaultQuery("sort", "id")
+	order := c.DefaultQuery("order", "asc")
+
+	// Validate order
+	if order != "asc" && order != "desc" {
+		order = "asc"
+	}
+
+	return PaginationParams{
+		Page:     page,
+		PageSize: pageSize,
+		Sort:     sort,
+		Order:    order,
+	}
 }
 
-// CalculatePaginationMeta calculates pagination metadata
-func CalculatePaginationMeta(total, page, pageSize int) PaginationMeta {
-	totalPages := (total + pageSize - 1) / pageSize
-	if totalPages == 0 {
-		totalPages = 1
+// NewPaginatedResponse creates a new paginated response
+func NewPaginatedResponse[T any](data []T, params PaginationParams, totalItems int) *PaginatedResponse[T] {
+	totalPages := int(math.Ceil(float64(totalItems) / float64(params.PageSize)))
+
+	return &PaginatedResponse[T]{
+		Data: data,
+		Meta: PaginationMeta{
+			Page:       params.Page,
+			PageSize:   params.PageSize,
+			TotalItems: totalItems,
+			TotalPages: totalPages,
+		},
+	}
+}
+
+// Offset calculates the database offset for the current page
+func (p PaginationParams) Offset() int {
+	return (p.Page - 1) * p.PageSize
+}
+
+// Limit returns the page size
+func (p PaginationParams) Limit() int {
+	return p.PageSize
+}
+
+// parseIntParam parses an integer parameter with a default value
+func parseIntParam(param string, defaultValue int) int {
+	if param == "" {
+		return defaultValue
 	}
 
-	return PaginationMeta{
-		Total:       total,
-		Page:        page,
-		PageSize:    pageSize,
-		TotalPages:  totalPages,
-		HasNext:     page < totalPages,
-		HasPrevious: page > 1,
+	value, err := strconv.Atoi(param)
+	if err != nil {
+		return defaultValue
 	}
+
+	return value
 }

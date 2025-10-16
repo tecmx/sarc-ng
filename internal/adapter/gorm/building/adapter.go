@@ -52,6 +52,20 @@ func (a *GormAdapter) ReadBuilding(id uint) (*building.Building, error) {
 	return &entity, nil
 }
 
+// FindBuildingByCode retrieves a building by code
+func (a *GormAdapter) FindBuildingByCode(code string) (*building.Building, error) {
+	var model GormModel
+	if err := a.db.Where("code = ?", code).First(&model).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	entity := modelToDomain(model)
+	return &entity, nil
+}
+
 // CreateBuilding adds a new building
 func (a *GormAdapter) CreateBuilding(b *building.Building) error {
 	model := domainToModel(*b)

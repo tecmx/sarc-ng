@@ -18,14 +18,16 @@ func (m *Mapper) FromDomain(entity *reservation.Reservation) *ReservationDTO {
 		return nil
 	}
 	return &ReservationDTO{
-		ID:         entity.ID,
-		ResourceID: entity.ResourceID,
-		UserID:     entity.UserID,
-		StartTime:  entity.StartTime,
-		EndTime:    entity.EndTime,
-		Status:     entity.Status,
-		CreatedAt:  entity.CreatedAt,
-		UpdatedAt:  entity.UpdatedAt,
+		ID:          entity.ID,
+		ResourceID:  entity.ResourceID,
+		UserID:      entity.UserID,
+		StartTime:   entity.StartTime,
+		EndTime:     entity.EndTime,
+		Purpose:     entity.Purpose,
+		Description: entity.Description,
+		Status:      entity.Status,
+		CreatedAt:   entity.CreatedAt,
+		UpdatedAt:   entity.UpdatedAt,
 	}
 }
 
@@ -35,11 +37,13 @@ func (m *Mapper) ToDomain(dto *CreateReservationDTO) *reservation.Reservation {
 		return nil
 	}
 	return &reservation.Reservation{
-		ResourceID: dto.ResourceID,
-		UserID:     dto.UserID,
-		StartTime:  dto.StartTime,
-		EndTime:    dto.EndTime,
-		Status:     dto.Status,
+		ResourceID:  dto.ResourceID,
+		UserID:      dto.UserID,
+		StartTime:   dto.StartTime,
+		EndTime:     dto.EndTime,
+		Purpose:     dto.Purpose,
+		Description: dto.Description,
+		Status:      dto.Status,
 	}
 }
 
@@ -49,11 +53,13 @@ func (m *Mapper) ToDomainWithID(dto *UpdateReservationDTO, id uint) *reservation
 		return nil
 	}
 	return &reservation.Reservation{
-		ID:         id,
-		ResourceID: dto.ResourceID,
-		UserID:     dto.UserID,
-		StartTime:  dto.StartTime,
-		EndTime:    dto.EndTime,
-		Status:     dto.Status,
+		ID:          id,
+		ResourceID:  dto.ResourceID,
+		UserID:      dto.UserID,
+		StartTime:   dto.StartTime,
+		EndTime:     dto.EndTime,
+		Purpose:     dto.Purpose,
+		Description: dto.Description,
+		Status:      dto.Status,
 	}
 }
