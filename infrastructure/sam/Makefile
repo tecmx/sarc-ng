@@ -14,7 +14,7 @@ endif
 ENV ?= prod
 AWS_REGION ?= us-east-1
 
-.PHONY: help build-SarcNgFunction build deploy deploy-cognito deploy-api deploy-all delete delete-cognito delete-api delete-all urls clean validate validate-cognito status
+.PHONY: help build-SarcNgFunction build deploy deploy-cognito deploy-api deploy-all delete delete-cognito delete-api delete-all urls clean validate validate-cognito status ui-upload ui-apply ui-customize
 
 # Default target - show help
 help:
@@ -33,6 +33,11 @@ help:
 	@echo "  validate         - Validate both SAM templates"
 	@echo "  validate-cognito - Validate Cognito template only"
 	@echo ""
+	@echo "UI Customization:"
+	@echo "  ui-customize     - Apply Cognito Hosted UI customization (ENV=prod)"
+	@echo "  ui-upload        - Upload UI assets to S3 (ENV=prod)"
+	@echo "  ui-apply         - Apply UI customization from local files"
+	@echo ""
 	@echo "Utilities:"
 	@echo "  status           - Show deployment status for both stacks"
 	@echo "  urls             - Show deployed API and Swagger URLs"
@@ -42,6 +47,7 @@ help:
 	@echo "Environment:"
 	@echo "  Use ENV=dev|staging|prod to specify environment (default: prod)"
 	@echo "  Example: make deploy-all ENV=dev"
+	@echo "  Example: make ui-customize ENV=dev"
 
 # Build target called by SAM CLI
 build-SarcNgFunction:
@@ -98,12 +104,7 @@ deploy: deploy-api
 
 # Delete Cognito stack
 delete-cognito:
-	@echo "⚠️  Deleting Cognito stack will delete all users!"
-	@read -p "Are you sure? [y/N] " -n 1 -r; \
-	echo; \
-	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-		sam delete --stack-name sarc-ng-cognito-$(ENV) --no-prompts; \
-	fi
+	sam delete --stack-name sarc-ng-cognito-$(ENV) --no-prompts; \
 
 # Delete API stack
 delete-api:
@@ -176,3 +177,19 @@ status:
 		--stack-name sarc-ng-$(ENV) \
 		--query 'Stacks[0].[StackName,StackStatus,LastUpdatedTime]' \
 		--output table 2>/dev/null || echo '❌ API stack not deployed'
+
+# Upload UI assets to S3
+ui-upload:
+	@echo "=== Uploading UI Assets to S3 ($(ENV)) ==="
+	@cd ui-customization && chmod +x upload-ui-assets.sh && ./upload-ui-assets.sh $(ENV)
+
+# Apply UI customization from local files
+ui-apply:
+	@echo "=== Applying UI Customization ($(ENV)) ==="
+	@cd ui-customization && chmod +x apply-ui-customization.sh && ./apply-ui-customization.sh $(ENV)
+
+# Complete UI customization workflow
+ui-customize: ui-apply
+	@echo ""
+	@echo "✓ UI customization complete!"
+	@echo "Visit the Hosted UI URL to see your custom login page."
