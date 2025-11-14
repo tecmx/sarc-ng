@@ -1,0 +1,155 @@
+---
+description: Apply when planning approach, writing code, or managing scope across any development task
+alwaysApply: true
+---
+
+# Core Development Principles & Code Quality
+
+> **PRIORITY**: HIGHEST - Foundation for all development tasks
+
+## **QUICK REFERENCE**
+
+- Read relevant files FIRST - context-aware reading from anywhere in codebase based on task type
+- Study existing patterns - check similar code before writing anything new
+- Think before coding - write reasoning first (3 paragraphs: observation → analysis → solution)
+- Write minimal, clean code with comprehensive docstrings
+- Apply Single Responsibility Principle (SRP) - one reason to change
+- Keep functions ≤20 lines, cyclomatic complexity ≤10
+- NEVER nest try-except blocks - extract to separate functions
+- Stay within exact scope - no unrequested features
+- Output reference files used when task is complete
+- Use real production data only - never sample/mock data
+
+## **CORE PRINCIPLES**
+
+### **MANDATORY PATTERN ANALYSIS**
+
+Before implementing ANY code:
+
+1. **Read relevant files** - Context-aware reading from anywhere in codebase:
+   - **Architecture changes** → Look for architecture docs (docs/, ADRs, design docs, layer documentation)
+   - **API/CLI work** → Look for API/CLI reference docs, interface definitions, usage guides
+   - **Domain-specific tasks** → Look in domain folders for READMEs, docs, related code
+   - **General development** → Start with project README, check docs/ folder if exists, project guides
+   - **Any task** → Consider any file type (code, tests, config, examples, comments) wherever located
+2. **Search for similar functionality** in the codebase
+3. **Study existing patterns** in the same module/layer
+4. **Identify reusable components** (functions, resources, factories)
+5. **Match architectural patterns** (resource usage, logging, error handling)
+
+### **Single Responsibility Principle**
+
+- One reason to change per class/function
+- Functions do one thing well
+- Extract complex logic to separate functions
+
+### **Command-Query Separation**
+
+Functions either:
+- **Command**: Perform action, return None (side effects)
+- **Query**: Return data, no side effects
+
+Never mix both in one function.
+
+### **YAGNI (You Aren't Gonna Need It)**
+
+- Start simple, refactor when pain emerges
+- Apply patterns only when complexity justifies them
+- Skip Strategy for 2-3 simple conditions
+- Skip Factory for single class creation
+
+### **Function Guidelines**
+
+- **Size**: ≤20 lines ideal
+- **Parameters**: 0-2 ideal, max 3
+- **Complexity**: ≤10 cyclomatic complexity
+- **Naming**: Reveal intent, no abbreviations
+- **Nesting**: ≤3 levels max
+
+### **Docstring Standards**
+
+- **Public functions**: Comprehensive Google style (Args, Returns, Examples)
+- **Private functions**: Single-line docstring minimum
+- **Classes**: Purpose, attributes, usage examples
+
+## **ESSENTIAL PATTERNS**
+
+### **Error Handling (Critical)**
+
+```python
+# ✅ CORRECT - Extract to separate functions
+def _fetch_data_safely(context):
+    """Fetch data with error handling."""
+    try:
+        return fetch_data()
+    except FetchError as e:
+        context.log.error(f"Fetch failed: {e}")
+        raise
+
+def process_data(context):
+    """Orchestrate data processing steps."""
+    data = _fetch_data_safely(context)
+    result = _transform_data_safely(data, context)
+    _save_data_safely(result, context)
+
+# ❌ AVOID - Nested try-except
+def process_data(context):
+    try:
+        data = fetch_data()
+        try:
+            result = transform(data)
+            # ... more nesting
+```
+
+**Why**: Hard to read, mixes abstraction levels, difficult to test, violates SRP.
+
+### **Scope Management**
+
+**What to Create (Without Asking):**
+- ✅ ADRs for architecture decisions (in project's ADR location if exists)
+- ✅ Docstrings in code (follow project's docstring style)
+
+**What NOT to Create (Unless Requested):**
+- ❌ Summary files (*_SUMMARY.md, *_COMPLETE.md, *_STATUS.md)
+- ❌ Guide files (*_GUIDE.md, *_INTEGRATION.md, *_TUTORIAL.md)
+- ❌ Verification/report files (*_VERIFICATION.md, *_REPORT.md)
+- ❌ README files or user guides
+- ❌ Tests (unless explicitly requested)
+
+### **Task Completion**
+
+**When task is complete:**
+- Output list of reference files that were considered/used during the task
+- Include file paths and brief description of how each file informed the implementation
+- This provides transparency and helps track what context influenced decisions
+
+## **ENFORCEMENT CHECKLIST**
+
+### **Process**
+
+- [ ] Read relevant files from codebase based on task type (context-aware, not just docs/)
+- [ ] Searched codebase for similar functionality
+- [ ] Studied existing patterns in same module/layer
+- [ ] Followed three-paragraph reasoning approach
+- [ ] Checked for existing functions/resources to reuse
+- [ ] Output reference files used when task complete
+
+### **Quality**
+
+- [ ] Single Responsibility: one reason to change
+- [ ] Command-Query Separation: do OR return, not both
+- [ ] Functions ≤20 lines, names reveal intent
+- [ ] Parameters: 0-2 ideal, max 3
+- [ ] Cyclomatic complexity ≤10
+- [ ] NO nested try-except blocks
+- [ ] Public functions have comprehensive docstrings (Google style)
+- [ ] Private functions have single-line docstrings
+
+### **Data & Scope**
+
+- [ ] Used real production data
+- [ ] Stayed within exact scope
+- [ ] No unrequested features/tests/docs
+- [ ] Only ADRs and docstrings created
+
+**CRITICAL**: These principles take precedence over all other guidelines!

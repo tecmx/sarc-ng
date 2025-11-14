@@ -1,0 +1,1318 @@
+openapi: 3.1.0
+info:
+  title: SARC-NG API Reference
+  description: |
+    API for SARC-NG (Resource Management and Scheduling System)
+
+    This API provides endpoints for managing buildings, classrooms, resources,
+    and scheduling through reservations and lessons.
+  version: 1.0.0
+  contact:
+    name: SARC-NG Support
+    email: support@example.com
+
+servers:
+  - url: https://ebxyw1cz23.execute-api.us-east-1.amazonaws.com/Prod/api/v1
+    description: Production AWS Lambda
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+
+tags:
+  - name: buildings
+    description: Building management
+  - name: classes
+    description: Class management
+  - name: lessons
+    description: Lesson scheduling and management
+  - name: reservations
+    description: Resource reservation management
+  - name: resources
+    description: Resource management
+  - name: auth
+    description: Authentication and authorization
+
+paths:
+  # Building endpoints
+  /buildings:
+    get:
+      summary: Get all buildings (paginated)
+      operationId: getAllBuildings
+      tags:
+        - buildings
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - $ref: "#/components/parameters/SearchParam"
+        - name: filter[name]
+          in: query
+          description: Filter by exact name match
+          required: false
+          schema:
+            type: string
+        - name: filter[code]
+          in: query
+          description: Filter by exact code match
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Sort field (id, name, code, created_at, updated_at)
+          required: false
+          schema:
+            type: string
+            enum: [id, name, code, created_at, updated_at]
+        - $ref: "#/components/parameters/SortOrderParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedBuildingsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create a new building
+      operationId: createBuilding
+      tags:
+        - buildings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuildingInput"
+      responses:
+        "201":
+          description: Building created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Building"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /buildings/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdPathParam"
+    get:
+      summary: Get building by ID
+      operationId: getBuildingById
+      tags:
+        - buildings
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Building"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      summary: Update building
+      operationId: updateBuilding
+      tags:
+        - buildings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuildingInput"
+      responses:
+        "200":
+          description: Building updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Building"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete building
+      operationId: deleteBuilding
+      tags:
+        - buildings
+      responses:
+        "204":
+          description: Building deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Classes endpoints
+  /classes:
+    get:
+      summary: Get all classes (paginated)
+      operationId: getAllClasses
+      tags:
+        - classes
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - $ref: "#/components/parameters/SearchParam"
+        - name: filter[name]
+          in: query
+          description: Filter by exact name match
+          required: false
+          schema:
+            type: string
+        - name: filter[capacity]
+          in: query
+          description: Filter by exact capacity
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sort field (id, name, capacity, created_at, updated_at)
+          required: false
+          schema:
+            type: string
+            enum: [id, name, capacity, created_at, updated_at]
+        - $ref: "#/components/parameters/SortOrderParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedClassesResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create a new class
+      operationId: createClass
+      tags:
+        - classes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassInput"
+      responses:
+        "201":
+          description: Class created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Class"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /classes/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdPathParam"
+    get:
+      summary: Get class by ID
+      operationId: getClassById
+      tags:
+        - classes
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Class"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      summary: Update class
+      operationId: updateClass
+      tags:
+        - classes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClassInput"
+      responses:
+        "200":
+          description: Class updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Class"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete class
+      operationId: deleteClass
+      tags:
+        - classes
+      responses:
+        "204":
+          description: Class deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Resources endpoints
+  /resources:
+    get:
+      summary: Get all resources (paginated)
+      operationId: getAllResources
+      tags:
+        - resources
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - $ref: "#/components/parameters/SearchParam"
+        - name: filter[name]
+          in: query
+          description: Filter by exact name match
+          required: false
+          schema:
+            type: string
+        - name: filter[type]
+          in: query
+          description: Filter by exact type match
+          required: false
+          schema:
+            type: string
+        - name: filter[location]
+          in: query
+          description: Filter by exact location match
+          required: false
+          schema:
+            type: string
+        - name: filter[is_available]
+          in: query
+          description: Filter by availability status
+          required: false
+          schema:
+            type: boolean
+        - name: sort
+          in: query
+          description: Sort field (id, name, type, location, is_available, created_at, updated_at)
+          required: false
+          schema:
+            type: string
+            enum: [id, name, type, location, is_available, created_at, updated_at]
+        - $ref: "#/components/parameters/SortOrderParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedResourcesResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create a new resource
+      operationId: createResource
+      tags:
+        - resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResourceInput"
+      responses:
+        "201":
+          description: Resource created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /resources/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdPathParam"
+    get:
+      summary: Get resource by ID
+      operationId: getResourceById
+      tags:
+        - resources
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      summary: Update resource
+      operationId: updateResource
+      tags:
+        - resources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResourceInput"
+      responses:
+        "200":
+          description: Resource updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete resource
+      operationId: deleteResource
+      tags:
+        - resources
+      responses:
+        "204":
+          description: Resource deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Reservation endpoints
+  /reservations:
+    get:
+      summary: Get all reservations
+      operationId: getAllReservations
+      tags:
+        - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - $ref: "#/components/parameters/SearchParam"
+        - name: filter[resource_id]
+          in: query
+          description: Filter by resource ID
+          required: false
+          schema:
+            type: integer
+        - name: filter[user_id]
+          in: query
+          description: Filter by user ID
+          required: false
+          schema:
+            type: integer
+        - name: filter[status]
+          in: query
+          description: Filter by exact status (pending, confirmed, cancelled)
+          required: false
+          schema:
+            type: string
+        - name: filter[purpose]
+          in: query
+          description: Filter by exact purpose match
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Sort field (id, resource_id, user_id, start_time, end_time, status, created_at, updated_at)
+          required: false
+          schema:
+            type: string
+            enum: [id, resource_id, user_id, start_time, end_time, status, created_at, updated_at]
+        - $ref: "#/components/parameters/SortOrderParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedReservationsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create a new reservation
+      operationId: createReservation
+      tags:
+        - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationInput"
+      responses:
+        "201":
+          description: Reservation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reservation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /reservations/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdPathParam"
+    get:
+      summary: Get reservation by ID
+      operationId: getReservationById
+      tags:
+        - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reservation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      summary: Update reservation
+      operationId: updateReservation
+      tags:
+        - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationInput"
+      responses:
+        "200":
+          description: Reservation updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reservation"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete reservation
+      operationId: deleteReservation
+      tags:
+        - reservations
+      security:
+        - CognitoOAuth: [openid, email, profile]
+        - BearerAuth: []
+      responses:
+        "204":
+          description: Reservation deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Lesson endpoints
+  /lessons:
+    get:
+      summary: Get all lessons
+      operationId: getAllLessons
+      tags:
+        - lessons
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - $ref: "#/components/parameters/SearchParam"
+        - name: filter[title]
+          in: query
+          description: Filter by exact title match
+          required: false
+          schema:
+            type: string
+        - name: filter[duration]
+          in: query
+          description: Filter by exact duration (in minutes)
+          required: false
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Sort field (id, title, duration, start_time, end_time, created_at, updated_at)
+          required: false
+          schema:
+            type: string
+            enum: [id, title, duration, start_time, end_time, created_at, updated_at]
+        - $ref: "#/components/parameters/SortOrderParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedLessonsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create a new lesson
+      operationId: createLesson
+      tags:
+        - lessons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LessonInput"
+      responses:
+        "201":
+          description: Lesson created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lesson"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /lessons/{id}:
+    parameters:
+      - $ref: "#/components/parameters/IdPathParam"
+    get:
+      summary: Get lesson by ID
+      operationId: getLessonById
+      tags:
+        - lessons
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lesson"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      summary: Update lesson
+      operationId: updateLesson
+      tags:
+        - lessons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LessonInput"
+      responses:
+        "200":
+          description: Lesson updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lesson"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete lesson
+      operationId: deleteLesson
+      tags:
+        - lessons
+      responses:
+        "204":
+          description: Lesson deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Authentication endpoints
+  /auth/login:
+    post:
+      summary: User login
+      operationId: login
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  schemas:
+    # Pagination wrapper and metadata schemas
+    PaginationResult:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Items per page
+        total_items:
+          type: integer
+          format: int64
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+
+    PaginatedResponseBase:
+      type: object
+      properties:
+        pagination:
+          $ref: "#/components/schemas/PaginationResult"
+      required:
+        - pagination
+
+    PaginatedBuildingsResponse:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedResponseBase"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Building"
+          required:
+            - data
+
+    PaginatedClassesResponse:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedResponseBase"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Class"
+          required:
+            - data
+
+    PaginatedLessonsResponse:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedResponseBase"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Lesson"
+          required:
+            - data
+
+    PaginatedResourcesResponse:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedResponseBase"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Resource"
+          required:
+            - data
+
+    PaginatedReservationsResponse:
+      allOf:
+        - $ref: "#/components/schemas/PaginatedResponseBase"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/Reservation"
+          required:
+            - data
+
+    # Core entities
+    Building:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Main Campus Building"
+        code:
+          type: string
+          example: "MCB-A"
+        address:
+          type: string
+          example: "123 University Ave"
+        floors:
+          type: integer
+          example: 5
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - code
+
+    BuildingInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Main Campus Building"
+        code:
+          type: string
+          example: "MCB-A"
+        address:
+          type: string
+          example: "123 University Ave"
+        floors:
+          type: integer
+          example: 5
+      required:
+        - name
+        - code
+
+    Class:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Computer Science 101"
+        code:
+          type: string
+          example: "CS101"
+        instructorName:
+          type: string
+          example: "Dr. Jane Smith"
+        semester:
+          type: string
+          example: "Fall 2023"
+        capacity:
+          type: integer
+          example: 30
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - code
+        - instructorName
+
+    ClassInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Computer Science 101"
+        code:
+          type: string
+          example: "CS101"
+        instructorName:
+          type: string
+          example: "Dr. Jane Smith"
+        semester:
+          type: string
+          example: "Fall 2023"
+        capacity:
+          type: integer
+          example: 30
+      required:
+        - name
+        - code
+        - instructorName
+
+    Resource:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Lecture Hall A"
+        type:
+          type: string
+          enum: [classroom, equipment, lab]
+          example: "classroom"
+        capacity:
+          type: integer
+          example: 50
+        location:
+          type: string
+          example: "Building A, Floor 2"
+        buildingId:
+          type: integer
+          example: 1
+        details:
+          type: object
+          additionalProperties: true
+          example: { "hasProjector": true, "hasComputers": false }
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - type
+
+    ResourceInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Lecture Hall A"
+        type:
+          type: string
+          enum: [classroom, equipment, lab]
+          example: "classroom"
+        capacity:
+          type: integer
+          example: 50
+        location:
+          type: string
+          example: "Building A, Floor 2"
+        buildingId:
+          type: integer
+          example: 1
+        details:
+          type: object
+          additionalProperties: true
+          example: { "hasProjector": true, "hasComputers": false }
+      required:
+        - name
+        - type
+
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        resourceId:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 5
+        userName:
+          type: string
+          example: "John Doe"
+        startTime:
+          type: string
+          format: date-time
+          example: "2023-09-01T09:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2023-09-01T11:00:00Z"
+        purpose:
+          type: string
+          example: "Workshop session"
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled]
+          example: "confirmed"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - resourceId
+        - userId
+        - startTime
+        - endTime
+        - status
+
+    ReservationInput:
+      type: object
+      properties:
+        resourceId:
+          type: integer
+          example: 1
+        startTime:
+          type: string
+          format: date-time
+          example: "2023-09-01T09:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2023-09-01T11:00:00Z"
+        purpose:
+          type: string
+          example: "Workshop session"
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled]
+          example: "pending"
+      required:
+        - resourceId
+        - startTime
+        - endTime
+
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        classId:
+          type: integer
+          example: 1
+        resourceId:
+          type: integer
+          example: 2
+        startTime:
+          type: string
+          format: date-time
+          example: "2023-09-04T14:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2023-09-04T15:30:00Z"
+        repeatPattern:
+          type: string
+          enum: [once, daily, weekly, biweekly]
+          example: "weekly"
+        repeatUntil:
+          type: string
+          format: date
+          example: "2023-12-15"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - classId
+        - resourceId
+        - startTime
+        - endTime
+
+    LessonInput:
+      type: object
+      properties:
+        classId:
+          type: integer
+          example: 1
+        resourceId:
+          type: integer
+          example: 2
+        startTime:
+          type: string
+          format: date-time
+          example: "2023-09-04T14:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2023-09-04T15:30:00Z"
+        repeatPattern:
+          type: string
+          enum: [once, daily, weekly, biweekly]
+          example: "weekly"
+        repeatUntil:
+          type: string
+          format: date
+          example: "2023-12-15"
+      required:
+        - classId
+        - resourceId
+        - startTime
+        - endTime
+
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "user@example.com"
+        password:
+          type: string
+          example: "password123"
+      required:
+        - username
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: "John Doe"
+            email:
+              type: string
+              example: "user@example.com"
+            role:
+              type: string
+              example: "admin"
+      required:
+        - token
+        - user
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "resource_not_found"
+        message:
+          type: string
+          example: "The requested resource was not found"
+      required:
+        - code
+        - message
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Conflict:
+      description: Conflict with existing resource
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number (default 1)
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSizeParam:
+      name: page_size
+      in: query
+      description: Page size (default 20, max 100)
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    SearchParam:
+      name: search
+      in: query
+      description: General text search across searchable fields
+      required: false
+      schema:
+        type: string
+    SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum: [asc, desc]
+        default: asc
+    IdPathParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Resource ID
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from Cognito (use the access_token from OAuth2 login)
+    CognitoOAuth:
+      type: oauth2
+      x-client-id: "17a1f3l2i1nt2h95gg0pks7e61"
+      flows:
+        authorizationCode:
+          authorizationUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize
+          tokenUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/token
+          scopes:
+            openid: OpenID Connect scope
+            email: Access to user email
+            profile: Access to user profile
+      description: OAuth2 authentication with AWS Cognito
+# Note: Security is applied per-endpoint, not globally
+# Public endpoints: buildings, classes, lessons, resources (no auth required)
+# Protected endpoints: reservations (authentication required)

@@ -1,0 +1,101 @@
+---
+description: Apply when writing functions, refactoring code, or working on naming conventions across the codebase
+alwaysApply: true
+---
+
+# Universal Naming Conventions for Functions and Assets
+
+> **PRIORITY**: HIGHEST - Consistent naming is critical for maintainability
+
+## **QUICK REFERENCE**
+
+- Use verb-noun pattern for functions (`calculate_total`, `get_user`, `validate_email`)
+- Follow consistent prefixes within functional areas (`calculate_*`, `get_*`, `validate_*`)
+- Use domain-specific terminology appropriately
+- Avoid abbreviations and generic names
+- Maintain consistency across the codebase
+
+## **CORE PRINCIPLES**
+
+### **CONSISTENCY OVER CLEVERNESS**
+
+- Use predictable patterns that developers can easily remember
+- Prefer explicit names over abbreviated ones
+- Maintain consistency within functional areas
+
+### **SEMANTIC CLARITY**
+
+- Function names should clearly indicate their purpose and return type
+- Use domain-specific terminology when appropriate
+- Avoid ambiguous or generic terms
+
+### **HIERARCHICAL ORGANIZATION**
+
+- Group related functions using consistent prefixes
+- Follow the verb-noun pattern for actions
+- Use consistent suffixes for similar operations
+
+## **ESSENTIAL PATTERNS**
+
+### **Common Patterns**
+
+- **Calculation**: `calculate_<what>_<type>` (e.g., `calculate_total_score`)
+- **Retrieval**: `get_<what>_<type>` (e.g., `get_user_profile`)
+- **Validation**: `validate_<what>_<aspect>` (e.g., `validate_email_format`)
+- **Generation**: `generate_<what>_<type>` (e.g., `generate_report_summary`)
+- **Normalization**: `normalize_<what>_<aspect>` (e.g., `normalize_phone_number`)
+- **Creation**: `create_<what>_<type>` (e.g., `create_user_session`)
+
+### **I/O Operations**
+
+- **Reading**: `read_<format>_<source>` (e.g., `read_csv_file`, `read_json_api`)
+- **Writing**: `write_<format>_<destination>` (e.g., `write_parquet_s3`)
+- **Loading**: `load_<what>_<from>` (e.g., `load_config_file`)
+
+### **Business Logic Patterns**
+
+- **Processing**: `process_<entity>_<operation>` (e.g., `process_order_payment`)
+- **Transformation**: `transform_<from>_to_<to>` (e.g., `transform_raw_to_clean`)
+- **Aggregation**: `aggregate_<what>_by_<dimension>` (e.g., `aggregate_sales_by_region`)
+
+### **Anti-Patterns to Avoid**
+
+```python
+# ❌ AVOID - Generic names
+def process_data(): pass
+def handle_stuff(): pass
+def do_work(): pass
+
+# ✅ CORRECT - Specific purpose
+def calculate_total_amount(): pass
+def process_user_request(): pass
+
+# ❌ AVOID - Abbreviations
+def calc_tot_amt(): pass
+def proc_usr_req(): pass
+
+# ✅ CORRECT - Full words
+def calculate_total_amount(): pass
+def process_user_request(): pass
+
+# ❌ AVOID - Mixed conventions
+def getUserData(): pass  # camelCase
+def validate_email_format(): pass  # snake_case
+
+# ✅ CORRECT - Consistent convention
+def get_user_data(): pass
+def validate_email_format(): pass
+```
+
+## **ENFORCEMENT CHECKLIST**
+
+- [ ] Follows established verb_noun pattern
+- [ ] Uses appropriate prefix (`calculate_`, `get_`, `validate_`, etc.)
+- [ ] Consistent with existing naming in the same module
+- [ ] Clear and unambiguous purpose
+- [ ] No mixing of naming patterns within functional areas
+- [ ] No generic names (`process_data`, `handle_stuff`)
+- [ ] No abbreviations (`calc`, `proc`, `usr`)
+- [ ] Consistent casing convention throughout module
+
+**CRITICAL**: Naming consistency is essential for code maintainability and developer productivity!

@@ -1,0 +1,111 @@
+---
+description: Apply when creating new rules, modifying existing rules, or working with the rule system structure
+alwaysApply: false
+globs: .cursor/rules/*.mdc
+---
+
+# Rule Creation & Management Guidelines
+
+> **PRIORITY**: HIGHEST - Essential for maintaining rule system integrity and AI agent performance
+
+## **QUICK REFERENCE**
+
+- Target 80-120 lines (sweet spot: ~100 lines) for optimal AI processing
+- Use Quick Reference → Core Principles → Essential Patterns → Enforcement Checklist structure
+- Show 2-4 focused examples with CORRECT/AVOID contrasts
+- Follow template exactly for predictable AI processing
+- Preserve rule headers (YAML frontmatter) when modifying content
+
+## **CORE PRINCIPLES**
+
+### **OPTIMAL AI PERFORMANCE**
+
+- Target 80-120 lines total for maximum AI comprehension
+- Use consistent structure across all rules for predictable processing
+- Focus on actionable guidance over theoretical concepts
+- Maintain logical flow from general principles to specific patterns
+
+### **CONSISTENCY & MAINTAINABILITY**
+
+- All rules follow the same template for predictable AI processing
+- Consistent section order: Quick Ref → Principles → Patterns → Checklist
+- Uniform formatting (bullets, code blocks, emphasis) across all rules
+- Clear distinction between core rules (auto-applied) and guides (on-demand)
+
+## **ESSENTIAL PATTERNS**
+
+### **Rule Structure Template**
+
+```markdown
+---
+description: [Clear context-based trigger]
+alwaysApply: [true/false]
+---
+# Rule Title
+> **PRIORITY**: [HIGHEST/HIGH/MEDIUM] - [Context]
+
+## **QUICK REFERENCE**
+- Key principle (most critical first)
+
+## **CORE PRINCIPLES**
+### **PRIMARY PRINCIPLE**
+- Clear, actionable guideline
+
+## **ESSENTIAL PATTERNS**
+### **Pattern Type**
+```[language]
+# CORRECT
+example
+
+# AVOID
+counter_example
+```
+
+## **ENFORCEMENT CHECKLIST**
+
+### **Category**
+
+- [ ] Testable requirement
+
+**CRITICAL**: Final emphasis!
+
+```
+
+## **WRITING GUIDELINES**
+
+- **Quick Reference**: 5-8 bullets, action-oriented, most critical first
+- **Core Principles**: 20-40 lines, bullet format, focus on "why" and "what"
+- **Essential Patterns**: 30-50 lines, CORRECT/AVOID contrasts, real examples
+- **Enforcement Checklist**: 10-15 lines, testable criteria, grouped logically
+
+## **QUALITY TARGETS**
+
+- **80-90 lines**: Focused, specific rules
+- **90-110 lines**: Comprehensive domain rules
+- **110-120 lines**: Complex architectural rules
+
+## **RULE QUALITY CHECKLIST**
+
+### **Structure & Length**
+
+- [ ] Length within 80-120 line target range
+- [ ] Quick Reference has 5-8 actionable bullets
+- [ ] Core Principles use consistent bullet formatting
+- [ ] Essential Patterns show clear CORRECT/AVOID contrasts
+- [ ] Enforcement Checklist has testable criteria
+
+### **Consistency & Standards**
+
+- [ ] Follows template exactly for predictable AI processing
+- [ ] Consistent structure with existing rules in same domain
+- [ ] Rule header (description, alwaysApply, globs) accurately defined
+- [ ] Final CRITICAL line reinforces key message
+
+### **AI Optimization**
+
+- [ ] Actionable guidance over theoretical concepts
+- [ ] Logical flow from principles to implementation
+- [ ] Focused examples (2-4 patterns with CORRECT/AVOID)
+- [ ] Token-efficient content (no redundancy with other rules)
+
+**CRITICAL**: Consistent structure and optimal length ensure maximum AI comprehension and performance!

@@ -1,0 +1,124 @@
+---
+description: Apply to all test development, test framework design, and quality assurance tasks
+alwaysApply: false
+globs: ["tests/**/*.py", "**/test_*.py", "**/conftest.py", "**/*_test.py"]
+---
+# Testing Standards & Best Practices (Core)
+
+> **PRIORITY**: HIGH - Comprehensive testing ensures code quality and reliability
+
+## **QUICK REFERENCE**
+
+- Use modern test framework features (fixtures, parametrization) - avoid legacy patterns
+- Follow AAA pattern: Arrange → Act → Assert (one logical assertion per test)
+- Name tests: `test_<function>_<scenario>_<expected_outcome>` (or framework equivalent)
+- Mock external dependencies only - never mock code under test
+- Parametrize similar test cases - avoid copy-paste duplication
+- Keep tests independent - no shared state between tests
+- Use framework exception testing (e.g., `pytest.raises()`, `expect().toThrow()`)
+- Write tests only when explicitly requested by user
+
+## **CORE PRINCIPLES**
+
+### **TEST PYRAMID STRUCTURE**
+
+- **Unit tests**: Fast, isolated (70-80%)
+- **Integration tests**: Component interactions (15-25%)
+- **End-to-end tests**: Critical flows (5-10%)
+
+### **TEST INDEPENDENCE & CLARITY**
+
+- Each test runs in isolation without depending on others
+- Test names reveal what is tested and expected outcome
+- One logical assertion per test (multiple statements allowed if same concept)
+- Mock only external dependencies (APIs, databases, file systems)
+
+## **ESSENTIAL PATTERNS**
+
+### **Modern Test Framework Style**
+
+```python
+# ✅ CORRECT - Modern test framework with fixtures (pytest example)
+import pytest
+from unittest.mock import Mock, patch
+
+@pytest.fixture
+def config():
+    return {"bucket": "test-bucket", "region": "us-east-1"}
+
+def test_process_event_with_valid_data_returns_success(config):
+    """Test event processing with valid data returns success."""
+    # Arrange
+    event = {"Records": [{"s3": {"bucket": {"name": "test-bucket"}}}]}
+    processor = EventProcessor(config)
+    # Act
+    result = processor.process(event)
+    # Assert
+    assert result["status"] == "success"
+
+# ❌ AVOID - Legacy test framework patterns
+class TestEventProcessor(unittest.TestCase):
+    def setUp(self):
+        self.config = {"bucket": "test-bucket"}
+```
+
+### **Mocking External Dependencies**
+
+```python
+# ✅ CORRECT - Mock external dependencies only
+@patch("boto3.client")
+def test_upload_to_s3_with_valid_path_uploads_successfully(mock_boto):
+    mock_s3 = Mock()
+    mock_boto.return_value = mock_s3
+    uploader = S3Uploader()
+    uploader.upload("test.txt", "bucket", "key")
+    mock_s3.upload_file.assert_called_once()
+
+# ❌ AVOID - Mocking code under test
+@patch("services.uploader.S3Uploader.upload")
+def test_upload(mock_upload):
+    uploader.upload("test.txt", "bucket", "key")  # Tests nothing!
+```
+
+### **Parametrization & Exception Testing**
+
+```python
+# ✅ CORRECT - Parametrize similar cases (pytest example)
+@pytest.mark.parametrize("input_value,expected", [
+    ("valid@email.com", True),
+    ("invalid.email", False),
+    ("", False),
+])
+def test_validate_email_returns_expected(input_value, expected):
+    assert validate_email(input_value) == expected
+
+# ✅ CORRECT - Exception testing with framework support (pytest example)
+def test_parse_json_with_invalid_format_raises_value_error():
+    with pytest.raises(ValueError) as exc_info:
+        parse_json("not valid json")
+    assert "Invalid JSON" in str(exc_info.value)
+```
+
+## **ENFORCEMENT CHECKLIST**
+
+### **Test Structure**
+
+- [ ] Uses modern test framework features (fixtures, parametrization)
+- [ ] Follows AAA pattern: Arrange → Act → Assert
+- [ ] Test names: `test_<function>_<scenario>_<outcome>` (or framework equivalent)
+- [ ] Tests are independent with no shared state
+
+### **Test Quality**
+
+- [ ] Mocks external dependencies only (not code under test)
+- [ ] Uses parametrization for similar test cases
+- [ ] Uses framework exception testing (e.g., `pytest.raises()`, `expect().toThrow()`)
+- [ ] Includes edge cases and error conditions
+
+### **Coverage & Scope**
+
+- [ ] Focuses on unit tests (70-80% of suite)
+- [ ] Tests behavior, not implementation details
+- [ ] Written only when explicitly requested
+
+**CRITICAL**: High-quality tests catch bugs early and serve as living documentation!

@@ -1,0 +1,214 @@
+---
+description: Apply when creating new commands, modifying existing commands, or working with the command system structure
+alwaysApply: false
+globs: .cursor/commands/*.md
+---
+
+# Command Creation & Management Guidelines
+
+> **PRIORITY**: HIGHEST - Essential for maintaining command system integrity and AI agent performance
+
+## **QUICK REFERENCE**
+
+- Target 80-130 lines (sweet spot: ~100 lines) for optimal AI processing
+- Use consistent structure: Metadata → Purpose → Usage → Parameters → What It Does → Workflow → Integration → Related Commands
+- Focus on "how to use" - commands describe usage, rules contain validation criteria
+- Never auto-apply fixes - always require explicit flags and user confirmation
+- Never generate summary/md files - only report findings unless explicitly requested
+- Universal design - commands work on any project type, any language
+
+## **CORE PRINCIPLES**
+
+### **OPTIMAL AI PERFORMANCE**
+
+- Target 80-130 lines total for maximum AI comprehension
+- Use consistent structure across all commands for predictable processing
+- Focus on actionable usage guidance over detailed validation criteria
+- Maintain logical flow from purpose → usage → parameters → integration
+
+### **CONSISTENCY & MAINTAINABILITY**
+
+- All commands follow the same template for predictable AI processing
+- Consistent section order: Metadata → Purpose → Usage → Parameters → What It Does → Workflow → Integration → Related Commands
+- Uniform formatting (tables, code blocks, emphasis) across all commands
+- Clear distinction between commands (how to use) and rules (what to check)
+
+### **UNIVERSAL DESIGN**
+
+- Commands must work on any project type (Python, JavaScript, Go, etc.)
+- Language-agnostic where possible, framework-agnostic examples
+- Minimal dependencies (only `.cursor/rules/00-*.mdc` files)
+- 100% portable - copy to any project without modification
+
+## **ESSENTIAL PATTERNS**
+
+### **Command Structure Template**
+
+```markdown
+# Command Title
+
+> **COMMAND**: `@agent [command-name]`
+> **CATEGORY**: [Category]
+> **AUTOFIX**: [✅ Full / ⚠️ Partial / 🔧 Manual / ❌ None]
+> **SCOPE**: Universal [optional: (any language/framework)]
+> **DEPENDENCIES**: `.cursor/rules/[rule-name].mdc` (if applicable)
+> **PORTABILITY**: 🟢 100%
+
+## Purpose
+
+[One sentence: What this command does]
+
+**When to Use:**
+- ✅ [Primary use case]
+- ✅ [Secondary use case]
+- ❌ [When NOT to use]
+
+**Expected Duration:** [time estimate]
+
+---
+
+## Usage
+
+```bash
+# Basic usage
+@agent [command-name]
+
+# With options
+@agent [command-name] [options]
+```
+
+### Examples
+
+```bash
+# Example 1: [description]
+@agent [command-name] [example-1]
+
+# Example 2: [description]
+@agent [command-name] [example-2]
+```
+
+---
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `param1` | type | `default` | Description |
+
+[Optional: Additional parameter details or enums]
+
+---
+
+## What It Does
+
+[2-3 sentences describing the command's behavior. Reference rules for detailed criteria.]
+
+**Important:**
+
+- ❌ **Never auto-applies fixes** - Always asks user for confirmation before making any changes
+- ❌ **Never generates summary/md files** - Only reports findings, does not create documentation files
+
+**Standards Applied:**
+
+- `.cursor/rules/[rule-name].mdc` - [what it validates]
+
+**Available Fixes (requires explicit flag and user confirmation):**
+
+- ✅ [What can be fixed]
+- ⚠️ Manual: [What requires manual intervention]
+
+---
+
+## Workflow
+
+1. **Scan** – [Describe the initial analysis step]
+2. **Report** – [Explain how findings are surfaced]
+3. **Prompt** – [Explain when/if the command asks for confirmation]
+4. **Apply** – [Clarify what happens when the user approves fixes]
+
+---
+
+## Integration
+
+### Makefile
+
+```makefile
+target: ## Description
+ @cursor-agent --print --model sonnet-4.5 \
+  "@agent [command-name] [options]"
+```
+
+[Optional: CI/CD examples]
+
+---
+
+## Related Commands
+
+- `@agent [related-command]` - [relationship]
+
+---
+
+**Last Updated:** [date]
+**Compatibility:** Cursor Agent CLI + IDE
+**Model Tested:** Claude Sonnet 4.5
+**Exit Codes:** 0 (pass), 1 (warnings), 2 (issues)
+
+```
+
+## **WRITING GUIDELINES**
+
+- **Metadata Block**: 6-8 lines, includes COMMAND, CATEGORY, AUTOFIX, SCOPE, DEPENDENCIES, PORTABILITY
+- **Purpose**: 10-15 lines, one sentence description + When to Use + Expected Duration
+- **Usage**: 15-25 lines, basic usage + 3-5 examples
+- **Parameters**: 5-15 lines, table format with defaults, optional enum details
+- **What It Does**: 10-20 lines, description + Important notes + Standards Applied + Available Fixes
+- **Workflow**: 6-12 lines, enumerate Scan → Report → Prompt → Apply (note when prompts apply)
+- **Integration**: 10-20 lines, Makefile example, optional CI/CD
+- **Related Commands**: 2-5 lines, links to related commands
+- **Footer**: 4 lines, Last Updated, Compatibility, Model Tested, Exit Codes
+
+## **QUALITY TARGETS**
+
+- **80-100 lines**: Simple, focused commands (e.g., `/test`)
+- **100-120 lines**: Standard commands with parameters and integration (e.g., `00-docs-check`)
+- **120-130 lines**: Complex commands with multiple parameters and extensive integration
+
+## **COMMAND QUALITY CHECKLIST**
+
+### **Structure & Length**
+
+- [ ] Length within 80-130 line target range
+- [ ] Metadata block includes all required fields (COMMAND, CATEGORY, AUTOFIX, SCOPE, DEPENDENCIES, PORTABILITY)
+- [ ] Purpose section includes When to Use and Expected Duration
+- [ ] Usage section has basic usage + 3-5 examples
+- [ ] Parameters use table format with defaults
+- [ ] What It Does includes Important notes about never auto-applying fixes
+- [ ] Workflow section documents Scan → Report → Prompt → Apply (and when prompts occur)
+- [ ] Integration includes Makefile example
+- [ ] Footer includes Last Updated, Compatibility, Model Tested, Exit Codes
+
+### **Consistency & Standards**
+
+- [ ] Follows template exactly for predictable AI processing
+- [ ] Consistent structure with existing commands
+- [ ] Command name follows naming convention (`00-*` for universal commands, `/test` for special commands)
+- [ ] Universal design - works on any project type
+- [ ] References rules for validation criteria (doesn't duplicate rule content)
+
+### **AI Optimization**
+
+- [ ] Focuses on "how to use" not "what to check" (that's in rules)
+- [ ] Actionable usage guidance over theoretical concepts
+- [ ] Logical flow from purpose → usage → parameters → integration
+- [ ] Clear examples showing real usage patterns
+- [ ] Token-efficient content (no redundancy with rules)
+
+### **Safety & User Experience**
+
+- [ ] Explicitly states "Never auto-applies fixes" in What It Does
+- [ ] Explicitly states "Never generates summary/md files" in What It Does
+- [ ] All fix capabilities require explicit flags and user confirmation
+- [ ] Clear exit codes documented
+- [ ] Integration examples are copy-pasteable
+
+**CRITICAL**: Commands focus on HOW to use. Rules contain WHAT to check. Commands reference rules instead of duplicating detailed validation criteria!

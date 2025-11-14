@@ -1,0 +1,130 @@
+---
+description: Apply when writing Python code, using Python libraries, or working on Python-specific features and patterns
+alwaysApply: true
+globs: **/*.py
+---
+
+# Modern Python Language Standards and Best Practices
+
+> **PRIORITY**: HIGH - Apply to all Python development tasks
+
+## **QUICK REFERENCE**
+
+- **ALL imports at top of file** (after docstring, never inside functions)
+- Use `from __future__ import annotations` + built-in types (`list[str]`, `str | None`)
+- Always add type hints with modern union syntax (`str | None` not `Optional[str]`)
+- Use f-strings, context managers, and list/dict comprehensions
+- Import only `Any` from typing - avoid `Dict`, `List`, `Optional`
+- Follow PEP 8: standard library → third-party → local imports
+
+## **CORE PRINCIPLES**
+
+### **MODERN PYTHON FEATURES FIRST**
+
+- Use Python 3.9+ features (union types, built-in generics, etc.)
+- Prefer modern syntax over legacy patterns
+- Eliminate deprecated Python patterns and imports
+- Use `from __future__ import annotations` for forward compatibility
+
+### **TYPE SAFETY & CLARITY**
+
+- Always use type hints for function parameters and return values
+- Use modern union syntax (`str | None` instead of `Optional[str]`)
+- Use built-in collection types (`list[str]` instead of `List[str]`)
+- Import `Any` only when actually needed from typing
+
+### **PYTHONIC CODE PATTERNS**
+
+- Follow PEP 8 style guidelines
+- Use list/dict comprehensions where appropriate
+- Prefer context managers (`with` statements)
+- Use f-strings for string formatting (never % or .format())
+
+## **ESSENTIAL PATTERNS**
+
+### **Modern Type Annotations & Imports**
+
+```python
+# ✅ CORRECT - Modern
+from __future__ import annotations
+from typing import Any
+from collections import defaultdict
+
+def process_data(items: list[dict[str, Any]], key: str | None = None) -> dict[str, int]:
+    """Process data with modern type hints."""
+    if not items:
+        raise ValueError("Items list cannot be empty")
+    groups = defaultdict(list)
+    for item in items:
+        groups[item.get(key, 'default')].append(item)
+    return {k: len(v) for k, v in groups.items()}
+
+# ❌ AVOID - Legacy
+from typing import Dict, List, Optional
+def process_data(items: List[Dict[str, Any]], key: Optional[str] = None) -> Dict[str, int]:
+    pass
+```
+
+### **Import Organization**
+
+```python
+# ✅ CORRECT - PEP 8 order
+# 1. Standard library
+import os
+from pathlib import Path
+
+# 2. Third-party packages
+import requests
+from dagster import asset
+
+# 3. Local imports
+from .utils import helper_function
+
+# ❌ AVOID - Lazy imports
+def process_data():
+    import pandas as pd  # Wrong!
+    return pd.DataFrame()
+
+# ✅ CORRECT - All imports at top
+import pandas as pd
+def process_data():
+    return pd.DataFrame()
+```
+
+### **String Formatting**
+
+```python
+# ✅ CORRECT - f-strings
+name = "Alice"
+message = f"Hello, {name}!"
+
+# ❌ AVOID - Old formatting
+message = "Hello, %s!" % name
+message = "Hello, {}!".format(name)
+```
+
+## **ENFORCEMENT CHECKLIST**
+
+### **Modern Syntax**
+
+- [ ] Used `from __future__ import annotations` for forward compatibility
+- [ ] Applied modern type hints (`list[str]`, `str | None`)
+- [ ] Eliminated legacy typing imports (`List`, `Dict`, `Optional`)
+- [ ] Used f-strings for string formatting
+
+### **Code Quality**
+
+- [ ] **ALL imports at top of file** (no lazy imports in functions)
+- [ ] Applied proper exception handling with specific exceptions
+- [ ] Used context managers for resource management
+- [ ] Followed PEP 8 import organization (stdlib → third-party → local)
+- [ ] Added clear docstrings with examples
+
+### **Performance & Style**
+
+- [ ] Used appropriate data structures (`defaultdict`, `Counter`)
+- [ ] Applied comprehensions where beneficial
+- [ ] Followed single responsibility principle for functions
+- [ ] Used descriptive variable and function names
+
+**CRITICAL**: Modern Python patterns improve readability, maintainability, and performance!

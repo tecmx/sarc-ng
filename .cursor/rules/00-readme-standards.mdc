@@ -1,0 +1,130 @@
+---
+description: Apply when creating or updating README.md files to ensure clear, actionable documentation
+globs:
+  - "**/README.md"
+---
+
+# README Documentation Standards
+
+> **PRIORITY**: HIGH - Applies to all README.md files
+
+## **QUICK REFERENCE**
+
+- **Internal Project READMEs**: Keep under 100 lines, pattern: Purpose → Quick Start → Structure → Commands → Links
+- **Guide/Reference READMEs**: Can be detailed (200-500 lines) for architecture/infrastructure docs
+- Start with Quick Start - commands before explanations
+- Use real, copy-pasteable commands (native tooling only)
+- Link to details - don't repeat what's elsewhere
+- No troubleshooting, no "known limitations", no architecture explanations in internal READMEs
+
+## **CORE PRINCIPLES**
+
+### **Internal Project README Pattern**
+
+Use for codebases where developers work internally:
+
+```markdown
+# Project Name
+
+One-sentence description of what this project does.
+
+## Purpose
+
+- **Key capability 1**: Brief explanation
+- **Key capability 2**: Brief explanation
+
+## Quick Start
+
+\```bash
+command1
+command2
+\```
+
+## Structure (optional - max 2 levels deep)
+
+\```
+project/
+├── module1/      # Brief description
+└── module2/      # Brief description
+\```
+
+## Common Commands
+
+\```bash
+command --option
+\```
+
+## Documentation
+
+For detailed information:
+- [Topic 1](link)
+- [Topic 2](link)
+```
+
+### **Guide/Reference README Pattern**
+
+Use for documentation that explains concepts (architecture guides, infrastructure docs):
+- Can be detailed (200-500 lines)
+- Structure: Overview → Architecture → Setup → Configuration → Operations → Troubleshooting
+
+## **ESSENTIAL PATTERNS**
+
+### **DO**
+
+1. **Keep under 100 lines** - Move details to separate docs
+2. **Start with Quick Start** - Commands before explanations
+3. **Use real commands** - Every code block copy-pasteable
+4. **Focus on the project itself** - Match the project's native tooling
+5. **Link to details** - Don't repeat what's elsewhere
+
+### **DON'T**
+
+1. **No architecture explanations** - Link to architecture docs
+2. **No troubleshooting sections** - Keep in separate TROUBLESHOOTING.md
+3. **No "Known Limitations"** - Address or link to issues
+4. **No backward compatibility** - No migration guides
+5. **No deep API docs** - Link to API documentation
+6. **No external tools** - Focus on native tools (e.g., dbt README uses dbt commands, not Dagster)
+
+### **Project-Specific Quick Start**
+
+```bash
+# ✅ CORRECT - Native project commands
+[project-tool] [command] [options]
+
+# ✅ CORRECT - Project-specific tooling
+[project-cli] [subcommand] [args]
+
+# ❌ WRONG - External tools in project README
+cd ../other-project
+[external-tool] [command]
+```
+
+## **ENFORCEMENT CHECKLIST**
+
+### **Content**
+
+- [ ] Under 100 lines total (internal project READMEs)
+- [ ] Has clear one-sentence description
+- [ ] Purpose section with 2-4 bullet points
+- [ ] Quick Start with real, copy-pasteable commands
+- [ ] Commands use native tooling (not external tools)
+- [ ] No troubleshooting section
+- [ ] No "known limitations" section
+- [ ] Links to detailed docs instead of including them
+
+### **Structure**
+
+- [ ] Follows standard order: Purpose → Quick Start → Structure → Commands → Documentation
+- [ ] Structure section max 2 levels deep
+- [ ] All code blocks are properly formatted
+- [ ] No redundant information
+
+### **Quality**
+
+- [ ] Commands actually work
+- [ ] Links point to existing files
+- [ ] No broken references
+- [ ] No outdated information
+
+**CRITICAL**: Simple internal READMEs enable faster onboarding and lower maintenance burden!

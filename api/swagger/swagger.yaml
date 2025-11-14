@@ -1,0 +1,1209 @@
+basePath: /api/v1
+definitions:
+  building.BuildingDTO:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  building.CreateBuildingDTO:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  building.UpdateBuildingDTO:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  class.ClassDTO:
+    properties:
+      capacity:
+        type: integer
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  class.CreateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  class.UpdateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  common.ErrorResponse:
+    properties:
+      code:
+        example: 400
+        type: integer
+      error:
+        example: Invalid input
+        type: string
+      message:
+        example: The provided data is invalid
+        type: string
+    type: object
+  common.PaginatedResponse-building_BuildingDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/building.BuildingDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/common.PaginationResult'
+    type: object
+  common.PaginatedResponse-class_ClassDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/class.ClassDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/common.PaginationResult'
+    type: object
+  common.PaginatedResponse-lesson_LessonDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/lesson.LessonDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/common.PaginationResult'
+    type: object
+  common.PaginatedResponse-reservation_ReservationDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/reservation.ReservationDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/common.PaginationResult'
+    type: object
+  common.PaginatedResponse-resource_ResourceDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/resource.ResourceDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/common.PaginationResult'
+    type: object
+  common.PaginationResult:
+    properties:
+      page:
+        description: Current page number
+        type: integer
+      page_size:
+        description: Items per page
+        type: integer
+      total_items:
+        description: Total number of items
+        type: integer
+      total_pages:
+        description: Total number of pages
+        type: integer
+    type: object
+  common.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        example: Operation completed successfully
+        type: string
+    type: object
+  lesson.CreateLessonDTO:
+    properties:
+      duration:
+        minimum: 1
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  lesson.LessonDTO:
+    properties:
+      createdAt:
+        type: string
+      duration:
+        type: integer
+      endTime:
+        type: string
+      id:
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  lesson.UpdateLessonDTO:
+    properties:
+      duration:
+        minimum: 1
+        type: integer
+      startTime:
+        type: string
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  reservation.CreateReservationDTO:
+    properties:
+      description:
+        type: string
+      endTime:
+        type: string
+      purpose:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      userId:
+        type: integer
+    required:
+    - endTime
+    - purpose
+    - resourceId
+    - startTime
+    - userId
+    type: object
+  reservation.ReservationDTO:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      endTime:
+        type: string
+      id:
+        type: integer
+      purpose:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+  reservation.UpdateReservationDTO:
+    properties:
+      description:
+        type: string
+      endTime:
+        type: string
+      purpose:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      userId:
+        type: integer
+    required:
+    - endTime
+    - purpose
+    - resourceId
+    - startTime
+    - userId
+    type: object
+  resource.CreateResourceDTO:
+    properties:
+      description:
+        type: string
+      isAvailable:
+        type: boolean
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - name
+    - type
+    type: object
+  resource.ResourceDTO:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      isAvailable:
+        type: boolean
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  resource.UpdateResourceDTO:
+    properties:
+      description:
+        type: string
+      isAvailable:
+        type: boolean
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    required:
+    - name
+    - type
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: SARC Next Generation - Resource Reservation and Management API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: SARC-NG API
+  version: "1.0"
+paths:
+  /buildings:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all buildings in the system
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Page size (default: 20, max: 100)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of buildings
+          schema:
+            $ref: '#/definitions/common.PaginatedResponse-building_BuildingDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get all buildings (paginated)
+      tags:
+      - buildings
+    post:
+      consumes:
+      - application/json
+      description: Create a new building with the provided name and code
+      parameters:
+      - description: Building creation data
+        in: body
+        name: building
+        required: true
+        schema:
+          $ref: '#/definitions/building.CreateBuildingDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created building
+          schema:
+            $ref: '#/definitions/building.BuildingDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Create a new building
+      tags:
+      - buildings
+  /buildings/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a building by its ID
+      parameters:
+      - description: Building ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Building deleted successfully
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Invalid building ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Building not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Delete a building
+      tags:
+      - buildings
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific building by its unique identifier
+      parameters:
+      - description: Building ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Building details
+          schema:
+            $ref: '#/definitions/building.BuildingDTO'
+        "400":
+          description: Invalid building ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Building not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get building by ID
+      tags:
+      - buildings
+    put:
+      consumes:
+      - application/json
+      description: Update an existing building's name and code by ID
+      parameters:
+      - description: Building ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Building update data
+        in: body
+        name: building
+        required: true
+        schema:
+          $ref: '#/definitions/building.UpdateBuildingDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated building
+          schema:
+            $ref: '#/definitions/building.BuildingDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Building not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Update an existing building
+      tags:
+      - buildings
+  /classes:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all classes in the system
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Page size (default: 20, max: 100)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of classes
+          schema:
+            $ref: '#/definitions/common.PaginatedResponse-class_ClassDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get all classes (paginated)
+      tags:
+      - classes
+    post:
+      consumes:
+      - application/json
+      description: Create a new class with the provided name and capacity
+      parameters:
+      - description: Class creation data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/class.CreateClassDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created class
+          schema:
+            $ref: '#/definitions/class.ClassDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Create a new class
+      tags:
+      - classes
+  /classes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a class by its ID
+      parameters:
+      - description: Class ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class deleted successfully
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Invalid class ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Class not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Delete a class
+      tags:
+      - classes
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific class by its unique identifier
+      parameters:
+      - description: Class ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Class details
+          schema:
+            $ref: '#/definitions/class.ClassDTO'
+        "400":
+          description: Invalid class ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Class not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get class by ID
+      tags:
+      - classes
+    put:
+      consumes:
+      - application/json
+      description: Update an existing class's name and capacity by ID
+      parameters:
+      - description: Class ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Class update data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/class.UpdateClassDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated class
+          schema:
+            $ref: '#/definitions/class.ClassDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Class not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Update an existing class
+      tags:
+      - classes
+  /lessons:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all lessons in the system
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Page size (default: 20, max: 100)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of lessons
+          schema:
+            $ref: '#/definitions/common.PaginatedResponse-lesson_LessonDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get all lessons (paginated)
+      tags:
+      - lessons
+    post:
+      consumes:
+      - application/json
+      description: Create a new lesson with the provided title, duration, and start
+        time
+      parameters:
+      - description: Lesson creation data
+        in: body
+        name: lesson
+        required: true
+        schema:
+          $ref: '#/definitions/lesson.CreateLessonDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created lesson
+          schema:
+            $ref: '#/definitions/lesson.LessonDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Create a new lesson
+      tags:
+      - lessons
+  /lessons/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a lesson by its ID
+      parameters:
+      - description: Lesson ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lesson deleted successfully
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Invalid lesson ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Lesson not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Delete a lesson
+      tags:
+      - lessons
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific lesson by its unique identifier
+      parameters:
+      - description: Lesson ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lesson details
+          schema:
+            $ref: '#/definitions/lesson.LessonDTO'
+        "400":
+          description: Invalid lesson ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Lesson not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get lesson by ID
+      tags:
+      - lessons
+    put:
+      consumes:
+      - application/json
+      description: Update an existing lesson's title, duration, and start time by
+        ID
+      parameters:
+      - description: Lesson ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Lesson update data
+        in: body
+        name: lesson
+        required: true
+        schema:
+          $ref: '#/definitions/lesson.UpdateLessonDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated lesson
+          schema:
+            $ref: '#/definitions/lesson.LessonDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Lesson not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Update an existing lesson
+      tags:
+      - lessons
+  /reservations:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all reservations in the system
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Page size (default: 20, max: 100)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of reservations
+          schema:
+            $ref: '#/definitions/common.PaginatedResponse-reservation_ReservationDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
+      summary: Get all reservations (paginated)
+      tags:
+      - reservations
+    post:
+      consumes:
+      - application/json
+      description: Create a new reservation with resource, user, and time information
+      parameters:
+      - description: Reservation creation data
+        in: body
+        name: reservation
+        required: true
+        schema:
+          $ref: '#/definitions/reservation.CreateReservationDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created reservation
+          schema:
+            $ref: '#/definitions/reservation.ReservationDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
+      summary: Create a new reservation
+      tags:
+      - reservations
+  /reservations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a reservation by its ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reservation deleted successfully
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Invalid reservation ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Reservation not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
+      summary: Delete a reservation
+      tags:
+      - reservations
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific reservation by its unique identifier
+      parameters:
+      - description: Reservation ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reservation details
+          schema:
+            $ref: '#/definitions/reservation.ReservationDTO'
+        "400":
+          description: Invalid reservation ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Reservation not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
+      summary: Get reservation by ID
+      tags:
+      - reservations
+    put:
+      consumes:
+      - application/json
+      description: Update an existing reservation's resource, user, time, and status
+        information by ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Reservation update data
+        in: body
+        name: reservation
+        required: true
+        schema:
+          $ref: '#/definitions/reservation.UpdateReservationDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated reservation
+          schema:
+            $ref: '#/definitions/reservation.ReservationDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Reservation not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      security:
+      - CognitoOAuth: []
+      - BearerAuth: []
+      summary: Update an existing reservation
+      tags:
+      - reservations
+  /resources:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a paginated list of all resources in the system
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - description: 'Page size (default: 20, max: 100)'
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of resources
+          schema:
+            $ref: '#/definitions/common.PaginatedResponse-resource_ResourceDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get all resources (paginated)
+      tags:
+      - resources
+    post:
+      consumes:
+      - application/json
+      description: Create a new resource with name, type, and availability information
+      parameters:
+      - description: Resource creation data
+        in: body
+        name: resource
+        required: true
+        schema:
+          $ref: '#/definitions/resource.CreateResourceDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created resource
+          schema:
+            $ref: '#/definitions/resource.ResourceDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Create a new resource
+      tags:
+      - resources
+  /resources/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a resource by its ID
+      parameters:
+      - description: Resource ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Resource deleted successfully
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Invalid resource ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Delete a resource
+      tags:
+      - resources
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific resource by its unique identifier
+      parameters:
+      - description: Resource ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Resource details
+          schema:
+            $ref: '#/definitions/resource.ResourceDTO'
+        "400":
+          description: Invalid resource ID
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get resource by ID
+      tags:
+      - resources
+    put:
+      consumes:
+      - application/json
+      description: Update an existing resource's name, type, and availability by ID
+      parameters:
+      - description: Resource ID
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Resource update data
+        in: body
+        name: resource
+        required: true
+        schema:
+          $ref: '#/definitions/resource.UpdateResourceDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated resource
+          schema:
+            $ref: '#/definitions/resource.ResourceDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "404":
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Update an existing resource
+      tags:
+      - resources
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: JWT token from Cognito (use the access_token from OAuth2 login)
+    in: header
+    name: Authorization
+    type: apiKey
+  CognitoOAuth:
+    authorizationUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize
+    flow: accessCode
+    scopes:
+      email: Access to user email
+      openid: OpenID Connect scope
+      profile: Access to user profile
+    tokenUrl: https://sarc-ng-auth-prod.auth.us-east-1.amazoncognito.com/oauth2/token
+    type: oauth2
+swagger: "2.0"
