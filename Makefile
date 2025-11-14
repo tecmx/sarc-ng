@@ -94,11 +94,9 @@ test: _maybe_generate ## Run tests
 
 # Cleanup
 .PHONY: clean
-clean: ## Remove all build artifacts, caches, and generated files
+clean: ## Remove build artifacts and caches (preserves committed generated files)
 	rm -rf $(BUILD_DIR) dist tmp
 	rm -f coverage.out coverage.html
-	rm -f cmd/server/wire_gen.go cmd/lambda/wire_gen.go
-	rm -f api/swagger/docs.go api/swagger/swagger.json api/swagger/swagger.yaml
 	rm -rf docs/.docusaurus docs/build
 	go clean -cache
 
