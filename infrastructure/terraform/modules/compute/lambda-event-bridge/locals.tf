@@ -12,10 +12,12 @@ locals {
   lambda_role_name = "${var.name}-lambda-role"
 
   tags = merge(
-    var.tags,
     {
-      Name      = var.name
-      ManagedBy = "terraform"
-    }
+      Project     = var.project_name
+      Environment = var.environment
+      Name        = var.name
+      ManagedBy   = "Terraform"
+    },
+    var.additional_tags
   )
-} 
+}

@@ -61,4 +61,4 @@ output "dlq_id" {
 output "dlq_url" {
   description = "The URL of the dead-letter queue"
   value       = var.create_dlq ? aws_sqs_queue.dlq[0].url : null
-} 
+}

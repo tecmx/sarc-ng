@@ -66,4 +66,4 @@ module "aurora_db" {
   additional_tags = {
     Example = "true"
   }
-} 
+}

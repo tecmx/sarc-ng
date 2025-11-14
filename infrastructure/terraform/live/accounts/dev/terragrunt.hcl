@@ -1,20 +1,5 @@
 # Dev environment specific configuration for LocalStack
-
-# Define locals to make the configuration more DRY (replicated from root)
-locals {
-  # Parse account and region information
-  account_vars = read_terragrunt_config(find_in_parent_folders("account.hcl", "empty.hcl"))
-  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl", "empty.hcl"))
-  env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl", "empty.hcl"))
-  
-  # Extract commonly used variables
-  account_name = local.account_vars.locals.account_name
-  account_id = try(local.account_vars.locals.aws_account_id, "")
-  aws_region = try(local.region_vars.locals.aws_region, "us-east-1")
-  environment = try(local.env_vars.locals.environment, "")
-}
-
-# Note: Using local state for LocalStack to avoid authentication issues
+# Overrides root configuration for LocalStack compatibility
 
 # Override provider configuration for LocalStack
 generate "provider" {
@@ -51,28 +36,3 @@ provider "aws" {
 
 EOF
 }
-
-# Standard validation and preparation hooks
-terraform {
-  before_hook "before_hook" {
-    commands     = ["apply", "plan"]
-    execute      = ["echo", "Running Terraform on ${local.environment} environment in ${local.aws_region}"]
-  }
-  
-  after_hook "after_hook" {
-    commands     = ["apply"]
-    execute      = ["echo", "Terraform apply completed successfully!"]
-    run_on_error = false
-  }
-}
-
-# Common inputs for all modules
-inputs = {
-  project_name = "sarc-ng"
-  is_local_development = true
-  
-  # Pass the parsed values as inputs to all child modules
-  aws_region = local.aws_region
-  account_id = local.account_id
-  environment = local.environment
-} 

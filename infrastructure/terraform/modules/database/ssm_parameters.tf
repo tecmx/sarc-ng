@@ -40,4 +40,4 @@ resource "aws_ssm_parameter" "db_secret_arn" {
   value       = aws_secretsmanager_secret.db.arn
 
   tags = local.tags
-} 
+}

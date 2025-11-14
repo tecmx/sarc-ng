@@ -13,10 +13,12 @@ locals {
   sqs_queue_name = element(split(":", var.sqs_queue_arn), length(split(":", var.sqs_queue_arn)) - 1)
 
   tags = merge(
-    var.tags,
     {
-      Name      = var.name
-      ManagedBy = "terraform"
-    }
+      Project     = var.project_name
+      Environment = var.environment
+      Name        = var.name
+      ManagedBy   = "Terraform"
+    },
+    var.additional_tags
   )
-} 
+}

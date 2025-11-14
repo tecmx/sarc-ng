@@ -2,6 +2,34 @@
 
 Complete guide for Terraform infrastructure management.
 
+## Documentation
+
+- **[STANDARDS.md](./STANDARDS.md)** - Complete standards and conventions reference
+- **Module Examples** - Each module includes `examples/complete/` with working configurations
+
+## Required Variables by Module
+
+### All Modules (Standard)
+```hcl
+project_name = "sarc-ng"  # lowercase-hyphen format
+environment  = "dev"      # dev, qa, staging, or prod
+```
+
+### Database Module (Additional)
+```hcl
+vpc_cidr = "10.0.0.0/16"  # VPC CIDR for security group egress
+```
+
+### ECS NLB Service Module (Additional)
+```hcl
+allowed_cidr_blocks = ["10.0.0.0/16"]  # Required, no defaults
+```
+
+### Lambda Modules (All Types)
+```hcl
+additional_tags = { }  # Optional custom tags (standard tags auto-applied)
+```
+
 ## Directory Structure
 
 ```

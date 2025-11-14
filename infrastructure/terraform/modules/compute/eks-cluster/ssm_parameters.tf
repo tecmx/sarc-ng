@@ -33,4 +33,4 @@ resource "aws_ssm_parameter" "cluster_oidc_issuer_url" {
   type        = "String"
   value       = module.eks.cluster_oidc_issuer_url
   tags        = local.tags
-} 
+}

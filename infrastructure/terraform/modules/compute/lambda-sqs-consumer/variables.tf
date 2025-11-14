@@ -1,3 +1,23 @@
+variable "project_name" {
+  description = "Project name used for resource naming"
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.project_name))
+    error_message = "Project name must contain only lowercase letters, numbers, and hyphens."
+  }
+}
+
+variable "environment" {
+  description = "Environment name (dev, qa, staging, prod)"
+  type        = string
+
+  validation {
+    condition     = contains(["dev", "qa", "staging", "prod"], var.environment)
+    error_message = "Environment must be dev, qa, staging, or prod."
+  }
+}
+
 variable "name" {
   description = "Name of the Lambda function"
   type        = string
@@ -64,8 +84,8 @@ variable "vpc_config" {
   default = null
 }
 
-variable "tags" {
-  description = "Tags to apply to all resources"
+variable "additional_tags" {
+  description = "Additional tags to add to all resources"
   type        = map(string)
   default     = {}
 }
@@ -183,4 +203,4 @@ variable "scaling_config" {
     maximum_concurrency = number
   })
   default = null
-} 
+}

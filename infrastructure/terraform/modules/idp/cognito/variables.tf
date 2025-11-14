@@ -11,6 +11,11 @@ variable "application_name" {
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string
+
+  validation {
+    condition     = contains(["dev", "qa", "staging", "prod"], var.environment)
+    error_message = "Environment must be dev, qa, staging, or prod."
+  }
 }
 
 variable "domain_name" {

@@ -5,11 +5,21 @@
 variable "project_name" {
   description = "Project name used for resource naming"
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.project_name))
+    error_message = "Project name must contain only lowercase letters, numbers, and hyphens."
+  }
 }
 
 variable "environment" {
   description = "Environment name (dev, qa, staging, prod)"
   type        = string
+
+  validation {
+    condition     = contains(["dev", "qa", "staging", "prod"], var.environment)
+    error_message = "Environment must be dev, qa, staging, or prod."
+  }
 }
 
 variable "service_name" {
@@ -156,4 +166,14 @@ variable "additional_tags" {
   description = "Additional tags to add to all resources"
   type        = map(string)
   default     = {}
-} 
+}
+
+variable "allowed_cidr_blocks" {
+  description = "List of CIDR blocks allowed to access the NLB"
+  type        = list(string)
+
+  validation {
+    condition     = length(var.allowed_cidr_blocks) > 0
+    error_message = "At least one CIDR block must be specified for security."
+  }
+}

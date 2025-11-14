@@ -23,10 +23,12 @@ locals {
   cors_configuration = var.cors_configuration != null ? var.cors_configuration : local.default_cors_configuration
 
   tags = merge(
-    var.tags,
     {
-      Name      = var.name
-      ManagedBy = "terraform"
-    }
+      Project     = var.project_name
+      Environment = var.environment
+      Name        = var.name
+      ManagedBy   = "Terraform"
+    },
+    var.additional_tags
   )
-} 
+}

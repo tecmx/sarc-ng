@@ -21,4 +21,4 @@ resource "aws_secretsmanager_secret_version" "db_user" {
     port     = var.port
     dbname   = mysql_database.schema.name
   })
-} 
+}

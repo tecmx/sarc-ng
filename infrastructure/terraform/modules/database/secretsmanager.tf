@@ -28,4 +28,4 @@ resource "aws_secretsmanager_secret_version" "db" {
     port   = var.is_aurora ? module.aurora[0].cluster_port : module.db[0].db_instance_port
     dbname = local.db_name
   })
-} 
+}

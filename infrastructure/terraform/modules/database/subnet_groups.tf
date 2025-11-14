@@ -14,4 +14,4 @@ resource "aws_db_subnet_group" "this" {
       Name = "${local.name}-db-subnet-group"
     }
   )
-} 
+}

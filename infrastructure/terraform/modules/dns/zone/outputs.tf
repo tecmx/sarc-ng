@@ -20,4 +20,4 @@ output "name_servers" {
 output "acm_certificate_arn" {
   description = "The ARN of the ACM certificate"
   value       = var.create_acm_certificate ? aws_acm_certificate.this[0].arn : null
-} 
+}

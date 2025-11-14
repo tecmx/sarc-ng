@@ -1,12 +1,6 @@
-terraform {
-  required_version = ">= 1.0"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
+/**
+ * Cognito IDP module - Main resources
+ */
 
 # Cognito User Pool
 resource "aws_cognito_user_pool" "main" {

@@ -13,7 +13,7 @@ locals {
     {
       Project     = var.project_name
       Environment = var.environment
-      Terraform   = "true"
+      ManagedBy   = "Terraform"
     },
     var.additional_tags
   )

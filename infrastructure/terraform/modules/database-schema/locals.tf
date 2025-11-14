@@ -21,4 +21,4 @@ locals {
     },
     var.additional_tags
   )
-} 
+}
