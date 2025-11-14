@@ -1,11 +1,15 @@
 basePath: /api/v1
 definitions:
-  building.BuildingDTO:
+  internal_transport_rest_building.BuildingDTO:
     properties:
+      address:
+        type: string
       code:
         type: string
       createdAt:
         type: string
+      floors:
+        type: integer
       id:
         type: integer
       name:
@@ -13,117 +17,302 @@ definitions:
       updatedAt:
         type: string
     type: object
-  building.CreateBuildingDTO:
+  internal_transport_rest_building.CreateBuildingDTO:
     properties:
+      address:
+        type: string
       code:
         type: string
+      floors:
+        type: integer
       name:
         type: string
     required:
     - code
     - name
     type: object
-  building.UpdateBuildingDTO:
+  internal_transport_rest_building.UpdateBuildingDTO:
     properties:
+      address:
+        type: string
       code:
         type: string
+      floors:
+        type: integer
       name:
         type: string
     required:
     - code
     - name
     type: object
-  class.ClassDTO:
+  internal_transport_rest_class.ClassDTO:
     properties:
       capacity:
         type: integer
+      code:
+        type: string
       createdAt:
         type: string
       id:
         type: integer
+      instructorName:
+        type: string
       name:
+        type: string
+      semester:
         type: string
       updatedAt:
         type: string
     type: object
-  class.CreateClassDTO:
+  internal_transport_rest_class.CreateClassDTO:
     properties:
       capacity:
         minimum: 1
         type: integer
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  class.UpdateClassDTO:
-    properties:
-      capacity:
-        minimum: 1
-        type: integer
-      name:
-        type: string
-    required:
-    - name
-    type: object
-  common.ErrorResponse:
-    properties:
       code:
-        example: 400
+        type: string
+      instructorName:
+        type: string
+      name:
+        type: string
+      semester:
+        type: string
+    required:
+    - code
+    - instructorName
+    - name
+    type: object
+  internal_transport_rest_class.UpdateClassDTO:
+    properties:
+      capacity:
+        minimum: 1
         type: integer
-      error:
-        example: Invalid input
+      code:
         type: string
-      message:
-        example: The provided data is invalid
+      instructorName:
+        type: string
+      name:
+        type: string
+      semester:
+        type: string
+    required:
+    - code
+    - instructorName
+    - name
+    type: object
+  internal_transport_rest_lesson.CreateLessonDTO:
+    properties:
+      classId:
+        type: integer
+      endTime:
+        type: string
+      repeatPattern:
+        enum:
+        - none
+        - daily
+        - weekly
+        - biweekly
+        - monthly
+        type: string
+      repeatUntil:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+    required:
+    - classId
+    - endTime
+    - repeatPattern
+    - resourceId
+    - startTime
+    type: object
+  internal_transport_rest_lesson.LessonDTO:
+    properties:
+      classId:
+        type: integer
+      createdAt:
+        type: string
+      endTime:
+        type: string
+      id:
+        type: integer
+      repeatPattern:
+        type: string
+      repeatUntil:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      updatedAt:
         type: string
     type: object
-  common.PaginatedResponse-building_BuildingDTO:
+  internal_transport_rest_lesson.UpdateLessonDTO:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/building.BuildingDTO'
-        type: array
-      pagination:
-        $ref: '#/definitions/common.PaginationResult'
+      classId:
+        type: integer
+      endTime:
+        type: string
+      repeatPattern:
+        enum:
+        - none
+        - daily
+        - weekly
+        - biweekly
+        - monthly
+        type: string
+      repeatUntil:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+    required:
+    - classId
+    - endTime
+    - repeatPattern
+    - resourceId
+    - startTime
     type: object
-  common.PaginatedResponse-class_ClassDTO:
+  internal_transport_rest_reservation.CreateReservationDTO:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/class.ClassDTO'
-        type: array
-      pagination:
-        $ref: '#/definitions/common.PaginationResult'
+      endTime:
+        type: string
+      purpose:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        enum:
+        - pending
+        - confirmed
+        - cancelled
+        type: string
+    required:
+    - endTime
+    - purpose
+    - resourceId
+    - startTime
+    - status
     type: object
-  common.PaginatedResponse-lesson_LessonDTO:
+  internal_transport_rest_reservation.ReservationDTO:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/lesson.LessonDTO'
-        type: array
-      pagination:
-        $ref: '#/definitions/common.PaginationResult'
+      createdAt:
+        type: string
+      endTime:
+        type: string
+      id:
+        type: integer
+      purpose:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+      userName:
+        type: string
     type: object
-  common.PaginatedResponse-reservation_ReservationDTO:
+  internal_transport_rest_reservation.UpdateReservationDTO:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/reservation.ReservationDTO'
-        type: array
-      pagination:
-        $ref: '#/definitions/common.PaginationResult'
+      endTime:
+        type: string
+      purpose:
+        type: string
+      resourceId:
+        type: integer
+      startTime:
+        type: string
+      status:
+        enum:
+        - pending
+        - confirmed
+        - cancelled
+        type: string
+    required:
+    - endTime
+    - purpose
+    - resourceId
+    - startTime
+    - status
     type: object
-  common.PaginatedResponse-resource_ResourceDTO:
+  internal_transport_rest_resource.CreateResourceDTO:
     properties:
-      data:
-        items:
-          $ref: '#/definitions/resource.ResourceDTO'
-        type: array
-      pagination:
-        $ref: '#/definitions/common.PaginationResult'
+      buildingId:
+        type: integer
+      capacity:
+        type: integer
+      details:
+        additionalProperties: true
+        type: object
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        enum:
+        - classroom
+        - equipment
+        - lab
+        type: string
+    required:
+    - name
+    - type
     type: object
-  common.PaginationResult:
+  internal_transport_rest_resource.ResourceDTO:
+    properties:
+      buildingId:
+        type: integer
+      capacity:
+        type: integer
+      createdAt:
+        type: string
+      details:
+        additionalProperties: true
+        type: object
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  internal_transport_rest_resource.UpdateResourceDTO:
+    properties:
+      buildingId:
+        type: integer
+      capacity:
+        type: integer
+      details:
+        additionalProperties: true
+        type: object
+      location:
+        type: string
+      name:
+        type: string
+      type:
+        enum:
+        - classroom
+        - equipment
+        - lab
+        type: string
+    required:
+    - name
+    - type
+    type: object
+  sarc-ng_internal_domain_common.PaginationResult:
     properties:
       page:
         description: Current page number
@@ -138,173 +327,69 @@ definitions:
         description: Total number of pages
         type: integer
     type: object
-  common.SuccessResponse:
+  sarc-ng_internal_transport_common.ErrorResponse:
+    properties:
+      code:
+        example: 400
+        type: integer
+      error:
+        example: Invalid input
+        type: string
+      message:
+        example: The provided data is invalid
+        type: string
+    type: object
+  sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_building_BuildingDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/sarc-ng_internal_domain_common.PaginationResult'
+    type: object
+  sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_class_ClassDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/sarc-ng_internal_domain_common.PaginationResult'
+    type: object
+  sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_lesson_LessonDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/sarc-ng_internal_domain_common.PaginationResult'
+    type: object
+  sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_reservation_ReservationDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/sarc-ng_internal_domain_common.PaginationResult'
+    type: object
+  sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_resource_ResourceDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
+        type: array
+      pagination:
+        $ref: '#/definitions/sarc-ng_internal_domain_common.PaginationResult'
+    type: object
+  sarc-ng_internal_transport_common.SuccessResponse:
     properties:
       data: {}
       message:
         example: Operation completed successfully
         type: string
-    type: object
-  lesson.CreateLessonDTO:
-    properties:
-      duration:
-        minimum: 1
-        type: integer
-      startTime:
-        type: string
-      title:
-        type: string
-    required:
-    - title
-    type: object
-  lesson.LessonDTO:
-    properties:
-      createdAt:
-        type: string
-      duration:
-        type: integer
-      endTime:
-        type: string
-      id:
-        type: integer
-      startTime:
-        type: string
-      title:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  lesson.UpdateLessonDTO:
-    properties:
-      duration:
-        minimum: 1
-        type: integer
-      startTime:
-        type: string
-      title:
-        type: string
-    required:
-    - title
-    type: object
-  reservation.CreateReservationDTO:
-    properties:
-      description:
-        type: string
-      endTime:
-        type: string
-      purpose:
-        type: string
-      resourceId:
-        type: integer
-      startTime:
-        type: string
-      status:
-        type: string
-      userId:
-        type: integer
-    required:
-    - endTime
-    - purpose
-    - resourceId
-    - startTime
-    - userId
-    type: object
-  reservation.ReservationDTO:
-    properties:
-      createdAt:
-        type: string
-      description:
-        type: string
-      endTime:
-        type: string
-      id:
-        type: integer
-      purpose:
-        type: string
-      resourceId:
-        type: integer
-      startTime:
-        type: string
-      status:
-        type: string
-      updatedAt:
-        type: string
-      userId:
-        type: integer
-    type: object
-  reservation.UpdateReservationDTO:
-    properties:
-      description:
-        type: string
-      endTime:
-        type: string
-      purpose:
-        type: string
-      resourceId:
-        type: integer
-      startTime:
-        type: string
-      status:
-        type: string
-      userId:
-        type: integer
-    required:
-    - endTime
-    - purpose
-    - resourceId
-    - startTime
-    - userId
-    type: object
-  resource.CreateResourceDTO:
-    properties:
-      description:
-        type: string
-      isAvailable:
-        type: boolean
-      location:
-        type: string
-      name:
-        type: string
-      type:
-        type: string
-    required:
-    - name
-    - type
-    type: object
-  resource.ResourceDTO:
-    properties:
-      createdAt:
-        type: string
-      description:
-        type: string
-      id:
-        type: integer
-      isAvailable:
-        type: boolean
-      location:
-        type: string
-      name:
-        type: string
-      type:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  resource.UpdateResourceDTO:
-    properties:
-      description:
-        type: string
-      isAvailable:
-        type: boolean
-      location:
-        type: string
-      name:
-        type: string
-      type:
-        type: string
-    required:
-    - name
-    - type
     type: object
 host: localhost:8080
 info:
@@ -324,7 +409,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve a paginated list of all buildings in the system
+      description: Retrieve a paginated list of all buildings with support for search,
+        filtering, and sorting
       parameters:
       - description: 'Page number (default: 1)'
         in: query
@@ -337,17 +423,42 @@ paths:
         minimum: 1
         name: page_size
         type: integer
+      - description: Search across name and code fields
+        in: query
+        name: search
+        type: string
+      - description: Filter by exact name match
+        in: query
+        name: filter[name]
+        type: string
+      - description: Filter by exact code match
+        in: query
+        name: filter[code]
+        type: string
+      - description: Sort field (id, name, code, created_at, updated_at)
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: Paginated list of buildings
           schema:
-            $ref: '#/definitions/common.PaginatedResponse-building_BuildingDTO'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_building_BuildingDTO'
+        "400":
+          description: Invalid filter or sort field
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all buildings (paginated)
       tags:
       - buildings
@@ -361,22 +472,22 @@ paths:
         name: building
         required: true
         schema:
-          $ref: '#/definitions/building.CreateBuildingDTO'
+          $ref: '#/definitions/internal_transport_rest_building.CreateBuildingDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created building
           schema:
-            $ref: '#/definitions/building.BuildingDTO'
+            $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new building
       tags:
       - buildings
@@ -398,19 +509,19 @@ paths:
         "200":
           description: Building deleted successfully
           schema:
-            $ref: '#/definitions/common.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid building ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Building not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a building
       tags:
       - buildings
@@ -431,19 +542,19 @@ paths:
         "200":
           description: Building details
           schema:
-            $ref: '#/definitions/building.BuildingDTO'
+            $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
         "400":
           description: Invalid building ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Building not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get building by ID
       tags:
       - buildings
@@ -463,26 +574,26 @@ paths:
         name: building
         required: true
         schema:
-          $ref: '#/definitions/building.UpdateBuildingDTO'
+          $ref: '#/definitions/internal_transport_rest_building.UpdateBuildingDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated building
           schema:
-            $ref: '#/definitions/building.BuildingDTO'
+            $ref: '#/definitions/internal_transport_rest_building.BuildingDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Building not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing building
       tags:
       - buildings
@@ -490,7 +601,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve a paginated list of all classes in the system
+      description: Retrieve a paginated list of all classes with support for search,
+        filtering, and sorting
       parameters:
       - description: 'Page number (default: 1)'
         in: query
@@ -503,17 +615,42 @@ paths:
         minimum: 1
         name: page_size
         type: integer
+      - description: Search across name field
+        in: query
+        name: search
+        type: string
+      - description: Filter by exact name match
+        in: query
+        name: filter[name]
+        type: string
+      - description: Filter by exact capacity
+        in: query
+        name: filter[capacity]
+        type: integer
+      - description: Sort field (id, name, capacity, created_at, updated_at)
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: Paginated list of classes
           schema:
-            $ref: '#/definitions/common.PaginatedResponse-class_ClassDTO'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_class_ClassDTO'
+        "400":
+          description: Invalid filter or sort field
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all classes (paginated)
       tags:
       - classes
@@ -527,22 +664,22 @@ paths:
         name: class
         required: true
         schema:
-          $ref: '#/definitions/class.CreateClassDTO'
+          $ref: '#/definitions/internal_transport_rest_class.CreateClassDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created class
           schema:
-            $ref: '#/definitions/class.ClassDTO'
+            $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new class
       tags:
       - classes
@@ -564,19 +701,19 @@ paths:
         "200":
           description: Class deleted successfully
           schema:
-            $ref: '#/definitions/common.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid class ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Class not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a class
       tags:
       - classes
@@ -597,19 +734,19 @@ paths:
         "200":
           description: Class details
           schema:
-            $ref: '#/definitions/class.ClassDTO'
+            $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
         "400":
           description: Invalid class ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Class not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get class by ID
       tags:
       - classes
@@ -629,26 +766,26 @@ paths:
         name: class
         required: true
         schema:
-          $ref: '#/definitions/class.UpdateClassDTO'
+          $ref: '#/definitions/internal_transport_rest_class.UpdateClassDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated class
           schema:
-            $ref: '#/definitions/class.ClassDTO'
+            $ref: '#/definitions/internal_transport_rest_class.ClassDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Class not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing class
       tags:
       - classes
@@ -656,7 +793,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve a paginated list of all lessons in the system
+      description: Retrieve a paginated list of all lessons with support for search,
+        filtering, and sorting
       parameters:
       - description: 'Page number (default: 1)'
         in: query
@@ -669,17 +807,43 @@ paths:
         minimum: 1
         name: page_size
         type: integer
+      - description: Search across title and description fields
+        in: query
+        name: search
+        type: string
+      - description: Filter by exact title match
+        in: query
+        name: filter[title]
+        type: string
+      - description: Filter by exact duration (in minutes)
+        in: query
+        name: filter[duration]
+        type: integer
+      - description: Sort field (id, title, duration, start_time, end_time, created_at,
+          updated_at)
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: Paginated list of lessons
           schema:
-            $ref: '#/definitions/common.PaginatedResponse-lesson_LessonDTO'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_lesson_LessonDTO'
+        "400":
+          description: Invalid filter or sort field
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all lessons (paginated)
       tags:
       - lessons
@@ -694,22 +858,22 @@ paths:
         name: lesson
         required: true
         schema:
-          $ref: '#/definitions/lesson.CreateLessonDTO'
+          $ref: '#/definitions/internal_transport_rest_lesson.CreateLessonDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created lesson
           schema:
-            $ref: '#/definitions/lesson.LessonDTO'
+            $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new lesson
       tags:
       - lessons
@@ -731,19 +895,19 @@ paths:
         "200":
           description: Lesson deleted successfully
           schema:
-            $ref: '#/definitions/common.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid lesson ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Lesson not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a lesson
       tags:
       - lessons
@@ -764,19 +928,19 @@ paths:
         "200":
           description: Lesson details
           schema:
-            $ref: '#/definitions/lesson.LessonDTO'
+            $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
         "400":
           description: Invalid lesson ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Lesson not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get lesson by ID
       tags:
       - lessons
@@ -797,26 +961,26 @@ paths:
         name: lesson
         required: true
         schema:
-          $ref: '#/definitions/lesson.UpdateLessonDTO'
+          $ref: '#/definitions/internal_transport_rest_lesson.UpdateLessonDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated lesson
           schema:
-            $ref: '#/definitions/lesson.LessonDTO'
+            $ref: '#/definitions/internal_transport_rest_lesson.LessonDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Lesson not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing lesson
       tags:
       - lessons
@@ -824,7 +988,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve a paginated list of all reservations in the system
+      description: Retrieve a paginated list of all reservations with support for
+        search, filtering, and sorting
       parameters:
       - description: 'Page number (default: 1)'
         in: query
@@ -837,21 +1002,55 @@ paths:
         minimum: 1
         name: page_size
         type: integer
+      - description: Search across purpose and description fields
+        in: query
+        name: search
+        type: string
+      - description: Filter by resource ID
+        in: query
+        name: filter[resource_id]
+        type: integer
+      - description: Filter by user ID
+        in: query
+        name: filter[user_id]
+        type: integer
+      - description: Filter by exact status (pending, confirmed, cancelled, etc.)
+        in: query
+        name: filter[status]
+        type: string
+      - description: Filter by exact purpose match
+        in: query
+        name: filter[purpose]
+        type: string
+      - description: Sort field (id, resource_id, user_id, start_time, end_time, status,
+          created_at, updated_at)
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: Paginated list of reservations
           schema:
-            $ref: '#/definitions/common.PaginatedResponse-reservation_ReservationDTO'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_reservation_ReservationDTO'
+        "400":
+          description: Invalid filter or sort field
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       security:
       - CognitoOAuth: []
       - BearerAuth: []
@@ -868,26 +1067,26 @@ paths:
         name: reservation
         required: true
         schema:
-          $ref: '#/definitions/reservation.CreateReservationDTO'
+          $ref: '#/definitions/internal_transport_rest_reservation.CreateReservationDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created reservation
           schema:
-            $ref: '#/definitions/reservation.ReservationDTO'
+            $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       security:
       - CognitoOAuth: []
       - BearerAuth: []
@@ -912,23 +1111,23 @@ paths:
         "200":
           description: Reservation deleted successfully
           schema:
-            $ref: '#/definitions/common.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid reservation ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Reservation not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       security:
       - CognitoOAuth: []
       - BearerAuth: []
@@ -952,23 +1151,23 @@ paths:
         "200":
           description: Reservation details
           schema:
-            $ref: '#/definitions/reservation.ReservationDTO'
+            $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
         "400":
           description: Invalid reservation ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Reservation not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       security:
       - CognitoOAuth: []
       - BearerAuth: []
@@ -992,30 +1191,30 @@ paths:
         name: reservation
         required: true
         schema:
-          $ref: '#/definitions/reservation.UpdateReservationDTO'
+          $ref: '#/definitions/internal_transport_rest_reservation.UpdateReservationDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated reservation
           schema:
-            $ref: '#/definitions/reservation.ReservationDTO'
+            $ref: '#/definitions/internal_transport_rest_reservation.ReservationDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Reservation not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       security:
       - CognitoOAuth: []
       - BearerAuth: []
@@ -1026,7 +1225,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve a paginated list of all resources in the system
+      description: Retrieve a paginated list of all resources with support for search,
+        filtering, and sorting
       parameters:
       - description: 'Page number (default: 1)'
         in: query
@@ -1039,17 +1239,51 @@ paths:
         minimum: 1
         name: page_size
         type: integer
+      - description: Search across name and description fields
+        in: query
+        name: search
+        type: string
+      - description: Filter by exact name match
+        in: query
+        name: filter[name]
+        type: string
+      - description: Filter by exact type match
+        in: query
+        name: filter[type]
+        type: string
+      - description: Filter by exact location match
+        in: query
+        name: filter[location]
+        type: string
+      - description: Filter by availability status
+        in: query
+        name: filter[is_available]
+        type: boolean
+      - description: Sort field (id, name, type, location, is_available, created_at,
+          updated_at)
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Sort order (asc or desc)
+        in: query
+        name: order
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: Paginated list of resources
           schema:
-            $ref: '#/definitions/common.PaginatedResponse-resource_ResourceDTO'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_resource_ResourceDTO'
+        "400":
+          description: Invalid filter or sort field
+          schema:
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get all resources (paginated)
       tags:
       - resources
@@ -1063,22 +1297,22 @@ paths:
         name: resource
         required: true
         schema:
-          $ref: '#/definitions/resource.CreateResourceDTO'
+          $ref: '#/definitions/internal_transport_rest_resource.CreateResourceDTO'
       produces:
       - application/json
       responses:
         "201":
           description: Created resource
           schema:
-            $ref: '#/definitions/resource.ResourceDTO'
+            $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Create a new resource
       tags:
       - resources
@@ -1100,19 +1334,19 @@ paths:
         "200":
           description: Resource deleted successfully
           schema:
-            $ref: '#/definitions/common.SuccessResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.SuccessResponse'
         "400":
           description: Invalid resource ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Resource not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Delete a resource
       tags:
       - resources
@@ -1133,19 +1367,19 @@ paths:
         "200":
           description: Resource details
           schema:
-            $ref: '#/definitions/resource.ResourceDTO'
+            $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
         "400":
           description: Invalid resource ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Resource not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Get resource by ID
       tags:
       - resources
@@ -1165,26 +1399,26 @@ paths:
         name: resource
         required: true
         schema:
-          $ref: '#/definitions/resource.UpdateResourceDTO'
+          $ref: '#/definitions/internal_transport_rest_resource.UpdateResourceDTO'
       produces:
       - application/json
       responses:
         "200":
           description: Updated resource
           schema:
-            $ref: '#/definitions/resource.ResourceDTO'
+            $ref: '#/definitions/internal_transport_rest_resource.ResourceDTO'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "404":
           description: Resource not found
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/sarc-ng_internal_transport_common.ErrorResponse'
       summary: Update an existing resource
       tags:
       - resources

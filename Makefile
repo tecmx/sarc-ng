@@ -49,16 +49,29 @@ debug: _maybe_generate ## Run with hot reloading (requires air)
 	air -c .air.toml
 
 wire: ## Generate dependency injection code
+	@echo "Generating Wire dependency injection code..."
 	@go generate ./cmd/server ./cmd/lambda
-	@test -f cmd/server/wire_gen.go && test -f cmd/lambda/wire_gen.go || (echo "Wire generation failed" && exit 1)
+	@if [ -f cmd/server/wire_gen.go ] && [ -f cmd/lambda/wire_gen.go ]; then \
+		echo "✓ Wire generation successful"; \
+	else \
+		echo "✗ Wire generation failed"; \
+		exit 1; \
+	fi
 
 generate: wire swagger ## Generate dependency injection code and Swagger docs
 
 swagger: ## Generate API documentation
 	$(call check_tool,swag)
+	@echo "Generating Swagger/OpenAPI documentation..."
 	@rm -rf api/swagger/swagger.json api/swagger/swagger.yaml api/swagger/docs.go
-	swag init -g cmd/server/main.go --parseDependency --parseInternal --output api/swagger
-	@test -f api/swagger/swagger.json || (echo "Swagger generation failed" && exit 1)
+	@swag init -g cmd/server/main.go --parseDependency --parseInternal --output api/swagger || \
+		(echo "✗ Swagger generation failed (known issue with swag <v1.18 and generics)" && exit 1)
+	@if [ -f api/swagger/swagger.json ]; then \
+		echo "✓ Swagger generation successful"; \
+	else \
+		echo "✗ Swagger generation failed"; \
+		exit 1; \
+	fi
 
 # Build
 .PHONY: build

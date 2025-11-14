@@ -26,7 +26,7 @@ const docTemplate = `{
     "paths": {
         "/buildings": {
             "get": {
-                "description": "Retrieve a paginated list of all buildings in the system",
+                "description": "Retrieve a paginated list of all buildings with support for search, filtering, and sorting",
                 "consumes": [
                     "application/json"
                 ],
@@ -52,19 +52,56 @@ const docTemplate = `{
                         "description": "Page size (default: 20, max: 100)",
                         "name": "page_size",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search across name and code fields",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact name match",
+                        "name": "filter[name]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact code match",
+                        "name": "filter[code]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field (id, name, code, created_at, updated_at)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "Sort order (asc or desc)",
+                        "name": "order",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Paginated list of buildings",
                         "schema": {
-                            "$ref": "#/definitions/common.PaginatedResponse-building_BuildingDTO"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_building_BuildingDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filter or sort field",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -88,7 +125,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/building.CreateBuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.CreateBuildingDTO"
                         }
                     }
                 ],
@@ -96,19 +133,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created building",
                         "schema": {
-                            "$ref": "#/definitions/building.BuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -141,25 +178,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Building details",
                         "schema": {
-                            "$ref": "#/definitions/building.BuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid building ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Building not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -191,7 +228,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/building.UpdateBuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.UpdateBuildingDTO"
                         }
                     }
                 ],
@@ -199,25 +236,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated building",
                         "schema": {
-                            "$ref": "#/definitions/building.BuildingDTO"
+                            "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Building not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -248,25 +285,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Building deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/common.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid building ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Building not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -274,7 +311,7 @@ const docTemplate = `{
         },
         "/classes": {
             "get": {
-                "description": "Retrieve a paginated list of all classes in the system",
+                "description": "Retrieve a paginated list of all classes with support for search, filtering, and sorting",
                 "consumes": [
                     "application/json"
                 ],
@@ -300,19 +337,56 @@ const docTemplate = `{
                         "description": "Page size (default: 20, max: 100)",
                         "name": "page_size",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search across name field",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact name match",
+                        "name": "filter[name]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by exact capacity",
+                        "name": "filter[capacity]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field (id, name, capacity, created_at, updated_at)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "Sort order (asc or desc)",
+                        "name": "order",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Paginated list of classes",
                         "schema": {
-                            "$ref": "#/definitions/common.PaginatedResponse-class_ClassDTO"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_class_ClassDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filter or sort field",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -336,7 +410,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/class.CreateClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.CreateClassDTO"
                         }
                     }
                 ],
@@ -344,19 +418,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created class",
                         "schema": {
-                            "$ref": "#/definitions/class.ClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -389,25 +463,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Class details",
                         "schema": {
-                            "$ref": "#/definitions/class.ClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid class ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Class not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -439,7 +513,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/class.UpdateClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.UpdateClassDTO"
                         }
                     }
                 ],
@@ -447,25 +521,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated class",
                         "schema": {
-                            "$ref": "#/definitions/class.ClassDTO"
+                            "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Class not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -496,25 +570,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Class deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/common.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid class ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Class not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -522,7 +596,7 @@ const docTemplate = `{
         },
         "/lessons": {
             "get": {
-                "description": "Retrieve a paginated list of all lessons in the system",
+                "description": "Retrieve a paginated list of all lessons with support for search, filtering, and sorting",
                 "consumes": [
                     "application/json"
                 ],
@@ -548,19 +622,56 @@ const docTemplate = `{
                         "description": "Page size (default: 20, max: 100)",
                         "name": "page_size",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search across title and description fields",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact title match",
+                        "name": "filter[title]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by exact duration (in minutes)",
+                        "name": "filter[duration]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field (id, title, duration, start_time, end_time, created_at, updated_at)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "Sort order (asc or desc)",
+                        "name": "order",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Paginated list of lessons",
                         "schema": {
-                            "$ref": "#/definitions/common.PaginatedResponse-lesson_LessonDTO"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_lesson_LessonDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filter or sort field",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -584,7 +695,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lesson.CreateLessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.CreateLessonDTO"
                         }
                     }
                 ],
@@ -592,19 +703,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created lesson",
                         "schema": {
-                            "$ref": "#/definitions/lesson.LessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -637,25 +748,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Lesson details",
                         "schema": {
-                            "$ref": "#/definitions/lesson.LessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid lesson ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Lesson not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -687,7 +798,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lesson.UpdateLessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.UpdateLessonDTO"
                         }
                     }
                 ],
@@ -695,25 +806,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated lesson",
                         "schema": {
-                            "$ref": "#/definitions/lesson.LessonDTO"
+                            "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Lesson not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -744,25 +855,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Lesson deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/common.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid lesson ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Lesson not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -778,7 +889,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieve a paginated list of all reservations in the system",
+                "description": "Retrieve a paginated list of all reservations with support for search, filtering, and sorting",
                 "consumes": [
                     "application/json"
                 ],
@@ -804,25 +915,74 @@ const docTemplate = `{
                         "description": "Page size (default: 20, max: 100)",
                         "name": "page_size",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search across purpose and description fields",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by resource ID",
+                        "name": "filter[resource_id]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by user ID",
+                        "name": "filter[user_id]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact status (pending, confirmed, cancelled, etc.)",
+                        "name": "filter[status]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact purpose match",
+                        "name": "filter[purpose]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field (id, resource_id, user_id, start_time, end_time, status, created_at, updated_at)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "Sort order (asc or desc)",
+                        "name": "order",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Paginated list of reservations",
                         "schema": {
-                            "$ref": "#/definitions/common.PaginatedResponse-reservation_ReservationDTO"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_reservation_ReservationDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filter or sort field",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -854,7 +1014,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/reservation.CreateReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.CreateReservationDTO"
                         }
                     }
                 ],
@@ -862,25 +1022,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created reservation",
                         "schema": {
-                            "$ref": "#/definitions/reservation.ReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -921,31 +1081,31 @@ const docTemplate = `{
                     "200": {
                         "description": "Reservation details",
                         "schema": {
-                            "$ref": "#/definitions/reservation.ReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid reservation ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Reservation not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -985,7 +1145,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/reservation.UpdateReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.UpdateReservationDTO"
                         }
                     }
                 ],
@@ -993,31 +1153,31 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated reservation",
                         "schema": {
-                            "$ref": "#/definitions/reservation.ReservationDTO"
+                            "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Reservation not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1056,31 +1216,31 @@ const docTemplate = `{
                     "200": {
                         "description": "Reservation deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/common.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid reservation ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Reservation not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1088,7 +1248,7 @@ const docTemplate = `{
         },
         "/resources": {
             "get": {
-                "description": "Retrieve a paginated list of all resources in the system",
+                "description": "Retrieve a paginated list of all resources with support for search, filtering, and sorting",
                 "consumes": [
                     "application/json"
                 ],
@@ -1114,19 +1274,68 @@ const docTemplate = `{
                         "description": "Page size (default: 20, max: 100)",
                         "name": "page_size",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search across name and description fields",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact name match",
+                        "name": "filter[name]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact type match",
+                        "name": "filter[type]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by exact location match",
+                        "name": "filter[location]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter by availability status",
+                        "name": "filter[is_available]",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field (id, name, type, location, is_available, created_at, updated_at)",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "Sort order (asc or desc)",
+                        "name": "order",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Paginated list of resources",
                         "schema": {
-                            "$ref": "#/definitions/common.PaginatedResponse-resource_ResourceDTO"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_resource_ResourceDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid filter or sort field",
+                        "schema": {
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1150,7 +1359,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/resource.CreateResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.CreateResourceDTO"
                         }
                     }
                 ],
@@ -1158,19 +1367,19 @@ const docTemplate = `{
                     "201": {
                         "description": "Created resource",
                         "schema": {
-                            "$ref": "#/definitions/resource.ResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1203,25 +1412,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Resource details",
                         "schema": {
-                            "$ref": "#/definitions/resource.ResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid resource ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Resource not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1253,7 +1462,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/resource.UpdateResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.UpdateResourceDTO"
                         }
                     }
                 ],
@@ -1261,25 +1470,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Updated resource",
                         "schema": {
-                            "$ref": "#/definitions/resource.ResourceDTO"
+                            "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Resource not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1310,25 +1519,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Resource deleted successfully",
                         "schema": {
-                            "$ref": "#/definitions/common.SuccessResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.SuccessResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid resource ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Resource not found",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/sarc-ng_internal_transport_common.ErrorResponse"
                         }
                     }
                 }
@@ -1336,14 +1545,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "building.BuildingDTO": {
+        "internal_transport_rest_building.BuildingDTO": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "code": {
                     "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
+                },
+                "floors": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -1356,41 +1571,56 @@ const docTemplate = `{
                 }
             }
         },
-        "building.CreateBuildingDTO": {
+        "internal_transport_rest_building.CreateBuildingDTO": {
             "type": "object",
             "required": [
                 "code",
                 "name"
             ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "code": {
                     "type": "string"
+                },
+                "floors": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 }
             }
         },
-        "building.UpdateBuildingDTO": {
+        "internal_transport_rest_building.UpdateBuildingDTO": {
             "type": "object",
             "required": [
                 "code",
                 "name"
             ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "code": {
                     "type": "string"
+                },
+                "floors": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 }
             }
         },
-        "class.ClassDTO": {
+        "internal_transport_rest_class.ClassDTO": {
             "type": "object",
             "properties": {
                 "capacity": {
                     "type": "integer"
+                },
+                "code": {
+                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
@@ -1398,7 +1628,13 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "instructorName": {
+                    "type": "string"
+                },
                 "name": {
+                    "type": "string"
+                },
+                "semester": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -1406,9 +1642,11 @@ const docTemplate = `{
                 }
             }
         },
-        "class.CreateClassDTO": {
+        "internal_transport_rest_class.CreateClassDTO": {
             "type": "object",
             "required": [
+                "code",
+                "instructorName",
                 "name"
             ],
             "properties": {
@@ -1416,114 +1654,351 @@ const docTemplate = `{
                     "type": "integer",
                     "minimum": 1
                 },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "class.UpdateClassDTO": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "capacity": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "common.ErrorResponse": {
-            "type": "object",
-            "properties": {
                 "code": {
+                    "type": "string"
+                },
+                "instructorName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "semester": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_class.UpdateClassDTO": {
+            "type": "object",
+            "required": [
+                "code",
+                "instructorName",
+                "name"
+            ],
+            "properties": {
+                "capacity": {
                     "type": "integer",
-                    "example": 400
+                    "minimum": 1
                 },
-                "error": {
+                "code": {
+                    "type": "string"
+                },
+                "instructorName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "semester": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_lesson.CreateLessonDTO": {
+            "type": "object",
+            "required": [
+                "classId",
+                "endTime",
+                "repeatPattern",
+                "resourceId",
+                "startTime"
+            ],
+            "properties": {
+                "classId": {
+                    "type": "integer"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "repeatPattern": {
                     "type": "string",
-                    "example": "Invalid input"
+                    "enum": [
+                        "none",
+                        "daily",
+                        "weekly",
+                        "biweekly",
+                        "monthly"
+                    ]
                 },
-                "message": {
+                "repeatUntil": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_lesson.LessonDTO": {
+            "type": "object",
+            "properties": {
+                "classId": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "repeatPattern": {
+                    "type": "string"
+                },
+                "repeatUntil": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_transport_rest_lesson.UpdateLessonDTO": {
+            "type": "object",
+            "required": [
+                "classId",
+                "endTime",
+                "repeatPattern",
+                "resourceId",
+                "startTime"
+            ],
+            "properties": {
+                "classId": {
+                    "type": "integer"
+                },
+                "endTime": {
+                    "type": "string"
+                },
+                "repeatPattern": {
                     "type": "string",
-                    "example": "The provided data is invalid"
+                    "enum": [
+                        "none",
+                        "daily",
+                        "weekly",
+                        "biweekly",
+                        "monthly"
+                    ]
+                },
+                "repeatUntil": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
                 }
             }
         },
-        "common.PaginatedResponse-building_BuildingDTO": {
+        "internal_transport_rest_reservation.CreateReservationDTO": {
+            "type": "object",
+            "required": [
+                "endTime",
+                "purpose",
+                "resourceId",
+                "startTime",
+                "status"
+            ],
+            "properties": {
+                "endTime": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "pending",
+                        "confirmed",
+                        "cancelled"
+                    ]
+                }
+            }
+        },
+        "internal_transport_rest_reservation.ReservationDTO": {
             "type": "object",
             "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/building.BuildingDTO"
-                    }
+                "createdAt": {
+                    "type": "string"
                 },
-                "pagination": {
-                    "$ref": "#/definitions/common.PaginationResult"
+                "endTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                },
+                "userName": {
+                    "type": "string"
                 }
             }
         },
-        "common.PaginatedResponse-class_ClassDTO": {
+        "internal_transport_rest_reservation.UpdateReservationDTO": {
+            "type": "object",
+            "required": [
+                "endTime",
+                "purpose",
+                "resourceId",
+                "startTime",
+                "status"
+            ],
+            "properties": {
+                "endTime": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "resourceId": {
+                    "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "pending",
+                        "confirmed",
+                        "cancelled"
+                    ]
+                }
+            }
+        },
+        "internal_transport_rest_resource.CreateResourceDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "type"
+            ],
+            "properties": {
+                "buildingId": {
+                    "type": "integer"
+                },
+                "capacity": {
+                    "type": "integer"
+                },
+                "details": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "classroom",
+                        "equipment",
+                        "lab"
+                    ]
+                }
+            }
+        },
+        "internal_transport_rest_resource.ResourceDTO": {
             "type": "object",
             "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/class.ClassDTO"
-                    }
+                "buildingId": {
+                    "type": "integer"
                 },
-                "pagination": {
-                    "$ref": "#/definitions/common.PaginationResult"
+                "capacity": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
-        "common.PaginatedResponse-lesson_LessonDTO": {
+        "internal_transport_rest_resource.UpdateResourceDTO": {
             "type": "object",
+            "required": [
+                "name",
+                "type"
+            ],
             "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/lesson.LessonDTO"
-                    }
+                "buildingId": {
+                    "type": "integer"
                 },
-                "pagination": {
-                    "$ref": "#/definitions/common.PaginationResult"
+                "capacity": {
+                    "type": "integer"
+                },
+                "details": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "classroom",
+                        "equipment",
+                        "lab"
+                    ]
                 }
             }
         },
-        "common.PaginatedResponse-reservation_ReservationDTO": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/reservation.ReservationDTO"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/common.PaginationResult"
-                }
-            }
-        },
-        "common.PaginatedResponse-resource_ResourceDTO": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/resource.ResourceDTO"
-                    }
-                },
-                "pagination": {
-                    "$ref": "#/definitions/common.PaginationResult"
-                }
-            }
-        },
-        "common.PaginationResult": {
+        "sarc-ng_internal_domain_common.PaginationResult": {
             "type": "object",
             "properties": {
                 "page": {
@@ -1544,253 +2019,100 @@ const docTemplate = `{
                 }
             }
         },
-        "common.SuccessResponse": {
+        "sarc-ng_internal_transport_common.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 400
+                },
+                "error": {
+                    "type": "string",
+                    "example": "Invalid input"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "The provided data is invalid"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_building_BuildingDTO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_transport_rest_building.BuildingDTO"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/sarc-ng_internal_domain_common.PaginationResult"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_class_ClassDTO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_transport_rest_class.ClassDTO"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/sarc-ng_internal_domain_common.PaginationResult"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_lesson_LessonDTO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_transport_rest_lesson.LessonDTO"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/sarc-ng_internal_domain_common.PaginationResult"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_reservation_ReservationDTO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_transport_rest_reservation.ReservationDTO"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/sarc-ng_internal_domain_common.PaginationResult"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.PaginatedResponse-internal_transport_rest_resource_ResourceDTO": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_transport_rest_resource.ResourceDTO"
+                    }
+                },
+                "pagination": {
+                    "$ref": "#/definitions/sarc-ng_internal_domain_common.PaginationResult"
+                }
+            }
+        },
+        "sarc-ng_internal_transport_common.SuccessResponse": {
             "type": "object",
             "properties": {
                 "data": {},
                 "message": {
                     "type": "string",
                     "example": "Operation completed successfully"
-                }
-            }
-        },
-        "lesson.CreateLessonDTO": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "duration": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "lesson.LessonDTO": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "duration": {
-                    "type": "integer"
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "lesson.UpdateLessonDTO": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "duration": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "reservation.CreateReservationDTO": {
-            "type": "object",
-            "required": [
-                "endTime",
-                "purpose",
-                "resourceId",
-                "startTime",
-                "userId"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "purpose": {
-                    "type": "string"
-                },
-                "resourceId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "reservation.ReservationDTO": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "purpose": {
-                    "type": "string"
-                },
-                "resourceId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "reservation.UpdateReservationDTO": {
-            "type": "object",
-            "required": [
-                "endTime",
-                "purpose",
-                "resourceId",
-                "startTime",
-                "userId"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "endTime": {
-                    "type": "string"
-                },
-                "purpose": {
-                    "type": "string"
-                },
-                "resourceId": {
-                    "type": "integer"
-                },
-                "startTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "resource.CreateResourceDTO": {
-            "type": "object",
-            "required": [
-                "name",
-                "type"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "isAvailable": {
-                    "type": "boolean"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "resource.ResourceDTO": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "isAvailable": {
-                    "type": "boolean"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "resource.UpdateResourceDTO": {
-            "type": "object",
-            "required": [
-                "name",
-                "type"
-            ],
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "isAvailable": {
-                    "type": "boolean"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
                 }
             }
         }
