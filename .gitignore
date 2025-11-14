@@ -72,10 +72,13 @@ infrastructure/sam/.aws-sam/
 samconfig.toml.bak
 *.pem
 
-# Generated Swagger artifacts
+# Generated code (Swagger/OpenAPI)
 api/swagger/docs.go
 api/swagger/swagger.json
 api/swagger/swagger.yaml
+
+# Note: wire_gen.go files are intentionally committed
+# to allow building without requiring the wire tool installed
 
 # Node.js / Docusaurus
 node_modules/
