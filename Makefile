@@ -80,10 +80,20 @@ test: _maybe_generate ## Run tests
 	go test -race ./...
 
 # Cleanup
-.PHONY: clean
-clean: ## Remove build artifacts
+.PHONY: clean clean-all clean-generated clean-docs
+clean: ## Remove build artifacts and caches
 	rm -rf $(BUILD_DIR) dist .env tmp
+	rm -f coverage.out coverage.html
 	go clean -cache
+
+clean-generated: ## Remove generated code (wire, swagger)
+	rm -f cmd/server/wire_gen.go cmd/lambda/wire_gen.go
+	rm -f api/swagger/docs.go api/swagger/swagger.json api/swagger/swagger.yaml
+
+clean-docs: ## Remove documentation build artifacts
+	rm -rf docs/.docusaurus docs/build docs/node_modules
+
+clean-all: clean clean-generated clean-docs ## Remove all artifacts including generated code
 
 # Internal helpers
 .PHONY: bin-dir
