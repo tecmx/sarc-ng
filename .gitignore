@@ -25,7 +25,6 @@ go.work.sum
 .env
 .env.local
 .env.production
-aws.env
 
 # IDE
 .idea/
